@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Leicester Parking Fines by Street (2025)</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <aside class="panel">
+        <p class="eyebrow">Leicester 2025</p>
+        <h1>Parking fines by street</h1>
+        <p class="intro">
+          Interactive point heat map built from Leicester City Council street-level parking fine counts.
+        </p>
+
+        <section class="controls">
+          <div class="field">
+            <label for="search-input">Search streets</label>
+            <input id="search-input" type="search" placeholder="Start typing a street name" />
+          </div>
+
+          <div class="field inline-field">
+            <label for="weight-mode">Weight scale</label>
+            <select id="weight-mode">
+              <option value="power" selected>Power (γ = 2.2)</option>
+              <option value="sqrt">Square root</option>
+              <option value="linear">Linear</option>
+              <option value="log">Logarithmic</option>
+            </select>
+          </div>
+
+          <div class="field inline-field">
+            <label for="top-filter">Streets shown</label>
+            <select id="top-filter">
+              <option value="all" selected>All streets</option>
+              <option value="top200">Top 200 by count</option>
+              <option value="top100">Top 100 by count</option>
+              <option value="top50">Top 50 by count</option>
+            </select>
+          </div>
+
+          <label class="toggle">
+            <input id="toggle-heat" type="checkbox" checked />
+            <span>Heat layer</span>
+          </label>
+
+          <label class="toggle">
+            <input id="toggle-markers" type="checkbox" checked />
+            <span>Point markers</span>
+          </label>
+
+          <label class="toggle">
+            <input id="toggle-zeroes" type="checkbox" />
+            <span>Show zero-count streets</span>
+          </label>
+
+          <button id="reset-view" type="button">Reset view</button>
+        </section>
+
+        <section class="legend">
+          <div class="legend-header">
+            <h2>Legend</h2>
+            <span id="legend-mode">power scale</span>
+          </div>
+          <div class="legend-bar"></div>
+          <div class="legend-labels">
+            <span>Lower</span>
+            <span>Higher</span>
+          </div>
+        </section>
+
+        <section class="summary">
+          <h2>Dataset</h2>
+          <dl id="summary-list"></dl>
+        </section>
+      </aside>
+
+      <main class="map-wrap">
+        <div id="status-banner" class="status-banner">Loading map data…</div>
+        <div id="map" aria-label="Map of Leicester parking fine counts"></div>
+      </main>
+    </div>
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+    <script src="app.js" type="module"></script>
+  </body>
+</html>
