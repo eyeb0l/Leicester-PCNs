@@ -30,10 +30,11 @@
           <div class="field inline-field">
             <label for="weight-mode">Weight scale</label>
             <select id="weight-mode">
-              <option value="power" selected>Power (γ = 2.2)</option>
+              <option value="log" selected>Logarithmic</option>
+              <option value="power">Power</option>
               <option value="sqrt">Square root</option>
               <option value="linear">Linear</option>
-              <option value="log">Logarithmic</option>
+              <option value="percentile">Percentile anchored (fixed)</option>
             </select>
           </div>
 
@@ -68,13 +69,10 @@
         <section class="legend">
           <div class="legend-header">
             <h2>Legend</h2>
-            <span id="legend-mode">power scale</span>
+            <span id="legend-mode">marker colour</span>
           </div>
-          <div class="legend-bar"></div>
-          <div class="legend-labels">
-            <span>Lower</span>
-            <span>Higher</span>
-          </div>
+          <div id="legend-bar" class="legend-bar"></div>
+          <div id="legend-ticks" class="legend-ticks"></div>
         </section>
 
         <section class="summary">

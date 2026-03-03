@@ -49,10 +49,13 @@ Then open [http://localhost:8000](http://localhost:8000).
 
 ## Heatmap tuning
 
-- Leaflet heat intensities are normalized per filter run with the default "Power" mapping (γ = 2.2) using the p99 count as the cap so the top streets dominate while mid/low streets fall off quickly.
+- Leaflet heat intensities are normalized per filter run using percentile-anchored interpolation, not direct max-based or cap-based normalization.
 - The "Streets shown" control lets you restrict rendering to the top 200/100/50 streets by count for diagnostics; the default shows all available streets.
-- Circle marker radii reuse the same p99 cap and γ = 2.2 exponent so both the heat layer and markers highlight the same hotspots. Weights below `0.08` are zeroed before rendering to prevent faint blobs.
-- Flip `DEBUG_SHOW_WEIGHTS` in `app.js` to inspect min/p25/p50/p75/p90/p95/p99/max stats plus the top streets and verify the distribution if the map ever looks off.
+- In `all` mode, the heat layer and markers use wider percentile stop curves so outliers like London Road remain visually dominant while 500-1200 streets stay clearly smaller.
+- In Top-N modes, the app uses a different percentile stop curve on the sliced dataset so the upper half remains legible instead of collapsing toward the floor.
+- Circle markers still render in the `2-60px` range, but marker size now comes from percentile anchors rather than a single clipped cap.
+- No heat or marker values are dropped to zero via a rendering threshold; use the Top-N filter to reduce clutter instead.
+- Flip `DEBUG_SHOW_WEIGHTS` in `app.js` to inspect mapping anchors, count/weight percentiles, and the top streets for the current filter slice if the map ever looks off.
 
 ## Debug snapshot
 
@@ -61,36 +64,42 @@ Captured with `node scripts/debug_snapshot.js` (which mirrors the `DEBUG_SHOW_WE
 ```
 Scenario: All streets
 Streets visualized: 1169
+Heat mapping anchors: min:1->0.0200 · p50:26->0.0400 · p90:282->0.1800 · p95:447->0.3000 · p99:972->0.6500 · max:5041->1.0000
+Marker mapping anchors: min:1->0.0100 · p50:26->0.0200 · p90:282->0.1000 · p95:447->0.1800 · p99:972->0.4500 · max:5041->1.0000
 Count percentiles: min:1 · p25:6 · p50:26 · p75:96 · p90:282 · p95:447 · p99:972 · max:5041
-Weight percentiles: min:0.0000 · p25:0.0000 · p50:0.0000 · p75:0.0000 · p90:0.0000 · p95:0.1811 · p99:1.0000 · max:1.0000
-Marker radius percentiles: min:2.00 · p50:2.01 · p90:3.05 · p99:18.00 · max:18.00
+Weight percentiles: min:0.0200 · p25:0.0240 · p50:0.0400 · p75:0.0783 · p90:0.1800 · p95:0.3000 · p99:0.6500 · max:1.0000
+Marker radius percentiles: min:2.58 · p50:3.16 · p90:7.80 · p99:28.10 · max:60.00
 ┌─────────┬────────────────────────┬───────┬────────┬────────┐
 │ (index) │ street                 │ count │ weight │ radius │
 ├─────────┼────────────────────────┼───────┼────────┼────────┤
-│ 0       │ London Road            │ 5041  │ 1      │ 18     │
-│ 1       │ Western Road           │ 2612  │ 1      │ 18     │
-│ 2       │ Bowling Green Street   │ 1849  │ 1      │ 18     │
-│ 3       │ Wellington Street      │ 1742  │ 1      │ 18     │
-│ 4       │ Granby Street          │ 1618  │ 1      │ 18     │
+│ 0       │ London Road            │ 5041  │ 1      │ 60     │
+│ 1       │ Western Road           │ 2612  │ 0.7911 │ 40.96  │
+│ 2       │ Bowling Green Street   │ 1849  │ 0.7254 │ 34.98  │
+│ 3       │ Wellington Street      │ 1742  │ 0.7162 │ 34.14  │
+│ 4       │ Granby Street          │ 1618  │ 0.7056 │ 33.16  │
 │ …       │ …                      │ …     │ …      │ …      │
-│ 24      │ The Newarke            │ 688   │ 0.4676 │ 9.48   │
+│ 24      │ The Newarke            │ 688   │ 0.4607 │ 19.63  │
 └─────────┴────────────────────────┴───────┴────────┴────────┘
 
 Scenario: Top 50 streets
 Streets visualized: 50
+Heat mapping anchors: min:504->0.1800 · p50:688->0.2800 · p90:1610->0.5500 · p95:1849->0.7200 · max:5041->1.0000
+Marker mapping anchors: min:504->0.1400 · p50:688->0.2200 · p90:1610->0.4800 · p95:1849->0.6200 · max:5041->1.0000
 Count percentiles: min:504 · p25:573 · p50:688 · p75:972 · p90:1610 · p95:1849 · p99:5041 · max:5041
-Weight percentiles: min:0.0000 · p25:0.0000 · p50:0.0000 · p75:0.0000 · p90:0.0812 · p95:0.1101 · p99:1.0000 · max:1.0000
-Marker radius percentiles: min:2.10 · p50:2.20 · p90:3.30 · p99:18.00 · max:18.00
+Weight percentiles: min:0.1800 · p25:0.2175 · p50:0.2800 · p75:0.3632 · p90:0.5500 · p95:0.7200 · p99:1.0000 · max:1.0000
+Marker radius percentiles: min:10.12 · p50:14.76 · p90:29.84 · p99:60.00 · max:60.00
+Top 50 count focus: p50:688 · p90:1610 · p95:1849 · p99:5041 · max:5041
+Top 50 weight focus: p50:0.2800 · p90:0.5500 · p95:0.7200 · p99:1.0000 · max:1.0000
 ┌─────────┬────────────────────────┬───────┬────────┬────────┐
 │ (index) │ street                 │ count │ weight │ radius │
 ├─────────┼────────────────────────┼───────┼────────┼────────┤
-│ 0       │ London Road            │ 5041  │ 1      │ 18     │
-│ 1       │ Western Road           │ 2612  │ 0.2354 │ 5.77   │
-│ 2       │ Bowling Green Street   │ 1849  │ 0.1101 │ 3.76   │
-│ 3       │ Wellington Street      │ 1742  │ 0.0966 │ 3.54   │
-│ 4       │ Granby Street          │ 1618  │ 0.0821 │ 3.31   │
+│ 0       │ London Road            │ 5041  │ 1      │ 60     │
+│ 1       │ Western Road           │ 2612  │ 0.7869 │ 43.23  │
+│ 2       │ Bowling Green Street   │ 1849  │ 0.72   │ 37.96  │
+│ 3       │ Wellington Street      │ 1742  │ 0.6439 │ 34.32  │
+│ 4       │ Granby Street          │ 1618  │ 0.5557 │ 30.11  │
 │ …       │ …                      │ …     │ …      │ …      │
-│ 24      │ The Newarke            │ 688   │ 0      │ 2.20   │
+│ 24      │ The Newarke            │ 688   │ 0.28   │ 14.76  │
 └─────────┴────────────────────────┴───────┴────────┴────────┘
 ```
 

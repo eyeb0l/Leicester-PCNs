@@ -1,0 +1,272 @@
+:root {
+  --ink: #152330;
+  --muted: #5c6b73;
+  --paper: #f3efe2;
+  --panel: rgba(255, 250, 242, 0.95);
+  --line: rgba(21, 35, 48, 0.14);
+  --accent: #b84c2a;
+  --accent-deep: #812d17;
+  --teal: #0e7a74;
+  --gold: #efb44b;
+  --shadow: 0 24px 60px rgba(21, 35, 48, 0.16);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family: Georgia, "Times New Roman", serif;
+  background:
+    radial-gradient(circle at top left, rgba(239, 180, 75, 0.2), transparent 32%),
+    linear-gradient(180deg, #f8f3e8 0%, #efe6d4 100%);
+  color: var(--ink);
+}
+
+body {
+  min-height: 100vh;
+}
+
+.page-shell {
+  display: grid;
+  grid-template-columns: minmax(320px, 380px) 1fr;
+  gap: 1.25rem;
+  min-height: 100vh;
+  padding: 1.25rem;
+}
+
+.panel,
+.map-wrap {
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.panel {
+  background: var(--panel);
+  backdrop-filter: blur(16px);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--accent-deep);
+  font-size: 0.82rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+p,
+dl,
+dd,
+dt {
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(2rem, 3vw, 3rem);
+  line-height: 0.95;
+}
+
+h2 {
+  font-size: 1.05rem;
+}
+
+.intro {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.controls,
+.summary,
+.legend {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.field,
+.toggle,
+#reset-view {
+  font: inherit;
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.field label {
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+input[type="search"],
+select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 0.8rem 0.95rem;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--ink);
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.8rem 0.95rem;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.toggle input {
+  accent-color: var(--accent);
+}
+
+#reset-view {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.9rem 1.1rem;
+  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+  color: #fff9f4;
+  cursor: pointer;
+}
+
+.legend-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.legend-bar {
+  height: 16px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #fee6a8 0%, #f0893f 55%, #b2191b 100%);
+  border: 1px solid rgba(21, 35, 48, 0.1);
+}
+
+#legend-mode {
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.legend-ticks {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.legend-tick {
+  display: grid;
+  justify-items: start;
+  gap: 0.2rem;
+}
+
+.legend-swatch {
+  width: 100%;
+  min-width: 0;
+  height: 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(21, 35, 48, 0.16);
+}
+
+.legend-tick-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-deep);
+}
+
+.legend-tick-value {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.summary dl {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.55rem 0.9rem;
+}
+
+.summary dt {
+  color: var(--muted);
+}
+
+.summary dd {
+  font-variant-numeric: tabular-nums;
+}
+
+.map-wrap {
+  position: relative;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+#map {
+  width: 100%;
+  height: calc(100vh - 2.5rem);
+  min-height: 640px;
+}
+
+.status-banner {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 700;
+  padding: 0.55rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(21, 35, 48, 0.82);
+  color: white;
+  font-size: 0.88rem;
+  letter-spacing: 0.01em;
+}
+
+.status-banner.is-hidden {
+  display: none;
+}
+
+.popup-content h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1rem;
+}
+
+.popup-content p {
+  margin: 0.25rem 0;
+  line-height: 1.4;
+}
+
+.popup-content .aliases {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.popup-content .marker-style {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+@media (max-width: 900px) {
+  .page-shell {
+    grid-template-columns: 1fr;
+  }
+
+  #map {
+    height: 65vh;
+    min-height: 460px;
+  }
+
+  .legend-ticks {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

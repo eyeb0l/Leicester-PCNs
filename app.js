@@ -1,11 +1,10 @@
 const LEICESTER_CENTER = [52.6369, -1.1398];
 const DEFAULT_ZOOM = 13;
 const MARKER_MIN_ZOOM = 14;
-const DEBUG_SHOW_WEIGHTS = true;
-const SCALE_EXPONENT = 2.2;
-const HEAT_WEIGHT_FLOOR = 0.08;
+const MANUAL_OVERRIDE_STATUS = "manual_override";
+const DEBUG_SHOW_WEIGHTS = false;
 const MARKER_MIN_RADIUS = 2;
-const MARKER_MAX_RADIUS = 18;
+const MARKER_MAX_RADIUS = 60;
 const TOP_FILTER_LIMITS = {
   all: Infinity,
   top200: 200,
@@ -39,6 +38,80 @@ const RADIUS_PERCENTILES = {
   p99: 0.99,
   max: 1,
 };
+const DEBUG_FOCUS_PERCENTILES = {
+  p50: 0.5,
+  p90: 0.9,
+  p95: 0.95,
+  p99: 0.99,
+  max: 1,
+};
+const ALL_HEAT_STOPS = [
+  ["min", 0.02],
+  ["p50", 0.04],
+  ["p90", 0.18],
+  ["p95", 0.3],
+  ["p99", 0.65],
+  ["max", 1],
+];
+const ALL_MARKER_STOPS = [
+  ["min", 0.01],
+  ["p50", 0.02],
+  ["p90", 0.1],
+  ["p95", 0.18],
+  ["p99", 0.45],
+  ["max", 1],
+];
+const TOP_HEAT_STOPS = [
+  ["min", 0.18],
+  ["p50", 0.28],
+  ["p90", 0.55],
+  ["p95", 0.72],
+  ["p99", 0.92],
+  ["max", 1],
+];
+const TOP_MARKER_STOPS = [
+  ["min", 0.14],
+  ["p50", 0.22],
+  ["p90", 0.48],
+  ["p95", 0.62],
+  ["p99", 0.88],
+  ["max", 1],
+];
+const COLOR_DEBUG_PERCENTILES = {
+  p50: 0.5,
+  p75: 0.75,
+  p90: 0.9,
+  p99: 0.99,
+};
+const MARKER_COLOR_RAMP = [
+  [0, "#fff6ee"],
+  [0.55, "#f6d8b7"],
+  [0.74, "#eba567"],
+  [0.9, "#c84d27"],
+  [1, "#7f1018"],
+];
+const MARKER_OUTLINE_COLOR = "#4c120f";
+const MARKER_OPACITY_STOPS = [
+  [0, 0.25],
+  [0.22, 0.33],
+  [0.5, 0.5],
+  [0.75, 0.62],
+  [1, 0.8],
+];
+const COLOR_CAP_LABEL_BY_FILTER = {
+  all: "p99",
+  top200: "max",
+  top100: "max",
+  top50: "max",
+};
+const COLOR_TRANSFORM_LABELS = {
+  linear: "linear",
+  log: "log1p",
+  percentile: "log1p",
+  power: "power",
+  sqrt: "square root",
+};
+const COLOR_POWER_GAMMA = 0.42;
 // Normalized weights + conservative heat settings keep hotspots readable instead of saturating the city.
 const HEAT_LAYER_OPTIONS = {
   radius: 10,
@@ -55,10 +128,11 @@ const HEAT_GRADIENT = {
   1.0: "#8c1b13",
 };
 const WEIGHT_MODE_LABELS = {
-  power: "power (γ=2.2)",
-  linear: "linear",
-  sqrt: "square root",
   log: "logarithmic",
+  power: "power",
+  sqrt: "square root",
+  linear: "linear",
+  percentile: "percentile anchored",
 };
 
 const elements = {
@@ -71,6 +145,8 @@ const elements = {
   resetView: document.querySelector("#reset-view"),
   summaryList: document.querySelector("#summary-list"),
   legendMode: document.querySelector("#legend-mode"),
+  legendBar: document.querySelector("#legend-bar"),
+  legendTicks: document.querySelector("#legend-ticks"),
   statusBanner: document.querySelector("#status-banner"),
 };
 
@@ -89,6 +165,7 @@ let visibleFeatures = [];
 let markerLayer = L.layerGroup();
 let heatLayer = null;
 let defaultBounds = null;
+let lastFocusedSearchKey = "";
 
 function showStatus(message) {
   elements.statusBanner.textContent = message;
@@ -110,20 +187,6 @@ function clamp(value, min = 0, max = 1) {
   return Math.min(max, Math.max(min, value));
 }
 
-function createWeightCalculator(mode) {
-  if (mode === "linear") {
-    return (x) => clamp(x);
-  }
-  if (mode === "sqrt") {
-    return (x) => clamp(Math.sqrt(Math.max(0, x)));
-  }
-  if (mode === "log") {
-    const scale = Math.log1p(9);
-    return (x) => clamp(Math.log1p(Math.max(0, x) * 9) / scale);
-  }
-  return (x) => clamp(Math.max(0, x) ** SCALE_EXPONENT);
-}
-
 function quantile(sortedValues, percentile) {
   if (!sortedValues.length) {
     return 0;
@@ -131,19 +194,6 @@ function quantile(sortedValues, percentile) {
   const clampedPercent = clamp(percentile, 0, 1);
   const index = Math.round(clampedPercent * (sortedValues.length - 1));
   return sortedValues[index];
-}
-
-function normalizeCount(count, capCount) {
-  if (!Number.isFinite(capCount) || capCount <= 0) {
-    return 0;
-  }
-  const clampedCount = Math.min(Math.max(count, 0), capCount);
-  return clampedCount / capCount;
-}
-
-function computeMarkerRadius(normalizedCount) {
-  const span = MARKER_MAX_RADIUS - MARKER_MIN_RADIUS;
-  return MARKER_MIN_RADIUS + span * (Math.max(0, normalizedCount) ** SCALE_EXPONENT);
 }
 
 function describePercentiles(values, config) {
@@ -167,8 +217,208 @@ function formatPercentileStats(stats, order, decimals = 0) {
     .join(" · ");
 }
 
+function hexToRgb(hex) {
+  const normalized = hex.replace("#", "");
+  const expanded =
+    normalized.length === 3
+      ? normalized
+          .split("")
+          .map((char) => `${char}${char}`)
+          .join("")
+      : normalized;
+  const value = Number.parseInt(expanded, 16);
+  return {
+    r: (value >> 16) & 255,
+    g: (value >> 8) & 255,
+    b: value & 255,
+  };
+}
+
+function rgbToHex({ r, g, b }) {
+  return `#${[r, g, b]
+    .map((channel) => Math.round(clamp(channel, 0, 255)).toString(16).padStart(2, "0"))
+    .join("")}`;
+}
+
+function mixHexColors(fromHex, toHex, amount) {
+  const from = hexToRgb(fromHex);
+  const to = hexToRgb(toHex);
+  const t = clamp(amount);
+  return rgbToHex({
+    r: from.r + (to.r - from.r) * t,
+    g: from.g + (to.g - from.g) * t,
+    b: from.b + (to.b - from.b) * t,
+  });
+}
+
+function buildOutputAnchors(countPercentiles, stopConfig) {
+  const anchors = [];
+  for (const [label, output] of stopConfig) {
+    const count = Math.max(0, countPercentiles[label] ?? 0);
+    const anchor = { label, count, output };
+    if (anchors.length && anchors[anchors.length - 1].count === count) {
+      anchors[anchors.length - 1] = anchor;
+    } else {
+      anchors.push(anchor);
+    }
+  }
+  return anchors;
+}
+
+function interpolateAnchors(count, anchors) {
+  if (!anchors.length) {
+    return 0;
+  }
+  if (count <= anchors[0].count) {
+    return anchors[0].output;
+  }
+  for (let index = 1; index < anchors.length; index += 1) {
+    const lower = anchors[index - 1];
+    const upper = anchors[index];
+    if (count <= upper.count) {
+      if (upper.count <= lower.count) {
+        return upper.output;
+      }
+      const t = clamp((count - lower.count) / (upper.count - lower.count));
+      return lower.output + (upper.output - lower.output) * t;
+    }
+  }
+  return anchors[anchors.length - 1].output;
+}
+
+function computeMarkerRadius(markerStrength) {
+  const span = MARKER_MAX_RADIUS - MARKER_MIN_RADIUS;
+  return MARKER_MIN_RADIUS + span * clamp(markerStrength);
+}
+
+function getColorTransformMode(weightMode) {
+  if (["linear", "log", "power", "sqrt"].includes(weightMode)) {
+    return weightMode;
+  }
+  return "log";
+}
+
+function transformCountForColor(count, transformMode) {
+  const safeCount = Math.max(0, count);
+  if (transformMode === "linear") {
+    return safeCount;
+  }
+  if (transformMode === "sqrt") {
+    return Math.sqrt(safeCount);
+  }
+  if (transformMode === "power") {
+    return safeCount ** COLOR_POWER_GAMMA;
+  }
+  return Math.log1p(safeCount);
+}
+
+function getColorCapLabel(topFilterMode) {
+  return COLOR_CAP_LABEL_BY_FILTER[topFilterMode] || "p99";
+}
+
+function computeColorPercent(count, colorContext) {
+  const transformedCap = transformCountForColor(colorContext.capCount, colorContext.transformMode);
+  if (!Number.isFinite(transformedCap) || transformedCap <= 0) {
+    return 0;
+  }
+  const transformedCount = transformCountForColor(count, colorContext.transformMode);
+  return clamp(transformedCount / transformedCap);
+}
+
+function interpolateRampColor(percent, ramp) {
+  const clampedPercent = clamp(percent);
+  if (clampedPercent <= ramp[0][0]) {
+    return ramp[0][1];
+  }
+  for (let index = 1; index < ramp.length; index += 1) {
+    const [lowerStop, lowerColor] = ramp[index - 1];
+    const [upperStop, upperColor] = ramp[index];
+    if (clampedPercent <= upperStop) {
+      const range = upperStop - lowerStop;
+      const t = range <= 0 ? 1 : (clampedPercent - lowerStop) / range;
+      return mixHexColors(lowerColor, upperColor, t);
+    }
+  }
+  return ramp[ramp.length - 1][1];
+}
+
+function interpolateStopValue(percent, stops) {
+  const clampedPercent = clamp(percent);
+  if (clampedPercent <= stops[0][0]) {
+    return stops[0][1];
+  }
+  for (let index = 1; index < stops.length; index += 1) {
+    const [lowerStop, lowerValue] = stops[index - 1];
+    const [upperStop, upperValue] = stops[index];
+    if (clampedPercent <= upperStop) {
+      const range = upperStop - lowerStop;
+      const t = range <= 0 ? 1 : (clampedPercent - lowerStop) / range;
+      return lowerValue + (upperValue - lowerValue) * t;
+    }
+  }
+  return stops[stops.length - 1][1];
+}
+
+function createMarkerColorStyle(colorPercent) {
+  const fillColor = interpolateRampColor(colorPercent, MARKER_COLOR_RAMP);
+  const strokeColor = mixHexColors(fillColor, MARKER_OUTLINE_COLOR, 0.42);
+  const fillOpacity = interpolateStopValue(colorPercent, MARKER_OPACITY_STOPS);
+  return {
+    colorPercent,
+    fillColor,
+    strokeColor,
+    fillOpacity,
+  };
+}
+
+function buildLegendGradient(ramp) {
+  const stops = ramp
+    .map(([stop, color]) => `${color} ${Math.round(stop * 100)}%`)
+    .join(", ");
+  return `linear-gradient(90deg, ${stops})`;
+}
+
+function formatAnchorStats(anchors, decimals = 2) {
+  return anchors
+    .map((anchor) => `${anchor.label}:${formatNumber(Math.round(anchor.count))}->${anchor.output.toFixed(decimals)}`)
+    .join(" · ");
+}
+
 function getCount(feature) {
   return Number(feature.properties.count_total) || 0;
+}
+
+function getFeatureKey(feature) {
+  return feature.properties.cache_key || feature.properties.display_name;
+}
+
+function isManualOverride(feature) {
+  return feature.properties.geocode_status === MANUAL_OVERRIDE_STATUS;
+}
+
+function formatColorModeLabel(transformMode) {
+  return COLOR_TRANSFORM_LABELS[transformMode] || "log1p";
+}
+
+function selectMedianColorSamples(scaledPoints, sampleSize = 5) {
+  const sorted = [...scaledPoints].sort((a, b) => a.count - b.count);
+  if (!sorted.length) {
+    return [];
+  }
+  const middle = Math.floor(sorted.length / 2);
+  const halfWindow = Math.floor(sampleSize / 2);
+  const start = Math.max(0, middle - halfWindow);
+  return sorted.slice(start, Math.min(sorted.length, start + sampleSize));
+}
+
+function buildColorSampleRows(points) {
+  return points.map((point) => ({
+    street: point.feature.properties.display_name,
+    count: point.count,
+    colorPercent: Number(point.colorPercent.toFixed(4)),
+    fillColor: point.fillColor,
+    fillOpacity: Number(point.fillOpacity.toFixed(2)),
+  }));
 }
 
 function applyTopCountFilter(features, mode) {
@@ -190,7 +440,7 @@ function matchesSearch(feature, term) {
   return haystacks.includes(term);
 }
 
-function logHeatSummary(mode, scaledPoints, stats) {
+function logHeatSummary(topFilterMode, scaledPoints, stats) {
   const topStreets = [...scaledPoints]
     .sort((a, b) => b.count - a.count)
     .slice(0, 25)
@@ -199,10 +449,25 @@ function logHeatSummary(mode, scaledPoints, stats) {
       count: point.count,
       weight: Number(point.weight.toFixed(4)),
       radius: Number(point.radius.toFixed(2)),
+      fillColor: point.fillColor,
+      fillOpacity: Number(point.fillOpacity.toFixed(2)),
     }));
+  const topColorSamples = buildColorSampleRows(
+    [...scaledPoints].sort((a, b) => b.count - a.count).slice(0, 10)
+  );
+  const medianColorSamples = buildColorSampleRows(selectMedianColorSamples(scaledPoints));
 
-  console.groupCollapsed(`[heat] mode=${mode} points=${scaledPoints.length} capCount=${stats.capCount}`);
+  console.groupCollapsed(
+    `[heat] filter=${topFilterMode} points=${scaledPoints.length}`
+  );
   console.log(`Streets visualized: ${scaledPoints.length}`);
+  console.log("Heat mapping anchors:", formatAnchorStats(stats.heatAnchors, 4));
+  console.log("Marker mapping anchors:", formatAnchorStats(stats.markerAnchors, 4));
+  console.log(
+    `Marker colour mapping: cap=${stats.colorCapLabel}:${formatNumber(
+      Math.round(stats.colorCapCount)
+    )} · transform=${formatColorModeLabel(stats.colorTransformMode)}`
+  );
   console.log(
     "Count percentiles:",
     formatPercentileStats(stats.countPercentiles, Object.keys(COUNT_PERCENTILES))
@@ -215,7 +480,25 @@ function logHeatSummary(mode, scaledPoints, stats) {
     "Marker radius percentiles:",
     formatPercentileStats(stats.radiusPercentiles, Object.keys(RADIUS_PERCENTILES), 2)
   );
+  console.log(
+    "Marker colour count focus:",
+    formatPercentileStats(stats.countPercentiles, Object.keys(COLOR_DEBUG_PERCENTILES))
+  );
+  if (topFilterMode === "top50") {
+    console.log(
+      "Top 50 count focus:",
+      formatPercentileStats(stats.countPercentiles, Object.keys(DEBUG_FOCUS_PERCENTILES))
+    );
+    console.log(
+      "Top 50 weight focus:",
+      formatPercentileStats(stats.weightPercentiles, Object.keys(DEBUG_FOCUS_PERCENTILES), 4)
+    );
+  }
   console.table(topStreets);
+  console.log("Marker colour samples: top 10");
+  console.table(topColorSamples);
+  console.log("Marker colour samples: around p50");
+  console.table(medianColorSamples);
   console.groupEnd();
 }
 
@@ -231,50 +514,89 @@ function dedupeByCacheKey(features) {
   return Array.from(map.values());
 }
 
-function computeScalingContext(features) {
-  const counts = features.map((feature) => getCount(feature));
-  const countPercentiles = describePercentiles(counts, COUNT_PERCENTILES);
-  const capCount = Math.max(1, countPercentiles.p99 || countPercentiles.max || 1);
-  return { capCount, countPercentiles };
+function getStopConfig(topFilterMode) {
+  if (topFilterMode === "all") {
+    return {
+      heatStops: ALL_HEAT_STOPS,
+      markerStops: ALL_MARKER_STOPS,
+    };
+  }
+  return {
+    heatStops: TOP_HEAT_STOPS,
+    markerStops: TOP_MARKER_STOPS,
+  };
 }
 
-function buildScaledPoints(features, mode, scalingContext) {
+function computeScalingContext(features, topFilterMode, weightMode) {
+  const counts = features.map((feature) => getCount(feature));
+  const countPercentiles = describePercentiles(counts, COUNT_PERCENTILES);
+  const stopConfig = getStopConfig(topFilterMode);
+  const heatAnchors = buildOutputAnchors(countPercentiles, stopConfig.heatStops);
+  const markerAnchors = buildOutputAnchors(countPercentiles, stopConfig.markerStops);
+  const colorCapLabel = getColorCapLabel(topFilterMode);
+  const colorCapCount = Math.max(1, countPercentiles[colorCapLabel] || countPercentiles.max || 1);
+  const colorTransformMode = getColorTransformMode(weightMode);
+  return {
+    countPercentiles,
+    heatAnchors,
+    markerAnchors,
+    colorCapLabel,
+    colorCapCount,
+    colorTransformMode,
+  };
+}
+
+function buildScaledPoints(features, scalingContext) {
   if (!features.length) {
     return {
       scaledPoints: [],
       stats: {
-        capCount: 0,
         countPercentiles: describePercentiles([], COUNT_PERCENTILES),
+        heatAnchors: [],
+        markerAnchors: [],
+        colorCapLabel: "p99",
+        colorCapCount: 0,
+        colorTransformMode: "log",
         weightPercentiles: describePercentiles([], WEIGHT_PERCENTILES),
         radiusPercentiles: describePercentiles([], RADIUS_PERCENTILES),
       },
     };
   }
 
-  const weightFor = createWeightCalculator(mode);
   const scaledPoints = features.map((feature) => {
     const count = getCount(feature);
-    const normalized = normalizeCount(count, scalingContext.capCount);
-    const rawWeight = weightFor(normalized);
-    const weight = rawWeight >= HEAT_WEIGHT_FLOOR ? rawWeight : 0;
-    const radius = computeMarkerRadius(normalized);
+    const weight = interpolateAnchors(count, scalingContext.heatAnchors);
+    const markerStrength = interpolateAnchors(count, scalingContext.markerAnchors);
+    const radius = computeMarkerRadius(markerStrength);
+    const colorPercent = computeColorPercent(count, {
+      capCount: scalingContext.colorCapCount,
+      transformMode: scalingContext.colorTransformMode,
+    });
+    const markerColorStyle = createMarkerColorStyle(colorPercent);
     const [lon, lat] = feature.geometry.coordinates;
     return {
       feature,
       lat,
       lon,
       count,
-      normalized,
       weight,
       radius,
+      colorPercent,
+      fillColor: markerColorStyle.fillColor,
+      strokeColor: markerColorStyle.strokeColor,
+      fillOpacity: markerColorStyle.fillOpacity,
     };
   });
 
   return {
     scaledPoints,
     stats: {
-      capCount: scalingContext.capCount,
       countPercentiles: scalingContext.countPercentiles,
+      heatAnchors: scalingContext.heatAnchors,
+      markerAnchors: scalingContext.markerAnchors,
+      colorCapLabel: scalingContext.colorCapLabel,
+      colorCapCount: scalingContext.colorCapCount,
+      colorTransformMode: scalingContext.colorTransformMode,
       weightPercentiles: describePercentiles(
         scaledPoints.map((point) => point.weight),
         WEIGHT_PERCENTILES
@@ -288,10 +610,28 @@ function buildScaledPoints(features, mode, scalingContext) {
 }
 
 function popupHtml(feature) {
-  const { display_name: displayName, count_total: countTotal, source_rows: sourceRows, aliases } = feature.properties;
+  const {
+    display_name: displayName,
+    count_total: countTotal,
+    source_rows: sourceRows,
+    aliases,
+    geocode_status: geocodeStatus,
+    marker_fill_color: markerFillColor,
+    marker_fill_opacity: markerFillOpacity,
+  } = feature.properties;
   const aliasHtml =
     aliases.length > 1
       ? `<p class="aliases">Aliases: ${aliases.map((alias) => escapeHtml(alias)).join(", ")}</p>`
+      : "";
+  const statusHtml =
+    geocodeStatus === MANUAL_OVERRIDE_STATUS
+      ? '<p class="marker-style"><strong>Manual override</strong></p>'
+      : "";
+  const markerStyleHtml =
+    markerFillColor && Number.isFinite(markerFillOpacity)
+      ? `<p class="marker-style">Marker: ${escapeHtml(markerFillColor)} · opacity ${Number(
+          markerFillOpacity
+        ).toFixed(2)}</p>`
       : "";
 
   return `
@@ -299,6 +639,8 @@ function popupHtml(feature) {
       <h3>${escapeHtml(displayName)}</h3>
       <p><strong>${formatNumber(countTotal)}</strong> fines</p>
       <p>${formatNumber(sourceRows)} source row${sourceRows === 1 ? "" : "s"}</p>
+      ${statusHtml}
+      ${markerStyleHtml}
       ${aliasHtml}
     </div>
   `;
@@ -332,13 +674,15 @@ function updateSummary(summary, filteredCount) {
 function buildMarkerLayer(scaledPoints) {
   const layer = L.layerGroup();
   for (const point of scaledPoints) {
+    point.feature.properties.marker_fill_color = point.fillColor;
+    point.feature.properties.marker_fill_opacity = point.fillOpacity;
     const marker = L.circleMarker([point.lat, point.lon], {
       radius: point.radius,
-      color: "#8d280f",
-      weight: 1,
-      fillColor: "#d65f2a",
-      fillOpacity: 0.72,
-      opacity: 0.85,
+      color: point.strokeColor,
+      weight: isManualOverride(point.feature) ? 2 : 1,
+      fillColor: point.fillColor,
+      fillOpacity: point.fillOpacity,
+      opacity: 0.88,
     });
     marker.bindPopup(popupHtml(point.feature));
     layer.addLayer(marker);
@@ -346,10 +690,44 @@ function buildMarkerLayer(scaledPoints) {
   return layer;
 }
 
-function buildHeatLayer(features, mode, scalingContext) {
-  const { scaledPoints, stats } = buildScaledPoints(features, mode, scalingContext);
+function updateLegend(stats) {
+  if (elements.legendBar) {
+    elements.legendBar.style.background = buildLegendGradient(MARKER_COLOR_RAMP);
+  }
+  if (elements.legendTicks) {
+    const tickSpecs = [
+      { label: "0", count: 0 },
+      { label: "P50", count: stats.countPercentiles.p50 || 0 },
+      { label: "P75", count: stats.countPercentiles.p75 || 0 },
+      { label: "P90", count: stats.countPercentiles.p90 || 0 },
+      { label: stats.colorCapLabel.toUpperCase(), count: stats.colorCapCount || 0 },
+    ];
+    elements.legendTicks.innerHTML = tickSpecs
+      .map((tick) => {
+        const colorPercent = computeColorPercent(tick.count, {
+          capCount: stats.colorCapCount,
+          transformMode: stats.colorTransformMode,
+        });
+        const markerColorStyle = createMarkerColorStyle(colorPercent);
+        return `
+          <div class="legend-tick">
+            <span class="legend-swatch" style="background:${markerColorStyle.fillColor}; border-color:${markerColorStyle.strokeColor}; opacity:${markerColorStyle.fillOpacity};"></span>
+            <span class="legend-tick-label">${tick.label}</span>
+            <span class="legend-tick-value">${formatNumber(Math.round(tick.count))}</span>
+          </div>
+        `;
+      })
+      .join("");
+  }
+  elements.legendMode.textContent = `marker colour · ${formatColorModeLabel(
+    stats.colorTransformMode
+  )} / ${stats.colorCapLabel} cap`;
+}
+
+function buildHeatLayer(features, topFilterMode, scalingContext) {
+  const { scaledPoints, stats } = buildScaledPoints(features, scalingContext);
   if (DEBUG_SHOW_WEIGHTS) {
-    logHeatSummary(mode, scaledPoints, stats);
+    logHeatSummary(topFilterMode, scaledPoints, stats);
   }
 
   const heatPoints = scaledPoints.map((point) => [point.lat, point.lon, point.weight]);
@@ -376,6 +754,26 @@ function updateMarkerVisibility() {
   }
 }
 
+function focusVisibleFeatures(features, searchTerm, focusKey) {
+  if (!searchTerm || focusKey === lastFocusedSearchKey || !features.length) {
+    if (!searchTerm) {
+      lastFocusedSearchKey = "";
+    }
+    return;
+  }
+
+  const points = features.map((feature) => {
+    const [lon, lat] = feature.geometry.coordinates;
+    return [lat, lon];
+  });
+
+  const bounds = L.latLngBounds(points);
+  if (bounds.isValid()) {
+    map.fitBounds(bounds.pad(0.4), { maxZoom: 16 });
+    lastFocusedSearchKey = focusKey;
+  }
+}
+
 function applyFilters(summary) {
   const showZeroes = elements.toggleZeroes.checked;
   const searchTerm = elements.searchInput.value.trim().toLowerCase();
@@ -384,9 +782,10 @@ function applyFilters(summary) {
 
   const baseFiltered = allFeatures.filter((feature) => {
     const isVisibleZero = showZeroes || !feature.properties.is_zero_count;
-    return isVisibleZero && matchesSearch(feature, searchTerm);
+    return isVisibleZero;
   });
-  visibleFeatures = applyTopCountFilter(baseFiltered, topFilterMode);
+  const topFiltered = applyTopCountFilter(baseFiltered, topFilterMode);
+  visibleFeatures = topFiltered.filter((feature) => matchesSearch(feature, searchTerm));
 
   if (map.hasLayer(markerLayer)) {
     map.removeLayer(markerLayer);
@@ -400,8 +799,8 @@ function applyFilters(summary) {
       `[heat] deduped ${visibleFeatures.length - heatFeatures.length} overlapping point(s) before rendering`
     );
   }
-  const scalingContext = computeScalingContext(heatFeatures);
-  const heatResult = buildHeatLayer(heatFeatures, weightMode, scalingContext);
+  const scalingContext = computeScalingContext(heatFeatures, topFilterMode, weightMode);
+  const heatResult = buildHeatLayer(heatFeatures, topFilterMode, scalingContext);
   markerLayer = buildMarkerLayer(heatResult.scaledPoints);
   heatLayer = heatResult.layer;
 
@@ -410,7 +809,12 @@ function applyFilters(summary) {
   }
 
   updateMarkerVisibility();
-  elements.legendMode.textContent = WEIGHT_MODE_LABELS[weightMode] || `${weightMode} scale`;
+  focusVisibleFeatures(
+    visibleFeatures,
+    searchTerm,
+    `${topFilterMode}|${showZeroes ? "zeroes" : "nonzero"}|${searchTerm}`
+  );
+  updateLegend(heatResult.stats);
   updateSummary(summary, visibleFeatures.length);
 }
 
@@ -456,7 +860,7 @@ async function init() {
     elements.toggleZeroes.addEventListener("change", () => applyFilters(summary));
     elements.resetView.addEventListener("click", () => {
       elements.searchInput.value = "";
-      elements.weightMode.value = "power";
+      elements.weightMode.value = "log";
       elements.topFilter.value = "all";
       elements.toggleHeat.checked = true;
       elements.toggleMarkers.checked = true;
