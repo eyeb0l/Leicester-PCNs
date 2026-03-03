@@ -1,9 +1,9 @@
 {
   "source_row_count": 1548,
   "normalized_street_count": 1546,
-  "geocoded_success_count": 1470,
-  "failed_geocode_count": 76,
+  "geocoded_success_count": 1493,
+  "failed_geocode_count": 53,
   "zero_count_feature_count": 300,
   "duplicate_groups_resolved": 2,
-  "last_build_at": "2026-03-03T13:32:48Z"
+  "last_build_at": "2026-03-03T14:22:22Z"
 }

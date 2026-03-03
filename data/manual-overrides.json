@@ -3,5 +3,120 @@
 	"lat": 52.64648210534154,
 	"lon": -1.129610659414936,
 	"reason": "Verified manually"
-  }
+    },
+  "careys close|leicester|uk": {
+	  "lat": 52.6343729797278,
+	  "lon": -1.138874930253258,
+	  "reason": "Verified manually"
+	},
+  "demontfort square|leicester|uk": {
+		"lat": 52.62837914368155,
+		"lon": -1.1261169209148485,
+		"reason": "Verified manually"
+	},
+  "demontfort street|leicester|uk": {
+		"lat": 52.627409163415926,
+		"lon": -1.1254415356902556,
+		"reason": "Verified manually"
+	},
+  "dover street car park|leicester|uk": {
+		"lat": 52.631994043172064,
+		"lon": -1.128382584486017,
+		"reason": "Verified manually"
+	},
+  "evinton place|leicester|uk": {
+		"lat": 52.626473857514874,
+		"lon": -1.1113984371829466,
+		"reason": "Verified manually"
+	},
+  "goscote house car park|leicester|uk": {
+		"lat": 52.63155342200276,
+		"lon": -1.1193179086329172,
+		"reason": "Verified manually"
+	},
+  "hardys avenue|leicester|uk": {
+		"lat": 52.66506573640823,
+		"lon": -1.1073849034757846,
+		"reason": "Verified manually"
+	},
+  "haymarket centre & car park|leicester|uk": {
+		"lat": 52.637966301184036,
+		"lon": -1.1317813393535774,
+		"reason": "Verified manually"
+	},
+  "highmeres road eastern carriageway|leicester|uk": {
+		"lat": 52.659339696026265,
+		"lon": -1.0848188328701043,
+		"reason": "Verified manually"
+	},
+  "highmeres road southern carriageway|leicester|uk": {
+		"lat": 52.65976616982149,
+		"lon": -1.0869252180438593,
+		"reason": "Verified manually"
+	},
+  "highmeres road western carriageway|leicester|uk": {
+		"lat": 52.66020689190914,
+		"lon": -1.0870383134367378,
+		"reason": "Verified manually"
+	},
+  "linkways gardens|leicester|uk": {
+		"lat": 52.63105053574114,
+		"lon": -1.15401854640774,
+		"reason": "Verified manually"
+	},
+  "maynell road|leicester|uk": {
+		"lat": 52.6409056169604,
+		"lon": -1.1019333594151104,
+		"reason": "Verified manually"
+	},
+  "newarke street car park|leicester|uk": {
+		"lat": 52.63119831457563,
+		"lon": -1.1345699184751121,
+		"reason": "Verified manually"
+	},
+  "phoenix square car park|leicester|uk": {
+		"lat": 52.63589150515582,
+		"lon": -1.1237065774881982,
+		"reason": "Verified manually"
+	},
+  "southgates south bound slip road|leicester|uk": {
+		"lat": 52.633347144875394,
+		"lon": -1.1383188500160453,
+		"reason": "Verified manually"
+	},
+  "st margaret’s pastures car park|leicester|uk": {
+		"lat": 52.642822732732114,
+		"lon": -1.1376497947329158,
+		"reason": "Verified manually"
+	},
+  "st oswalds road|leicester|uk": {
+		"lat": 52.64500792378853,
+		"lon": -1.1796334839496858,
+		"reason": "Verified manually"
+	},
+  "st saviours hill|leicester|uk": {
+		"lat": 52.63692519351043,
+		"lon": -1.1096850402865654,
+		"reason": "Verified manually"
+	},
+  "vicarage lane (bel)|leicester|uk": {
+		"lat": 52.65841588884091,
+		"lon": -1.1243843190005691,
+		"reason": "Verified manually"
+	},
+  "victoria park car park|leicester|uk": {
+		"lat": 52.625663540014436,
+		"lon": -1.1195944968003002,
+		"reason": "Verified manually"
+	},
+  "watermead country park car park|leicester|uk": {
+		"lat": 52.67105125453993,
+		"lon": -1.1106401866405948,
+		"reason": "Verified manually"
+	},
+  "west walk central parking area|leicester|uk": {
+		"lat": 52.6276097977081,
+		"lon": -1.1238836056021735,
+		"reason": "Verified manually"
+	}
 }

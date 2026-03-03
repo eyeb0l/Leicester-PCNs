@@ -292,6 +292,28 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -1.128382584486017,
+          52.631994043172064
+        ]
+      },
+      "properties": {
+        "cache_key": "dover street car park|leicester|uk",
+        "display_name": "Dover Street Car Park",
+        "aliases": [
+          "Dover Street Car Park"
+        ],
+        "count_total": 962,
+        "source_rows": 1,
+        "is_zero_count": false,
+        "has_zero_count_variant": false,
+        "geocode_status": "manual_override"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -1.1385312,
           52.6247548
         ]
@@ -1084,6 +1106,28 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -1.1195944968003002,
+          52.625663540014436
+        ]
+      },
+      "properties": {
+        "cache_key": "victoria park car park|leicester|uk",
+        "display_name": "Victoria Park Car Park",
+        "aliases": [
+          "Victoria Park Car Park"
+        ],
+        "count_total": 505,
+        "source_rows": 1,
+        "is_zero_count": false,
+        "has_zero_count_variant": false,
+        "geocode_status": "manual_override"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -1.1367834,
           52.6286567
         ]
@@ -1165,6 +1209,28 @@
         "is_zero_count": false,
         "has_zero_count_variant": false,
         "geocode_status": "ok"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.138874930253258,
+          52.6343729797278
+        ]
+      },
+      "properties": {
+        "cache_key": "careys close|leicester|uk",
+        "display_name": "Careys Close",
+        "aliases": [
+          "Careys Close"
+        ],
+        "count_total": 483,
+        "source_rows": 1,
+        "is_zero_count": false,
+        "has_zero_count_variant": false,
+        "geocode_status": "manual_override"
       }
     },
     {
@@ -1715,6 +1781,28 @@
         "is_zero_count": false,
         "has_zero_count_variant": false,
         "geocode_status": "ok"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.1254415356902556,
+          52.627409163415926
+        ]
+      },
+      "properties": {
+        "cache_key": "demontfort street|leicester|uk",
+        "display_name": "Demontfort Street",
+        "aliases": [
+          "Demontfort Street"
+        ],
+        "count_total": 385,
+        "source_rows": 1,
+        "is_zero_count": false,
+        "has_zero_count_variant": false,
+        "geocode_status": "manual_override"
       }
     },
     {
@@ -4054,6 +4142,28 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -1.1193179086329172,
+          52.63155342200276
+        ]
+      },
+      "properties": {
+        "cache_key": "goscote house car park|leicester|uk",
+        "display_name": "Goscote House Car Park",
+        "aliases": [
+          "Goscote House Car Park"
+        ],
+        "count_total": 177,
+        "source_rows": 1,
+        "is_zero_count": false,
+        "has_zero_count_variant": false,
+        "geocode_status": "manual_override"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -1.1126434,
           52.625922
         ]
@@ -4179,6 +4289,28 @@
         "is_zero_count": false,
         "has_zero_count_variant": false,
         "geocode_status": "ok"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.1383188500160453,
+          52.633347144875394
+        ]
+      },
+      "properties": {
+        "cache_key": "southgates south bound slip road|leicester|uk",
+        "display_name": "Southgates South Bound Slip Road",
+        "aliases": [
+          "Southgates South Bound Slip Road"
+        ],
+        "count_total": 171,
+        "source_rows": 1,
+        "is_zero_count": false,
+        "has_zero_count_variant": false,
+        "geocode_status": "manual_override"
       }
     },
     {
@@ -5594,6 +5726,50 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -1.1376497947329158,
+          52.642822732732114
+        ]
+      },
+      "properties": {
+        "cache_key": "st margaret’s pastures car park|leicester|uk",
+        "display_name": "St Margaret’s Pastures Car Park",
+        "aliases": [
+          "St Margaret’s Pastures Car Park"
+        ],
+        "count_total": 121,
+        "source_rows": 1,
+        "is_zero_count": false,
+        "has_zero_count_variant": false,
+        "geocode_status": "manual_override"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.1106401866405948,
+          52.67105125453993
+        ]
+      },
+      "properties": {
+        "cache_key": "watermead country park car park|leicester|uk",
+        "display_name": "Watermead Country Park Car Park",
+        "aliases": [
+          "Watermead Country Park Car Park"
+        ],
+        "count_total": 120,
+        "source_rows": 1,
+        "is_zero_count": false,
+        "has_zero_count_variant": false,
+        "geocode_status": "manual_override"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -1.1114351,
           52.626442
         ]
@@ -6511,6 +6687,28 @@
         "is_zero_count": false,
         "has_zero_count_variant": false,
         "geocode_status": "ok"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.1237065774881982,
+          52.63589150515582
+        ]
+      },
+      "properties": {
+        "cache_key": "phoenix square car park|leicester|uk",
+        "display_name": "Phoenix Square Car Park",
+        "aliases": [
+          "Phoenix Square Car Park"
+        ],
+        "count_total": 95,
+        "source_rows": 1,
+        "is_zero_count": false,
+        "has_zero_count_variant": false,
+        "geocode_status": "manual_override"
       }
     },
     {
@@ -9225,6 +9423,28 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -1.0848188328701043,
+          52.659339696026265
+        ]
+      },
+      "properties": {
+        "cache_key": "highmeres road eastern carriageway|leicester|uk",
+        "display_name": "Highmeres Road Eastern Carriageway",
+        "aliases": [
+          "Highmeres Road Eastern Carriageway"
+        ],
+        "count_total": 59,
+        "source_rows": 1,
+        "is_zero_count": false,
+        "has_zero_count_variant": false,
+        "geocode_status": "manual_override"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -1.1526253,
           52.6736236
         ]
@@ -9900,6 +10120,28 @@
         "is_zero_count": false,
         "has_zero_count_variant": false,
         "geocode_status": "ok"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.1261169209148485,
+          52.62837914368155
+        ]
+      },
+      "properties": {
+        "cache_key": "demontfort square|leicester|uk",
+        "display_name": "Demontfort Square",
+        "aliases": [
+          "Demontfort Square"
+        ],
+        "count_total": 52,
+        "source_rows": 1,
+        "is_zero_count": false,
+        "has_zero_count_variant": false,
+        "geocode_status": "manual_override"
       }
     },
     {
@@ -11271,6 +11513,28 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -1.0869252180438593,
+          52.65976616982149
+        ]
+      },
+      "properties": {
+        "cache_key": "highmeres road southern carriageway|leicester|uk",
+        "display_name": "Highmeres Road Southern Carriageway",
+        "aliases": [
+          "Highmeres Road Southern Carriageway"
+        ],
+        "count_total": 38,
+        "source_rows": 1,
+        "is_zero_count": false,
+        "has_zero_count_variant": false,
+        "geocode_status": "manual_override"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -1.0896811,
           52.6411819
         ]
@@ -11550,6 +11814,28 @@
         "is_zero_count": false,
         "has_zero_count_variant": false,
         "geocode_status": "ok"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.1096850402865654,
+          52.63692519351043
+        ]
+      },
+      "properties": {
+        "cache_key": "st saviours hill|leicester|uk",
+        "display_name": "St Saviours Hill",
+        "aliases": [
+          "St Saviours Hill"
+        ],
+        "count_total": 37,
+        "source_rows": 1,
+        "is_zero_count": false,
+        "has_zero_count_variant": false,
+        "geocode_status": "manual_override"
       }
     },
     {
@@ -14725,6 +15011,28 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -1.1238836056021735,
+          52.6276097977081
+        ]
+      },
+      "properties": {
+        "cache_key": "west walk central parking area|leicester|uk",
+        "display_name": "West Walk Central Parking Area",
+        "aliases": [
+          "West Walk Central Parking Area"
+        ],
+        "count_total": 19,
+        "source_rows": 1,
+        "is_zero_count": false,
+        "has_zero_count_variant": false,
+        "geocode_status": "manual_override"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -1.1553547,
           52.6236926
         ]
@@ -16353,6 +16661,28 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -1.0870383134367378,
+          52.66020689190914
+        ]
+      },
+      "properties": {
+        "cache_key": "highmeres road western carriageway|leicester|uk",
+        "display_name": "Highmeres Road Western Carriageway",
+        "aliases": [
+          "Highmeres Road Western Carriageway"
+        ],
+        "count_total": 13,
+        "source_rows": 1,
+        "is_zero_count": false,
+        "has_zero_count_variant": false,
+        "geocode_status": "manual_override"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -1.1594423,
           52.6412802
         ]
@@ -16434,6 +16764,28 @@
         "is_zero_count": false,
         "has_zero_count_variant": false,
         "geocode_status": "ok"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.1345699184751121,
+          52.63119831457563
+        ]
+      },
+      "properties": {
+        "cache_key": "newarke street car park|leicester|uk",
+        "display_name": "Newarke Street Car Park",
+        "aliases": [
+          "Newarke  Street Car Park"
+        ],
+        "count_total": 13,
+        "source_rows": 1,
+        "is_zero_count": false,
+        "has_zero_count_variant": false,
+        "geocode_status": "manual_override"
       }
     },
     {
@@ -19807,6 +20159,28 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -1.1073849034757846,
+          52.66506573640823
+        ]
+      },
+      "properties": {
+        "cache_key": "hardys avenue|leicester|uk",
+        "display_name": "Hardys Avenue",
+        "aliases": [
+          "Hardys Avenue"
+        ],
+        "count_total": 5,
+        "source_rows": 1,
+        "is_zero_count": false,
+        "has_zero_count_variant": false,
+        "geocode_status": "manual_override"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -1.0921551,
           52.6399811
         ]
@@ -19844,6 +20218,28 @@
         "is_zero_count": false,
         "has_zero_count_variant": false,
         "geocode_status": "ok"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.1019333594151104,
+          52.6409056169604
+        ]
+      },
+      "properties": {
+        "cache_key": "maynell road|leicester|uk",
+        "display_name": "Maynell Road",
+        "aliases": [
+          "Maynell Road"
+        ],
+        "count_total": 5,
+        "source_rows": 1,
+        "is_zero_count": false,
+        "has_zero_count_variant": false,
+        "geocode_status": "manual_override"
       }
     },
     {
@@ -20974,6 +21370,28 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -1.1243843190005691,
+          52.65841588884091
+        ]
+      },
+      "properties": {
+        "cache_key": "vicarage lane (bel)|leicester|uk",
+        "display_name": "Vicarage Lane (Bel)",
+        "aliases": [
+          "Vicarage Lane (Bel)"
+        ],
+        "count_total": 4,
+        "source_rows": 1,
+        "is_zero_count": false,
+        "has_zero_count_variant": false,
+        "geocode_status": "manual_override"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -1.1198635,
           52.6546074
         ]
@@ -21810,6 +22228,28 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -1.1796334839496858,
+          52.64500792378853
+        ]
+      },
+      "properties": {
+        "cache_key": "st oswalds road|leicester|uk",
+        "display_name": "St Oswalds Road",
+        "aliases": [
+          "St Oswalds Road"
+        ],
+        "count_total": 3,
+        "source_rows": 1,
+        "is_zero_count": false,
+        "has_zero_count_variant": false,
+        "geocode_status": "manual_override"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -1.085145,
           52.6483835
         ]
@@ -22573,6 +23013,28 @@
         "is_zero_count": false,
         "has_zero_count_variant": false,
         "geocode_status": "ok"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.1317813393535774,
+          52.637966301184036
+        ]
+      },
+      "properties": {
+        "cache_key": "haymarket centre & car park|leicester|uk",
+        "display_name": "Haymarket Centre & Car Park",
+        "aliases": [
+          "Haymarket Centre & Car Park"
+        ],
+        "count_total": 2,
+        "source_rows": 1,
+        "is_zero_count": false,
+        "has_zero_count_variant": false,
+        "geocode_status": "manual_override"
       }
     },
     {
@@ -24010,6 +24472,28 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -1.1113984371829466,
+          52.626473857514874
+        ]
+      },
+      "properties": {
+        "cache_key": "evinton place|leicester|uk",
+        "display_name": "Evinton Place",
+        "aliases": [
+          "Evinton Place"
+        ],
+        "count_total": 1,
+        "source_rows": 1,
+        "is_zero_count": false,
+        "has_zero_count_variant": false,
+        "geocode_status": "manual_override"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -1.1319081,
           52.6358232
         ]
@@ -24707,6 +25191,28 @@
         "is_zero_count": false,
         "has_zero_count_variant": false,
         "geocode_status": "ok"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.15401854640774,
+          52.63105053574114
+        ]
+      },
+      "properties": {
+        "cache_key": "linkways gardens|leicester|uk",
+        "display_name": "Linkways Gardens",
+        "aliases": [
+          "Linkways Gardens"
+        ],
+        "count_total": 1,
+        "source_rows": 1,
+        "is_zero_count": false,
+        "has_zero_count_variant": false,
+        "geocode_status": "manual_override"
       }
     },
     {
