@@ -15,6 +15,22 @@
           dark: "#111820",
         };
         const root = document.documentElement;
+        const applyThemeSignals = (target, theme, source) => {
+          if (!target) {
+            return;
+          }
+          target.dataset.theme = theme;
+          target.dataset.themeSource = source;
+          target.dataset.colorMode = theme;
+          target.dataset.darkMode = String(theme === "dark");
+          target.classList.toggle("theme-light", theme === "light");
+          target.classList.toggle("theme-dark", theme === "dark");
+          target.classList.toggle("light", theme === "light");
+          target.classList.toggle("dark", theme === "dark");
+          target.classList.toggle("color-mode-light", theme === "light");
+          target.classList.toggle("color-mode-dark", theme === "dark");
+          target.style.colorScheme = theme;
+        };
         const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
         let theme = prefersDark ? "dark" : "light";
         let source = "system";
@@ -27,10 +43,7 @@
           }
         } catch {}
 
-        root.dataset.theme = theme;
-        root.dataset.themeSource = source;
-        root.classList.add(`theme-${theme}`);
-        root.style.colorScheme = theme;
+        applyThemeSignals(root, theme, source);
 
         const themeColorMeta = document.querySelector('meta[name="theme-color"]');
         if (themeColorMeta) {
@@ -39,8 +52,23 @@
 
         const colorSchemeMeta = document.querySelector('meta[name="color-scheme"]');
         if (colorSchemeMeta) {
-          colorSchemeMeta.setAttribute("content", theme === "dark" ? "dark light" : "light dark");
+          colorSchemeMeta.setAttribute("content", theme);
         }
+
+        const supportedColorSchemesMeta = document.querySelector(
+          'meta[name="supported-color-schemes"]'
+        );
+        if (supportedColorSchemesMeta) {
+          supportedColorSchemesMeta.setAttribute("content", theme);
+        }
+
+        document.addEventListener(
+          "DOMContentLoaded",
+          () => {
+            applyThemeSignals(document.body, theme, source);
+          },
+          { once: true }
+        );
       })();
     </script>
     <link

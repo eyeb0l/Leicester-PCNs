@@ -143,8 +143,10 @@ const HEAT_BLOB_OPTIONS = {
   maxOpacity: 0.34,
 };
 const rootElement = document.documentElement;
+const bodyElement = document.body;
 const themeColorMeta = document.querySelector('meta[name="theme-color"]');
 const colorSchemeMeta = document.querySelector('meta[name="color-scheme"]');
+const supportedColorSchemesMeta = document.querySelector('meta[name="supported-color-schemes"]');
 const systemThemeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 const themeState = {
   mode: rootElement.dataset.theme === "dark" ? "dark" : "light",
@@ -191,7 +193,10 @@ function updateThemeMeta(theme) {
     themeColorMeta.setAttribute("content", THEME_COLORS[theme] || THEME_COLORS.light);
   }
   if (colorSchemeMeta) {
-    colorSchemeMeta.setAttribute("content", theme === "dark" ? "dark light" : "light dark");
+    colorSchemeMeta.setAttribute("content", theme);
+  }
+  if (supportedColorSchemesMeta) {
+    supportedColorSchemesMeta.setAttribute("content", theme);
   }
 }
 
@@ -225,12 +230,26 @@ function syncThemeUi() {
   }
 }
 
+function setThemeTarget(target, theme, source) {
+  if (!target) {
+    return;
+  }
+  target.dataset.theme = theme;
+  target.dataset.themeSource = source;
+  target.dataset.colorMode = theme;
+  target.dataset.darkMode = String(theme === "dark");
+  target.style.colorScheme = theme;
+  target.classList.toggle("theme-light", theme === "light");
+  target.classList.toggle("theme-dark", theme === "dark");
+  target.classList.toggle("light", theme === "light");
+  target.classList.toggle("dark", theme === "dark");
+  target.classList.toggle("color-mode-light", theme === "light");
+  target.classList.toggle("color-mode-dark", theme === "dark");
+}
+
 function setThemeRoot(theme, source) {
-  rootElement.dataset.theme = theme;
-  rootElement.dataset.themeSource = source;
-  rootElement.style.colorScheme = theme;
-  rootElement.classList.toggle("theme-light", theme === "light");
-  rootElement.classList.toggle("theme-dark", theme === "dark");
+  setThemeTarget(rootElement, theme, source);
+  setThemeTarget(bodyElement, theme, source);
 }
 
 function applyTheme(theme, source = themeState.source) {
