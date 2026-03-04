@@ -166,6 +166,7 @@ const elements = {
   resetView: document.querySelector("#reset-view"),
   summaryList: document.querySelector("#summary-list"),
   leagueTable: document.querySelector("#league-table"),
+  leagueTableMeta: document.querySelector("#league-table-meta"),
   legendMode: document.querySelector("#legend-mode"),
   legendBar: document.querySelector("#legend-bar"),
   legendTicks: document.querySelector("#legend-ticks"),
@@ -878,7 +879,7 @@ function updateLeagueTable(features, limit = 10) {
     return;
   }
 
-  const rows = dedupeByCacheKey(features)
+  const rankedRows = dedupeByCacheKey(features)
     .filter((feature) => getCount(feature) > 0)
     .sort((left, right) => {
       const countDifference = getCount(right) - getCount(left);
@@ -887,25 +888,35 @@ function updateLeagueTable(features, limit = 10) {
       }
       return left.properties.display_name.localeCompare(right.properties.display_name);
     })
-    .slice(0, limit)
-    .map((feature) => {
-      const overallRank = feature.properties.overall_rank;
-      const pcnsPerDay = feature.properties.pcns_per_day;
-      const shareOfTotal = feature.properties.share_of_total;
-      return `
-        <li class="league-row">
-          <span class="league-rank">#${formatNumber(overallRank)}</span>
-          <div class="league-main">
-            <span class="league-street">${escapeHtml(feature.properties.display_name)}</span>
-            <span class="league-meta">
-              <span>${formatDecimal(pcnsPerDay)} per day</span>
-              <span>${formatPercent(shareOfTotal)} of total</span>
-            </span>
-          </div>
-          <span class="league-count">${formatNumber(getCount(feature))} fines</span>
-        </li>
-      `;
-    });
+    .slice(0, limit);
+
+  const topTenShare = rankedRows.reduce(
+    (sum, feature) => sum + (feature.properties.share_of_total || 0),
+    0
+  );
+
+  if (elements.leagueTableMeta) {
+    elements.leagueTableMeta.textContent = `TOP 10 STREETS–${formatPercent(topTenShare)}`;
+  }
+
+  const rows = rankedRows.map((feature) => {
+    const overallRank = feature.properties.overall_rank;
+    const pcnsPerDay = feature.properties.pcns_per_day;
+    const shareOfTotal = feature.properties.share_of_total;
+    return `
+      <li class="league-row">
+        <span class="league-rank">#${formatNumber(overallRank)}</span>
+        <div class="league-main">
+          <span class="league-street">${escapeHtml(feature.properties.display_name)}</span>
+          <span class="league-meta">
+            <span>${formatDecimal(pcnsPerDay)} per day</span>
+            <span>${formatPercent(shareOfTotal)} of total</span>
+          </span>
+        </div>
+        <span class="league-count">${formatNumber(getCount(feature))} fines</span>
+      </li>
+    `;
+  });
 
   elements.leagueTable.innerHTML = rows.join("");
 }
