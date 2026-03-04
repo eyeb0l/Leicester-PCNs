@@ -999,6 +999,8 @@ function popupHtml(feature) {
     count_total: countTotal,
     overall_rank: overallRank,
     pcns_per_day: pcnsPerDay,
+    street_length_miles: streetLengthMiles,
+    fines_per_mile: finesPerMile,
     aliases,
     geocode_status: geocodeStatus,
   } = feature.properties;
@@ -1014,6 +1016,17 @@ function popupHtml(feature) {
     geocodeStatus === MANUAL_OVERRIDE_STATUS
       ? '<p class="marker-style"><strong>Manual override</strong></p>'
       : "";
+  const hasLengthMetrics =
+    Number.isFinite(streetLengthMiles) &&
+    streetLengthMiles > 0 &&
+    Number.isFinite(finesPerMile) &&
+    finesPerMile >= 0;
+  const lengthHtml = hasLengthMetrics
+    ? `<p>Length: <strong>${formatDecimal(streetLengthMiles, 2)} mi</strong> · ${formatDecimal(
+        finesPerMile,
+        1
+      )} fines/mi</p>`
+    : "";
 
   return `
     <div class="popup-content">
@@ -1021,6 +1034,7 @@ function popupHtml(feature) {
       <p><strong>${formatNumber(countTotal)}</strong> fines</p>
       ${rankHtml}
       ${perDayHtml}
+      ${lengthHtml}
       ${statusHtml}
       ${aliasHtml}
     </div>

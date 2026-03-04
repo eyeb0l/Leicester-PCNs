@@ -12,6 +12,7 @@ Static web app and Python preprocessing pipeline for mapping Leicester City Coun
 - `data/source/leicester.csv`: tracked source CSV used by the build scripts
 - `data/build/normalized_streets.json`: normalized street dataset emitted by `prepare_data.py`
 - `data/cache/geocode-cache.json`: resumable geocode cache, including failures
+- `data/cache/street-lengths.json`: street length cache derived from OSM/Overpass
 - `data/manual-overrides.json`: manual lat/lon fixes that override cached API results
 - `data/build/streets.geojson`: final map-ready point dataset
 - `data/build/summary.json`: build summary used by the browser UI
@@ -26,6 +27,8 @@ Static web app and Python preprocessing pipeline for mapping Leicester City Coun
 - Count values are parsed with `float()` and accepted only when they represent a whole number (e.g., `11.` → `11`)
 - Manual overrides always take precedence over geocoder responses
 - Failed geocodes are cached and not retried unless you delete them or rerun with `--retry-errors`
+- Street-length enrichment skips any car park/parking area and any manual-override location
+- Popup length and fines-per-mile are hidden when street length cannot be derived
 
 ## Map providers
 
@@ -98,6 +101,7 @@ cp map-config.example.json map-config.json
 python3 -m pip install --user geopy
 python3 scripts/prepare_data.py
 python3 scripts/geocode_streets.py --progress --retry-errors
+python3 scripts/build_street_lengths.py
 python3 scripts/build_geojson.py
 python3 -m http.server
 ```
