@@ -54,7 +54,7 @@ Then open [http://localhost:8000](http://localhost:8000).
 - In `all` mode, the heat layer uses a steeper low-end curve than the markers so lower-count streets contribute much less background haze while outliers like London Road remain dominant.
 - In Top-N modes, the app uses a different percentile stop curve on the sliced dataset so the upper half remains legible instead of collapsing toward the floor.
 - Heat radius and blur now scale with zoom, and the rendered heat weights get an additional contrast boost so hotspots keep a readable footprint and stronger visual separation when you zoom in.
-- Circle markers still render in the `2-60px` range, but marker size now comes from percentile anchors rather than a single clipped cap.
+- Circle markers now render in the `2.5-75px` range, with size still driven by percentile anchors rather than a single clipped cap.
 - No heat or marker values are dropped to zero via a rendering threshold; use the Top-N filter to reduce clutter instead.
 - Flip `DEBUG_SHOW_WEIGHTS` in `app.js` to inspect mapping anchors, count/weight percentiles, and the top streets for the current filter slice if the map ever looks off.
 
@@ -68,18 +68,18 @@ Streets visualized: 1193
 Heat mapping anchors: min:1->0.0050 · p50:27->0.0180 · p75:97->0.0550 · p90:292->0.1600 · p95:452->0.3200 · p99:972->0.7200 · max:5041->1.0000
 Marker mapping anchors: min:1->0.0100 · p50:27->0.0200 · p90:292->0.1000 · p95:452->0.1800 · p99:972->0.4500 · max:5041->1.0000
 Count percentiles: min:1 · p25:6 · p50:27 · p75:97 · p90:292 · p95:452 · p99:972 · max:5041
-Weight percentiles: min:0.0050 · p25:0.0075 · p50:0.0180 · p75:0.0550 · p90:0.1600 · p95:0.3200 · p99:0.7200 · max:1.0000
-Marker radius percentiles: min:2.58 · p50:3.16 · p90:7.80 · p99:28.10 · max:60.00
+Weight percentiles: min:0.0120 · p25:0.0120 · p50:0.0180 · p75:0.0396 · p90:0.1284 · p95:0.2791 · p99:0.6922 · max:1.0000
+Marker radius percentiles: min:3.23 · p50:3.95 · p90:9.75 · p99:35.13 · max:75.00
 ┌─────────┬────────────────────────┬───────┬────────┬────────┐
 │ (index) │ street                 │ count │ weight │ radius │
 ├─────────┼────────────────────────┼───────┼────────┼────────┤
-│ 0       │ London Road            │ 5041  │ 1      │ 60     │
-│ 1       │ Western Road           │ 2612  │ 0.8329 │ 40.96  │
-│ 2       │ Bowling Green Street   │ 1849  │ 0.7803 │ 34.98  │
-│ 3       │ Wellington Street      │ 1742  │ 0.773  │ 34.14  │
-│ 4       │ Granby Street          │ 1618  │ 0.7645 │ 33.16  │
+│ 0       │ London Road            │ 5041  │ 1      │ 75     │
+│ 1       │ Western Road           │ 2612  │ 0.8148 │ 51.2   │
+│ 2       │ Bowling Green Street   │ 1849  │ 0.7575 │ 43.72  │
+│ 3       │ Wellington Street      │ 1742  │ 0.7495 │ 42.67  │
+│ 4       │ Granby Street          │ 1618  │ 0.7402 │ 41.46  │
 │ …       │ …                      │ …     │ …      │ …      │
-│ 24      │ Eastern Boulevard      │ 743   │ 0.5438 │ 21.2   │
+│ 24      │ Eastern Boulevard      │ 743   │ 0.5055 │ 26.5   │
 └─────────┴────────────────────────┴───────┴────────┴────────┘
 
 Scenario: Top 50 streets
@@ -87,20 +87,20 @@ Streets visualized: 50
 Heat mapping anchors: min:505->0.0800 · p50:743->0.1800 · p75:972->0.3000 · p90:1610->0.5500 · p95:1849->0.7600 · max:5041->1.0000
 Marker mapping anchors: min:505->0.1400 · p50:743->0.2200 · p90:1610->0.4800 · p95:1849->0.6200 · max:5041->1.0000
 Count percentiles: min:505 · p25:582 · p50:743 · p75:972 · p90:1610 · p95:1849 · p99:5041 · max:5041
-Weight percentiles: min:0.0800 · p25:0.1124 · p50:0.1800 · p75:0.3000 · p90:0.5500 · p95:0.7600 · p99:1.0000 · max:1.0000
-Marker radius percentiles: min:10.12 · p50:14.76 · p90:29.84 · p99:60.00 · max:60.00
+Weight percentiles: min:0.0576 · p25:0.0809 · p50:0.1465 · p75:0.2596 · p90:0.5119 · p95:0.7354 · p99:1.0000 · max:1.0000
+Marker radius percentiles: min:12.65 · p50:18.45 · p90:37.30 · p99:75.00 · max:75.00
 Top 50 count focus: p50:743 · p90:1610 · p95:1849 · p99:5041 · max:5041
-Top 50 weight focus: p50:0.1800 · p90:0.5500 · p95:0.7600 · p99:1.0000 · max:1.0000
+Top 50 weight focus: p50:0.1465 · p90:0.5119 · p95:0.7354 · p99:1.0000 · max:1.0000
 ┌─────────┬────────────────────────┬───────┬────────┬────────┐
 │ (index) │ street                 │ count │ weight │ radius │
 ├─────────┼────────────────────────┼───────┼────────┼────────┤
-│ 0       │ London Road            │ 5041  │ 1      │ 60     │
-│ 1       │ Western Road           │ 2612  │ 0.8174 │ 43.23  │
-│ 2       │ Bowling Green Street   │ 1849  │ 0.76   │ 37.96  │
-│ 3       │ Wellington Street      │ 1742  │ 0.666  │ 34.32  │
-│ 4       │ Granby Street          │ 1618  │ 0.557  │ 30.11  │
+│ 0       │ London Road            │ 5041  │ 1      │ 75     │
+│ 1       │ Western Road           │ 2612  │ 0.7978 │ 54.04  │
+│ 2       │ Bowling Green Street   │ 1849  │ 0.7354 │ 47.45  │
+│ 3       │ Wellington Street      │ 1742  │ 0.6343 │ 42.91  │
+│ 4       │ Granby Street          │ 1618  │ 0.5193 │ 37.64  │
 │ …       │ …                      │ …     │ …      │ …      │
-│ 24      │ Eastern Boulevard      │ 743   │ 0.18   │ 14.76  │
+│ 24      │ Eastern Boulevard      │ 743   │ 0.1465 │ 18.45  │
 └─────────┴────────────────────────┴───────┴────────┴────────┘
 ```
 

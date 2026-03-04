@@ -4,13 +4,13 @@
 const fs = require("fs");
 const path = require("path");
 
-const MARKER_MIN_RADIUS = 2;
-const MARKER_MAX_RADIUS = 60;
+const MARKER_MIN_RADIUS = 2.5;
+const MARKER_MAX_RADIUS = 75;
 const DEFAULT_ZOOM = 13;
 const HEAT_BLOB_OPTIONS = {
-  minRadius: 10,
-  maxRadius: 52,
-  zoomRadiusBoost: 4,
+  minRadius: 12.5,
+  maxRadius: 65,
+  zoomRadiusBoost: 5,
   minOpacity: 0.07,
   maxOpacity: 0.34,
 };

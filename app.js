@@ -3,8 +3,8 @@ const DEFAULT_ZOOM = 13;
 const MARKER_MIN_ZOOM = 14;
 const MANUAL_OVERRIDE_STATUS = "manual_override";
 const DEBUG_SHOW_WEIGHTS = false;
-const MARKER_MIN_RADIUS = 2;
-const MARKER_MAX_RADIUS = 60;
+const MARKER_MIN_RADIUS = 2.5;
+const MARKER_MAX_RADIUS = 75;
 const TOP_FILTER_LIMITS = {
   all: Infinity,
   top200: 200,
@@ -116,9 +116,9 @@ const COLOR_TRANSFORM_LABELS = {
 const COLOR_POWER_GAMMA = 0.42;
 // Heat layer is rendered as large colour-matched blobs so the palette tracks the markers.
 const HEAT_BLOB_OPTIONS = {
-  minRadius: 10,
-  maxRadius: 52,
-  zoomRadiusBoost: 4,
+  minRadius: 12.5,
+  maxRadius: 65,
+  zoomRadiusBoost: 5,
   minOpacity: 0.07,
   maxOpacity: 0.34,
 };
