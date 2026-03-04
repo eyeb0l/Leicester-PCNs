@@ -50,7 +50,7 @@ Then open [http://localhost:8000](http://localhost:8000).
 ## Heatmap tuning
 
 - Leaflet heat intensities and marker sizes are normalized per filter run using percentile anchors, while marker colour uses the selected scale transform.
-- The "Streets shown" control lets you restrict rendering to the top 200/100/50 streets by count for diagnostics; the default shows all available streets.
+- The "Streets shown" control lets you restrict rendering to the top 200/100/50 streets by count for diagnostics; the default shows the top 200 streets.
 - In `all` mode, the heat layer uses a steeper low-end curve than the markers so lower-count streets contribute much less background haze while outliers like London Road remain dominant.
 - In Top-N modes, the app uses a different percentile stop curve on the sliced dataset so the upper half remains legible instead of collapsing toward the floor.
 - Heat radius and blur now scale with zoom, and the rendered heat weights get an additional contrast boost so hotspots keep a readable footprint and stronger visual separation when you zoom in.

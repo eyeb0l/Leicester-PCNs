@@ -892,7 +892,7 @@ async function init() {
     elements.resetView.addEventListener("click", () => {
       elements.searchInput.value = "";
       elements.weightMode.value = "log";
-      elements.topFilter.value = "all";
+      elements.topFilter.value = "top200";
       elements.toggleHeat.checked = true;
       elements.toggleMarkers.checked = true;
       elements.toggleZeroes.checked = false;
