@@ -966,6 +966,24 @@ function assignOverallRanks(features) {
   }
 }
 
+function assignDensityRanks(features) {
+  const rankedFeatures = dedupeByCacheKey(features)
+    .filter((feature) => Number.isFinite(getDensity(feature)))
+    .sort((left, right) => {
+      const densityDifference = (getDensity(right) ?? 0) - (getDensity(left) ?? 0);
+      if (densityDifference !== 0) {
+        return densityDifference;
+      }
+      return left.properties.display_name.localeCompare(right.properties.display_name);
+    });
+
+  const ranksByKey = new Map(rankedFeatures.map((feature, index) => [getFeatureKey(feature), index + 1]));
+
+  for (const feature of features) {
+    feature.properties.density_rank = ranksByKey.get(getFeatureKey(feature)) ?? null;
+  }
+}
+
 function getStopConfig(topFilterMode) {
   if (topFilterMode === "all") {
     return {
@@ -1070,19 +1088,22 @@ function buildScaledPoints(features, scalingContext, metricMode) {
   };
 }
 
-function popupHtml(feature) {
+function popupHtml(feature, metricMode) {
   const {
     display_name: displayName,
     count_total: countTotal,
     overall_rank: overallRank,
+    density_rank: densityRank,
     pcns_per_day: pcnsPerDay,
     street_length_miles: streetLengthMiles,
     fines_per_mile: finesPerMile,
     aliases,
     geocode_status: geocodeStatus,
   } = feature.properties;
-  const rankHtml = Number.isFinite(overallRank)
-    ? `<p>Overall rank: <strong>#${formatNumber(overallRank)}</strong></p>`
+  const activeRank = metricMode === METRIC_MODES.density ? densityRank : overallRank;
+  const rankLabel = metricMode === METRIC_MODES.density ? "Density rank" : "Overall rank";
+  const rankHtml = Number.isFinite(activeRank)
+    ? `<p>${rankLabel}: <strong>#${formatNumber(activeRank)}</strong></p>`
     : "";
   const perDayHtml = Number.isFinite(pcnsPerDay) ? `<p>~ ${formatDecimal(pcnsPerDay)} per day</p>` : "";
   const aliasHtml =
@@ -1203,7 +1224,7 @@ function updateLeagueTable(features, metricMode, limit = 10) {
   elements.leagueTable.innerHTML = rows.join("");
 }
 
-function buildMarkerLayer(scaledPoints) {
+function buildMarkerLayer(scaledPoints, metricMode) {
   const layer = L.layerGroup();
   for (const point of scaledPoints) {
     point.feature.properties.marker_fill_color = point.fillColor;
@@ -1216,7 +1237,7 @@ function buildMarkerLayer(scaledPoints) {
       fillOpacity: point.fillOpacity,
       opacity: 0.88,
     });
-    marker.bindPopup(popupHtml(point.feature));
+    marker.bindPopup(popupHtml(point.feature, metricMode));
     layer.addLayer(marker);
   }
   return layer;
@@ -1353,7 +1374,7 @@ function applyFilters(summary) {
   }
   const scalingContext = computeScalingContext(heatFeatures, topFilterMode, weightMode, metricMode);
   const heatResult = buildHeatLayer(heatFeatures, topFilterMode, scalingContext, metricMode);
-  markerLayer = buildMarkerLayer(heatResult.scaledPoints);
+  markerLayer = buildMarkerLayer(heatResult.scaledPoints, metricMode);
   heatLayer = heatResult.layer;
 
   if (heatLayer && elements.toggleHeat.checked && heatResult.scaledPoints.length > 0) {
@@ -1409,6 +1430,7 @@ async function init() {
 
     allFeatures = geojson.features || [];
     assignOverallRanks(allFeatures);
+    assignDensityRanks(allFeatures);
     syncTopFilterLabels(getMetricMode());
     updateLeagueTable(allFeatures, getMetricMode());
     setDefaultBounds(allFeatures);
