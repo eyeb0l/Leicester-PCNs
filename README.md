@@ -45,6 +45,39 @@ cp map-config.example.json map-config.json
 - Publish `map-config.json` alongside the rest of the static site assets in deployment
 - Leave `mapbox/light-v11` and `mapbox/dark-v11` in place unless you want to target different compatible style IDs
 
+## Cloudflare Pages
+
+For a GitHub-linked Cloudflare Pages deployment, do not commit `map-config.json`. Instead:
+
+1. Add a Pages environment variable named `MAPBOX_PUBLIC_TOKEN` for both Preview and Production.
+2. Set the build command to `node scripts/write-map-config.mjs`.
+3. Set the build output directory to `.` so Pages publishes the repository root as static assets.
+
+The script writes `map-config.json` at build time from the Pages environment variable, which keeps the token out of Git while still making the required public `pk.` token available to the browser.
+
+- Production URL restrictions are straightforward: allow your production hostname and stable `pages.dev` hostname if you use it.
+- Preview deployments usually get changing URLs. Use a separate preview token with looser restrictions if you want preview builds to keep working.
+- If your build command also needs to regenerate data, prepend those steps before `node scripts/write-map-config.mjs`.
+
+If you deploy from the terminal instead of a GitHub-triggered Pages build, use the same script first and then deploy the static output:
+
+```bash
+MAPBOX_PUBLIC_TOKEN=pk.your-token-here node scripts/write-map-config.mjs
+wrangler pages deploy . --project-name pcn
+```
+
+This repo already publishes the repository root as static assets, which matches [`wrangler.jsonc`](/Volumes/T7/Projects/Leicester-PCNs/wrangler.jsonc).
+
+### Preview token troubleshooting
+
+If a Preview deployment loads the app shell but the basemap never appears, the usual cause is Mapbox token URL restrictions not matching the Preview hostname.
+
+- Check the browser network panel for failed requests to `api.mapbox.com/styles/v1/...` with `401` or `403` responses.
+- If Production works but Preview does not, your token is probably restricted to the production hostname only.
+- The simplest fix is to use a separate Preview token in Cloudflare Pages with looser URL restrictions.
+- If you want one token for both, include every hostname you actually serve from, including any stable `pages.dev` URL you use.
+- The app will surface this failure as `Mapbox tiles failed to load. Check the token and its URL restrictions.`
+
 ## Geocoding behavior
 
 - Provider: Nominatim (OpenStreetMap)
@@ -67,6 +100,12 @@ python3 -m http.server
 ```
 
 Then open [http://localhost:8000](http://localhost:8000).
+
+If you prefer to generate the config from an environment variable instead of editing the file manually:
+
+```bash
+MAPBOX_PUBLIC_TOKEN=pk.your-token-here node scripts/write-map-config.mjs
+```
 
 ## Heatmap tuning
 
