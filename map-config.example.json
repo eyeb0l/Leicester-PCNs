@@ -1,0 +1,7 @@
+{
+  "mapboxAccessToken": "pk.YOUR_PUBLIC_TOKEN_HERE",
+  "basemapStyles": {
+    "light": "mapbox/light-v11",
+    "dark": "mapbox/dark-v11"
+  }
+}
