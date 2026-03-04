@@ -94,11 +94,11 @@ const MARKER_COLOR_RAMP = [
 ];
 const MARKER_OUTLINE_COLOR = "#4c120f";
 const MARKER_OPACITY_STOPS = [
-  [0, 0.25],
-  [0.22, 0.33],
-  [0.5, 0.5],
-  [0.75, 0.62],
-  [1, 0.8],
+  [0, 0.22],
+  [0.22, 0.3],
+  [0.5, 0.46],
+  [0.75, 0.58],
+  [1, 0.74],
 ];
 const COLOR_CAP_LABEL_BY_FILTER = {
   all: "p99",
