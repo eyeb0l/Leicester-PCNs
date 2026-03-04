@@ -142,6 +142,7 @@ const HEAT_BLOB_OPTIONS = {
   minOpacity: 0.07,
   maxOpacity: 0.34,
 };
+const DATASET_DAY_COUNT = 365;
 const rootElement = document.documentElement;
 const bodyElement = document.body;
 const themeColorMeta = document.querySelector('meta[name="theme-color"]');
@@ -302,6 +303,21 @@ function hideStatus() {
 
 function formatNumber(value) {
   return new Intl.NumberFormat("en-GB").format(value);
+}
+
+function formatDecimal(value, fractionDigits = 1) {
+  return new Intl.NumberFormat("en-GB", {
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  }).format(value);
+}
+
+function formatPercent(value, fractionDigits = 1) {
+  return new Intl.NumberFormat("en-GB", {
+    style: "percent",
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  }).format(value);
 }
 
 function clamp(value, min = 0, max = 1) {
@@ -679,13 +695,24 @@ function assignOverallRanks(features) {
     }
     return left.properties.display_name.localeCompare(right.properties.display_name);
   });
+  const totalFineCount = rankedFeatures.reduce((sum, feature) => sum + getCount(feature), 0);
 
-  const rankByKey = new Map(
-    rankedFeatures.map((feature, index) => [getFeatureKey(feature), index + 1])
+  const metricsByKey = new Map(
+    rankedFeatures.map((feature, index) => [
+      getFeatureKey(feature),
+      {
+        overallRank: index + 1,
+        pcnsPerDay: getCount(feature) / DATASET_DAY_COUNT,
+        shareOfTotal: totalFineCount > 0 ? getCount(feature) / totalFineCount : 0,
+      },
+    ])
   );
 
   for (const feature of features) {
-    feature.properties.overall_rank = rankByKey.get(getFeatureKey(feature)) ?? null;
+    const metrics = metricsByKey.get(getFeatureKey(feature));
+    feature.properties.overall_rank = metrics?.overallRank ?? null;
+    feature.properties.pcns_per_day = metrics?.pcnsPerDay ?? 0;
+    feature.properties.share_of_total = metrics?.shareOfTotal ?? 0;
   }
 }
 
@@ -791,16 +818,15 @@ function popupHtml(feature) {
   const {
     display_name: displayName,
     count_total: countTotal,
-    source_rows: sourceRows,
     overall_rank: overallRank,
+    pcns_per_day: pcnsPerDay,
     aliases,
     geocode_status: geocodeStatus,
-    marker_fill_color: markerFillColor,
-    marker_fill_opacity: markerFillOpacity,
   } = feature.properties;
   const rankHtml = Number.isFinite(overallRank)
     ? `<p>Overall rank: <strong>#${formatNumber(overallRank)}</strong></p>`
     : "";
+  const perDayHtml = Number.isFinite(pcnsPerDay) ? `<p>~ ${formatDecimal(pcnsPerDay)} per day</p>` : "";
   const aliasHtml =
     aliases.length > 1
       ? `<p class="aliases">Aliases: ${aliases.map((alias) => escapeHtml(alias)).join(", ")}</p>`
@@ -809,21 +835,14 @@ function popupHtml(feature) {
     geocodeStatus === MANUAL_OVERRIDE_STATUS
       ? '<p class="marker-style"><strong>Manual override</strong></p>'
       : "";
-  const markerStyleHtml =
-    markerFillColor && Number.isFinite(markerFillOpacity)
-      ? `<p class="marker-style">Marker: ${escapeHtml(markerFillColor)} · opacity ${Number(
-          markerFillOpacity
-        ).toFixed(2)}</p>`
-      : "";
 
   return `
     <div class="popup-content">
       <h3>${escapeHtml(displayName)}</h3>
       <p><strong>${formatNumber(countTotal)}</strong> fines</p>
       ${rankHtml}
-      <p>${formatNumber(sourceRows)} source row${sourceRows === 1 ? "" : "s"}</p>
+      ${perDayHtml}
       ${statusHtml}
-      ${markerStyleHtml}
       ${aliasHtml}
     </div>
   `;
@@ -871,10 +890,18 @@ function updateLeagueTable(features, limit = 10) {
     .slice(0, limit)
     .map((feature) => {
       const overallRank = feature.properties.overall_rank;
+      const pcnsPerDay = feature.properties.pcns_per_day;
+      const shareOfTotal = feature.properties.share_of_total;
       return `
         <li class="league-row">
           <span class="league-rank">#${formatNumber(overallRank)}</span>
-          <span class="league-street">${escapeHtml(feature.properties.display_name)}</span>
+          <div class="league-main">
+            <span class="league-street">${escapeHtml(feature.properties.display_name)}</span>
+            <span class="league-meta">
+              <span>${formatDecimal(pcnsPerDay)} per day</span>
+              <span>${formatPercent(shareOfTotal)} of total</span>
+            </span>
+          </div>
           <span class="league-count">${formatNumber(getCount(feature))} fines</span>
         </li>
       `;
