@@ -108,8 +108,7 @@ const COLOR_CAP_LABEL_BY_FILTER = {
 };
 const COLOR_TRANSFORM_LABELS = {
   linear: "linear",
-  log: "log1p",
-  percentile: "log1p",
+  log: "logarithmic",
   power: "power",
   sqrt: "square root",
 };
@@ -122,14 +121,6 @@ const HEAT_BLOB_OPTIONS = {
   minOpacity: 0.07,
   maxOpacity: 0.34,
 };
-const WEIGHT_MODE_LABELS = {
-  log: "logarithmic",
-  power: "power",
-  sqrt: "square root",
-  linear: "linear",
-  percentile: "percentile anchored",
-};
-
 const elements = {
   searchInput: document.querySelector("#search-input"),
   weightMode: document.querySelector("#weight-mode"),
@@ -425,7 +416,7 @@ function isManualOverride(feature) {
 }
 
 function formatColorModeLabel(transformMode) {
-  return COLOR_TRANSFORM_LABELS[transformMode] || "log1p";
+  return COLOR_TRANSFORM_LABELS[transformMode] || "logarithmic";
 }
 
 function selectMedianColorSamples(scaledPoints, sampleSize = 5) {
@@ -768,7 +759,7 @@ function updateLegend(stats) {
   }
   elements.legendMode.textContent = `marker colour · ${formatColorModeLabel(
     stats.colorTransformMode
-  )} / ${stats.colorCapLabel} cap`;
+  )} scale / ${stats.colorCapLabel} cap`;
 }
 
 function buildHeatLayer(features, topFilterMode, scalingContext) {

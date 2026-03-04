@@ -112,8 +112,7 @@ const COLOR_CAP_LABEL_BY_FILTER = {
 };
 const COLOR_TRANSFORM_LABELS = {
   linear: "linear",
-  log: "log1p",
-  percentile: "log1p",
+  log: "logarithmic",
   power: "power",
   sqrt: "square root",
 };
@@ -349,7 +348,7 @@ function formatAnchors(anchors, decimals = 4) {
 }
 
 function formatColorModeLabel(transformMode) {
-  return COLOR_TRANSFORM_LABELS[transformMode] || "log1p";
+  return COLOR_TRANSFORM_LABELS[transformMode] || "logarithmic";
 }
 
 function selectMedianColorSamples(scaledPoints, sampleSize = 5) {
