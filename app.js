@@ -14,8 +14,24 @@ const MAPBOX_TILE_ERROR_MESSAGE =
 const MAPBOX_ATTRIBUTION =
   '&copy; <a href="https://www.mapbox.com/about/maps/" target="_blank" rel="noopener noreferrer">Mapbox</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> <a href="https://www.mapbox.com/map-feedback/" target="_blank" rel="noopener noreferrer">Improve this map</a>';
 const DEFAULT_BASEMAP_STYLES = Object.freeze({
-  light: "mapbox/light-v11",
+  light: "mapbox/streets-v12",
   dark: "mapbox/dark-v11",
+});
+const THEME_MAP_PROFILES = Object.freeze({
+  light: {
+    tileFilter: "contrast(1.08) brightness(0.96) saturate(0.9)",
+    heatOpacityScale: 0.82,
+    heatRadiusScale: 0.94,
+    markerOutlineMix: 0.56,
+    markerOpacityBoost: 0.06,
+  },
+  dark: {
+    tileFilter: "none",
+    heatOpacityScale: 1,
+    heatRadiusScale: 1,
+    markerOutlineMix: 0.42,
+    markerOpacityBoost: 0,
+  },
 });
 const THEME_COLORS = {
   light: "#f8f3e8",
@@ -325,6 +341,18 @@ function createMapboxTileUrl(styleId, token) {
   return `https://api.mapbox.com/styles/v1/${encodedStyleId}/tiles/256/{z}/{x}/{y}?${params.toString()}`;
 }
 
+function getThemeMapProfile(theme = themeState.mode) {
+  return THEME_MAP_PROFILES[theme] || THEME_MAP_PROFILES.light;
+}
+
+function applyMapTileFilter(theme = themeState.mode) {
+  const tilePane = map.getPane("tilePane");
+  if (!tilePane) {
+    return;
+  }
+  tilePane.style.filter = getThemeMapProfile(theme).tileFilter;
+}
+
 function createBaseTileLayer(theme) {
   if (!basemapConfig) {
     return null;
@@ -355,6 +383,7 @@ function createBaseTileLayer(theme) {
 function updateBaseLayer(theme) {
   const nextLayer = createBaseTileLayer(theme);
   if (!nextLayer) {
+    applyMapTileFilter(theme);
     return;
   }
   if (baseTileLayer) {
@@ -362,6 +391,7 @@ function updateBaseLayer(theme) {
   }
   baseTileLayer = nextLayer;
   baseTileLayer.addTo(map);
+  applyMapTileFilter(theme);
 }
 
 function syncThemeUi() {
@@ -410,6 +440,7 @@ function applyTheme(theme, source = themeState.source) {
   setThemeRoot(nextTheme, nextSource);
   updateThemeMeta(nextTheme);
   updateBaseLayer(nextTheme);
+  applyMapTileFilter(nextTheme);
   syncThemeUi();
 }
 
@@ -583,25 +614,28 @@ function boostHeatWeight(weight) {
   return clamp(contrasted, 0.015, 1);
 }
 
-function getHeatRadius(heatWeight, zoom) {
+function getHeatRadius(heatWeight, zoom, themeProfile = getThemeMapProfile()) {
   const zoomDelta = zoom - DEFAULT_ZOOM;
   const baseRadius =
     HEAT_BLOB_OPTIONS.minRadius +
     (HEAT_BLOB_OPTIONS.maxRadius - HEAT_BLOB_OPTIONS.minRadius) * clamp(heatWeight ** 1.08);
+  const scaledRadius =
+    (baseRadius + Math.max(0, zoomDelta) * HEAT_BLOB_OPTIONS.zoomRadiusBoost) *
+    themeProfile.heatRadiusScale;
   return Math.round(
     clamp(
-      baseRadius + Math.max(0, zoomDelta) * HEAT_BLOB_OPTIONS.zoomRadiusBoost,
-      HEAT_BLOB_OPTIONS.minRadius,
+      scaledRadius,
+      Math.max(10, HEAT_BLOB_OPTIONS.minRadius * 0.8),
       HEAT_BLOB_OPTIONS.maxRadius + 24
     )
   );
 }
 
-function getHeatOpacity(heatWeight) {
-  return (
+function getHeatOpacity(heatWeight, themeProfile = getThemeMapProfile()) {
+  const baseOpacity =
     HEAT_BLOB_OPTIONS.minOpacity +
-    (HEAT_BLOB_OPTIONS.maxOpacity - HEAT_BLOB_OPTIONS.minOpacity) * clamp(heatWeight ** 0.96)
-  );
+    (HEAT_BLOB_OPTIONS.maxOpacity - HEAT_BLOB_OPTIONS.minOpacity) * clamp(heatWeight ** 0.96);
+  return clamp(baseOpacity * themeProfile.heatOpacityScale, 0.05, 1);
 }
 
 function getColorTransformMode(weightMode) {
@@ -672,10 +706,14 @@ function interpolateStopValue(percent, stops) {
   return stops[stops.length - 1][1];
 }
 
-function createMarkerColorStyle(colorPercent) {
+function createMarkerColorStyle(colorPercent, themeProfile = getThemeMapProfile()) {
   const fillColor = interpolateRampColor(colorPercent, MARKER_COLOR_RAMP);
-  const strokeColor = mixHexColors(fillColor, MARKER_OUTLINE_COLOR, 0.42);
-  const fillOpacity = interpolateStopValue(colorPercent, MARKER_OPACITY_STOPS);
+  const strokeColor = mixHexColors(fillColor, MARKER_OUTLINE_COLOR, themeProfile.markerOutlineMix);
+  const fillOpacity = clamp(
+    interpolateStopValue(colorPercent, MARKER_OPACITY_STOPS) + themeProfile.markerOpacityBoost,
+    0,
+    0.82
+  );
   return {
     colorPercent,
     fillColor,
@@ -905,6 +943,7 @@ function buildScaledPoints(features, scalingContext) {
     };
   }
 
+  const themeProfile = getThemeMapProfile();
   const scaledPoints = features.map((feature) => {
     const count = getCount(feature);
     const heatStrength = interpolateAnchors(count, scalingContext.heatAnchors);
@@ -915,7 +954,7 @@ function buildScaledPoints(features, scalingContext) {
       capCount: scalingContext.colorCapCount,
       transformMode: scalingContext.colorTransformMode,
     });
-    const markerColorStyle = createMarkerColorStyle(colorPercent);
+    const markerColorStyle = createMarkerColorStyle(colorPercent, themeProfile);
     const [lon, lat] = feature.geometry.coordinates;
     return {
       feature,
@@ -923,8 +962,8 @@ function buildScaledPoints(features, scalingContext) {
       lon,
       count,
       weight,
-      heatRadius: getHeatRadius(weight, map.getZoom()),
-      heatOpacity: getHeatOpacity(weight),
+      heatRadius: getHeatRadius(weight, map.getZoom(), themeProfile),
+      heatOpacity: getHeatOpacity(weight, themeProfile),
       radius,
       colorPercent,
       fillColor: markerColorStyle.fillColor,
@@ -1096,6 +1135,7 @@ function buildHeatLayerFromPoints(scaledPoints) {
 }
 
 function updateLegend(stats) {
+  const themeProfile = getThemeMapProfile();
   if (elements.legendBar) {
     elements.legendBar.style.background = buildLegendGradient(MARKER_COLOR_RAMP);
   }
@@ -1113,7 +1153,7 @@ function updateLegend(stats) {
           capCount: stats.colorCapCount,
           transformMode: stats.colorTransformMode,
         });
-        const markerColorStyle = createMarkerColorStyle(colorPercent);
+        const markerColorStyle = createMarkerColorStyle(colorPercent, themeProfile);
         return `
           <div class="legend-tick">
             <span class="legend-swatch" style="background:${markerColorStyle.fillColor}; border-color:${markerColorStyle.strokeColor}; opacity:${markerColorStyle.fillOpacity};"></span>
@@ -1237,6 +1277,7 @@ async function init() {
     basemapConfig = await loadMapConfig();
     setMapboxBrandingVisible(true);
     updateBaseLayer(themeState.mode);
+    applyMapTileFilter(themeState.mode);
 
     showStatus("Loading prepared map data…");
     const [geojsonResponse, summaryResponse] = await Promise.all([

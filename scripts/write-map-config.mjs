@@ -4,7 +4,7 @@ import { writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const DEFAULT_BASEMAP_STYLES = {
-  light: "mapbox/light-v11",
+  light: "mapbox/streets-v12",
   dark: "mapbox/dark-v11",
 };
 

@@ -29,7 +29,7 @@ Static web app and Python preprocessing pipeline for mapping Leicester City Coun
 
 ## Map providers
 
-- Visible basemap: Mapbox Static Tiles (`mapbox/light-v11` and `mapbox/dark-v11`)
+- Visible basemap: Mapbox Static Tiles (`mapbox/streets-v12` in light mode and `mapbox/dark-v11` in dark mode)
 - Geocoding provider: Nominatim (OpenStreetMap)
 
 ## Runtime config
@@ -43,7 +43,9 @@ cp map-config.example.json map-config.json
 - Use a public `pk.` access token in `map-config.json`
 - Restrict the token to `http://localhost:8000` and your deployed origin in the Mapbox dashboard
 - Publish `map-config.json` alongside the rest of the static site assets in deployment
-- Leave `mapbox/light-v11` and `mapbox/dark-v11` in place unless you want to target different compatible style IDs
+- Leave `mapbox/streets-v12` and `mapbox/dark-v11` in place unless you want to target different compatible style IDs
+- The light theme intentionally uses a higher-contrast base map plus a lighter heat/marker treatment so labels and roads remain readable under the overlay.
+- If your local `map-config.json` was copied before this change, it may still pin `mapbox/light-v11`; edit it manually or regenerate it to pick up the new default.
 
 ## Cloudflare Pages
 
@@ -58,6 +60,7 @@ The script writes `map-config.json` at build time from the Pages environment var
 - Production URL restrictions are straightforward: allow your production hostname and stable `pages.dev` hostname if you use it.
 - Preview deployments usually get changing URLs. Use a separate preview token with looser restrictions if you want preview builds to keep working.
 - If your build command also needs to regenerate data, prepend those steps before `node scripts/write-map-config.mjs`.
+- Cloudflare Pages deployments will pick up the new `mapbox/streets-v12` light-style default automatically through [`scripts/write-map-config.mjs`](/Volumes/T7/Projects/Leicester-PCNs/scripts/write-map-config.mjs).
 
 If you deploy from the terminal instead of a GitHub-triggered Pages build, use the same script first and then deploy the static output:
 
