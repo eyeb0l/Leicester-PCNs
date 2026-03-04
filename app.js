@@ -130,6 +130,7 @@ const elements = {
   toggleZeroes: document.querySelector("#toggle-zeroes"),
   resetView: document.querySelector("#reset-view"),
   summaryList: document.querySelector("#summary-list"),
+  leagueTable: document.querySelector("#league-table"),
   legendMode: document.querySelector("#legend-mode"),
   legendBar: document.querySelector("#legend-bar"),
   legendTicks: document.querySelector("#legend-ticks"),
@@ -533,6 +534,24 @@ function dedupeByCacheKey(features) {
   return Array.from(map.values());
 }
 
+function assignOverallRanks(features) {
+  const rankedFeatures = dedupeByCacheKey(features).sort((left, right) => {
+    const countDifference = getCount(right) - getCount(left);
+    if (countDifference !== 0) {
+      return countDifference;
+    }
+    return left.properties.display_name.localeCompare(right.properties.display_name);
+  });
+
+  const rankByKey = new Map(
+    rankedFeatures.map((feature, index) => [getFeatureKey(feature), index + 1])
+  );
+
+  for (const feature of features) {
+    feature.properties.overall_rank = rankByKey.get(getFeatureKey(feature)) ?? null;
+  }
+}
+
 function getStopConfig(topFilterMode) {
   if (topFilterMode === "all") {
     return {
@@ -636,11 +655,15 @@ function popupHtml(feature) {
     display_name: displayName,
     count_total: countTotal,
     source_rows: sourceRows,
+    overall_rank: overallRank,
     aliases,
     geocode_status: geocodeStatus,
     marker_fill_color: markerFillColor,
     marker_fill_opacity: markerFillOpacity,
   } = feature.properties;
+  const rankHtml = Number.isFinite(overallRank)
+    ? `<p>Overall rank: <strong>#${formatNumber(overallRank)}</strong></p>`
+    : "";
   const aliasHtml =
     aliases.length > 1
       ? `<p class="aliases">Aliases: ${aliases.map((alias) => escapeHtml(alias)).join(", ")}</p>`
@@ -660,6 +683,7 @@ function popupHtml(feature) {
     <div class="popup-content">
       <h3>${escapeHtml(displayName)}</h3>
       <p><strong>${formatNumber(countTotal)}</strong> fines</p>
+      ${rankHtml}
       <p>${formatNumber(sourceRows)} source row${sourceRows === 1 ? "" : "s"}</p>
       ${statusHtml}
       ${markerStyleHtml}
@@ -691,6 +715,35 @@ function updateSummary(summary, filteredCount) {
   elements.summaryList.innerHTML = rows
     .map(([label, value]) => `<dt>${label}</dt><dd>${value}</dd>`)
     .join("");
+}
+
+function updateLeagueTable(features, limit = 10) {
+  if (!elements.leagueTable) {
+    return;
+  }
+
+  const rows = dedupeByCacheKey(features)
+    .filter((feature) => getCount(feature) > 0)
+    .sort((left, right) => {
+      const countDifference = getCount(right) - getCount(left);
+      if (countDifference !== 0) {
+        return countDifference;
+      }
+      return left.properties.display_name.localeCompare(right.properties.display_name);
+    })
+    .slice(0, limit)
+    .map((feature) => {
+      const overallRank = feature.properties.overall_rank;
+      return `
+        <li class="league-row">
+          <span class="league-rank">#${formatNumber(overallRank)}</span>
+          <span class="league-street">${escapeHtml(feature.properties.display_name)}</span>
+          <span class="league-count">${formatNumber(getCount(feature))} fines</span>
+        </li>
+      `;
+    });
+
+  elements.leagueTable.innerHTML = rows.join("");
 }
 
 function buildMarkerLayer(scaledPoints) {
@@ -880,6 +933,8 @@ async function init() {
     const summary = await summaryResponse.json();
 
     allFeatures = geojson.features || [];
+    assignOverallRanks(allFeatures);
+    updateLeagueTable(allFeatures);
     setDefaultBounds(allFeatures);
     applyFilters(summary);
 
