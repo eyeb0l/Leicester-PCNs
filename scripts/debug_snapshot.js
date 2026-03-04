@@ -6,6 +6,14 @@ const path = require("path");
 
 const MARKER_MIN_RADIUS = 2;
 const MARKER_MAX_RADIUS = 60;
+const DEFAULT_ZOOM = 13;
+const HEAT_BLOB_OPTIONS = {
+  minRadius: 10,
+  maxRadius: 52,
+  zoomRadiusBoost: 4,
+  minOpacity: 0.07,
+  maxOpacity: 0.34,
+};
 
 const COUNT_PERCENTILES = {
   min: 0,
@@ -42,11 +50,12 @@ const DEBUG_FOCUS_PERCENTILES = {
   max: 1,
 };
 const ALL_HEAT_STOPS = [
-  ["min", 0.02],
-  ["p50", 0.04],
-  ["p90", 0.18],
-  ["p95", 0.3],
-  ["p99", 0.65],
+  ["min", 0.005],
+  ["p50", 0.018],
+  ["p75", 0.055],
+  ["p90", 0.16],
+  ["p95", 0.32],
+  ["p99", 0.72],
   ["max", 1],
 ];
 const ALL_MARKER_STOPS = [
@@ -58,11 +67,12 @@ const ALL_MARKER_STOPS = [
   ["max", 1],
 ];
 const TOP_HEAT_STOPS = [
-  ["min", 0.18],
-  ["p50", 0.28],
+  ["min", 0.08],
+  ["p50", 0.18],
+  ["p75", 0.3],
   ["p90", 0.55],
-  ["p95", 0.72],
-  ["p99", 0.92],
+  ["p95", 0.76],
+  ["p99", 0.93],
   ["max", 1],
 ];
 const TOP_MARKER_STOPS = [
@@ -209,6 +219,39 @@ function interpolateAnchors(count, anchors) {
 function computeMarkerRadius(markerStrength) {
   const span = MARKER_MAX_RADIUS - MARKER_MIN_RADIUS;
   return MARKER_MIN_RADIUS + span * clamp(markerStrength);
+}
+
+function boostHeatWeight(weight) {
+  const normalized = clamp(weight);
+  if (normalized <= 0.02) {
+    return clamp(normalized, 0.012, 1);
+  }
+  if (normalized < 0.12) {
+    return clamp(normalized * 0.72, 0.02, 1);
+  }
+  const contrasted = normalized ** 1.12;
+  return clamp(contrasted, 0.015, 1);
+}
+
+function getHeatRadius(heatWeight, zoom = DEFAULT_ZOOM) {
+  const zoomDelta = zoom - DEFAULT_ZOOM;
+  const baseRadius =
+    HEAT_BLOB_OPTIONS.minRadius +
+    (HEAT_BLOB_OPTIONS.maxRadius - HEAT_BLOB_OPTIONS.minRadius) * clamp(heatWeight ** 1.08);
+  return Math.round(
+    clamp(
+      baseRadius + Math.max(0, zoomDelta) * HEAT_BLOB_OPTIONS.zoomRadiusBoost,
+      HEAT_BLOB_OPTIONS.minRadius,
+      HEAT_BLOB_OPTIONS.maxRadius + 24
+    )
+  );
+}
+
+function getHeatOpacity(heatWeight) {
+  return (
+    HEAT_BLOB_OPTIONS.minOpacity +
+    (HEAT_BLOB_OPTIONS.maxOpacity - HEAT_BLOB_OPTIONS.minOpacity) * clamp(heatWeight ** 0.96)
+  );
 }
 
 function getColorTransformMode(weightMode) {
@@ -390,7 +433,8 @@ function runScenario(label, limit, weightMode = DEFAULT_WEIGHT_MODE) {
   const colorTransformMode = getColorTransformMode(weightMode);
   const scaledPoints = deduped.map((feature) => {
     const count = getCount(feature);
-    const weight = interpolateAnchors(count, heatAnchors);
+    const heatStrength = interpolateAnchors(count, heatAnchors);
+    const weight = boostHeatWeight(heatStrength);
     const markerStrength = interpolateAnchors(count, markerAnchors);
     const radius = computeMarkerRadius(markerStrength);
     const colorPercent = computeColorPercent(count, {
@@ -403,6 +447,8 @@ function runScenario(label, limit, weightMode = DEFAULT_WEIGHT_MODE) {
       feature,
       count,
       weight,
+      heatRadius: getHeatRadius(weight),
+      heatOpacity: getHeatOpacity(weight),
       radius,
       colorPercent,
       fillColor: markerColorStyle.fillColor,

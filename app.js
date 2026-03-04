@@ -46,11 +46,12 @@ const DEBUG_FOCUS_PERCENTILES = {
   max: 1,
 };
 const ALL_HEAT_STOPS = [
-  ["min", 0.02],
-  ["p50", 0.04],
-  ["p90", 0.18],
-  ["p95", 0.3],
-  ["p99", 0.65],
+  ["min", 0.005],
+  ["p50", 0.018],
+  ["p75", 0.055],
+  ["p90", 0.16],
+  ["p95", 0.32],
+  ["p99", 0.72],
   ["max", 1],
 ];
 const ALL_MARKER_STOPS = [
@@ -62,11 +63,12 @@ const ALL_MARKER_STOPS = [
   ["max", 1],
 ];
 const TOP_HEAT_STOPS = [
-  ["min", 0.18],
-  ["p50", 0.28],
+  ["min", 0.08],
+  ["p50", 0.18],
+  ["p75", 0.3],
   ["p90", 0.55],
-  ["p95", 0.72],
-  ["p99", 0.92],
+  ["p95", 0.76],
+  ["p99", 0.93],
   ["max", 1],
 ];
 const TOP_MARKER_STOPS = [
@@ -112,20 +114,13 @@ const COLOR_TRANSFORM_LABELS = {
   sqrt: "square root",
 };
 const COLOR_POWER_GAMMA = 0.42;
-// Normalized weights + conservative heat settings keep hotspots readable instead of saturating the city.
-const HEAT_LAYER_OPTIONS = {
-  radius: 10,
-  blur: 7,
-  maxZoom: 17,
-  minOpacity: 0.2,
-  maxOpacity: 0.5,
-  max: 1,
-};
-const HEAT_GRADIENT = {
-  0.2: "#fee6a8",
-  0.45: "#f0893f",
-  0.75: "#d7441f",
-  1.0: "#8c1b13",
+// Heat layer is rendered as large colour-matched blobs so the palette tracks the markers.
+const HEAT_BLOB_OPTIONS = {
+  minRadius: 10,
+  maxRadius: 52,
+  zoomRadiusBoost: 4,
+  minOpacity: 0.07,
+  maxOpacity: 0.34,
 };
 const WEIGHT_MODE_LABELS = {
   log: "logarithmic",
@@ -289,6 +284,39 @@ function interpolateAnchors(count, anchors) {
 function computeMarkerRadius(markerStrength) {
   const span = MARKER_MAX_RADIUS - MARKER_MIN_RADIUS;
   return MARKER_MIN_RADIUS + span * clamp(markerStrength);
+}
+
+function boostHeatWeight(weight) {
+  const normalized = clamp(weight);
+  if (normalized <= 0.02) {
+    return clamp(normalized, 0.012, 1);
+  }
+  if (normalized < 0.12) {
+    return clamp(normalized * 0.72, 0.02, 1);
+  }
+  const contrasted = normalized ** 1.12;
+  return clamp(contrasted, 0.015, 1);
+}
+
+function getHeatRadius(heatWeight, zoom) {
+  const zoomDelta = zoom - DEFAULT_ZOOM;
+  const baseRadius =
+    HEAT_BLOB_OPTIONS.minRadius +
+    (HEAT_BLOB_OPTIONS.maxRadius - HEAT_BLOB_OPTIONS.minRadius) * clamp(heatWeight ** 1.08);
+  return Math.round(
+    clamp(
+      baseRadius + Math.max(0, zoomDelta) * HEAT_BLOB_OPTIONS.zoomRadiusBoost,
+      HEAT_BLOB_OPTIONS.minRadius,
+      HEAT_BLOB_OPTIONS.maxRadius + 24
+    )
+  );
+}
+
+function getHeatOpacity(heatWeight) {
+  return (
+    HEAT_BLOB_OPTIONS.minOpacity +
+    (HEAT_BLOB_OPTIONS.maxOpacity - HEAT_BLOB_OPTIONS.minOpacity) * clamp(heatWeight ** 0.96)
+  );
 }
 
 function getColorTransformMode(weightMode) {
@@ -565,7 +593,8 @@ function buildScaledPoints(features, scalingContext) {
 
   const scaledPoints = features.map((feature) => {
     const count = getCount(feature);
-    const weight = interpolateAnchors(count, scalingContext.heatAnchors);
+    const heatStrength = interpolateAnchors(count, scalingContext.heatAnchors);
+    const weight = boostHeatWeight(heatStrength);
     const markerStrength = interpolateAnchors(count, scalingContext.markerAnchors);
     const radius = computeMarkerRadius(markerStrength);
     const colorPercent = computeColorPercent(count, {
@@ -580,6 +609,8 @@ function buildScaledPoints(features, scalingContext) {
       lon,
       count,
       weight,
+      heatRadius: getHeatRadius(weight, map.getZoom()),
+      heatOpacity: getHeatOpacity(weight),
       radius,
       colorPercent,
       fillColor: markerColorStyle.fillColor,
@@ -690,6 +721,22 @@ function buildMarkerLayer(scaledPoints) {
   return layer;
 }
 
+function buildHeatLayerFromPoints(scaledPoints) {
+  const layer = L.layerGroup();
+  for (const point of scaledPoints) {
+    const heatMarker = L.circleMarker([point.lat, point.lon], {
+      radius: point.heatRadius,
+      stroke: false,
+      fillColor: point.fillColor,
+      fillOpacity: point.heatOpacity,
+      interactive: false,
+      bubblingMouseEvents: false,
+    });
+    layer.addLayer(heatMarker);
+  }
+  return layer;
+}
+
 function updateLegend(stats) {
   if (elements.legendBar) {
     elements.legendBar.style.background = buildLegendGradient(MARKER_COLOR_RAMP);
@@ -730,15 +777,8 @@ function buildHeatLayer(features, topFilterMode, scalingContext) {
     logHeatSummary(topFilterMode, scaledPoints, stats);
   }
 
-  const heatPoints = scaledPoints.map((point) => [point.lat, point.lon, point.weight]);
   return {
-    layer:
-      heatPoints.length > 0
-        ? L.heatLayer(heatPoints, {
-            ...HEAT_LAYER_OPTIONS,
-            gradient: HEAT_GRADIENT,
-          })
-        : null,
+    layer: scaledPoints.length > 0 ? buildHeatLayerFromPoints(scaledPoints) : null,
     scaledPoints,
     stats,
   };
@@ -872,7 +912,13 @@ async function init() {
       }
       applyFilters(summary);
     });
-    map.on("zoomend", updateMarkerVisibility);
+    map.on("zoomend", () => {
+      if (elements.toggleHeat.checked) {
+        applyFilters(summary);
+        return;
+      }
+      updateMarkerVisibility();
+    });
 
     hideStatus();
   } catch (error) {
