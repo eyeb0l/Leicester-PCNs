@@ -90,26 +90,6 @@
         </p>
 
         <section class="controls">
-          <div class="theme-controls">
-            <label class="toggle" for="theme-toggle">
-              <input
-                id="theme-toggle"
-                type="checkbox"
-                role="switch"
-                aria-describedby="theme-toggle-note"
-              />
-              <span>Dark mode</span>
-            </label>
-            <div class="theme-toggle-meta">
-              <p id="theme-toggle-note" class="theme-toggle-note">
-                Follows your device display mode until you switch it.
-              </p>
-              <button id="theme-reset" class="theme-reset" type="button" hidden>
-                Use device setting
-              </button>
-            </div>
-          </div>
-
           <div class="field">
             <label for="search-input">Search streets</label>
             <input id="search-input" type="search" placeholder="Start typing a street name" />
@@ -173,6 +153,26 @@
             <span>top 10 streets</span>
           </div>
           <ol id="league-table" class="league-table"></ol>
+        </section>
+
+        <section class="theme-controls">
+          <label class="toggle" for="theme-toggle">
+            <input
+              id="theme-toggle"
+              type="checkbox"
+              role="switch"
+              aria-describedby="theme-toggle-note"
+            />
+            <span>Dark mode</span>
+          </label>
+          <div class="theme-toggle-meta">
+            <p id="theme-toggle-note" class="theme-toggle-note">
+              Follows your device display mode until you switch it.
+            </p>
+            <button id="theme-reset" class="theme-reset" type="button" hidden>
+              Use device setting
+            </button>
+          </div>
         </section>
       </aside>
 
