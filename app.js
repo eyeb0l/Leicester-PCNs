@@ -43,6 +43,14 @@ const TOP_FILTER_LIMITS = {
   top100: 100,
   top50: 50,
 };
+const METRIC_MODES = Object.freeze({
+  total: "total",
+  density: "density",
+});
+const METRIC_LABELS = Object.freeze({
+  [METRIC_MODES.total]: "total fines",
+  [METRIC_MODES.density]: "density (fines/mi)",
+});
 const COUNT_PERCENTILES = {
   min: 0,
   p25: 0.25,
@@ -171,6 +179,7 @@ const elements = {
   searchInput: document.querySelector("#search-input"),
   weightMode: document.querySelector("#weight-mode"),
   topFilter: document.querySelector("#top-filter"),
+  metricMode: document.querySelector("#metric-mode"),
   toggleHeat: document.querySelector("#toggle-heat"),
   toggleMarkers: document.querySelector("#toggle-markers"),
   toggleZeroes: document.querySelector("#toggle-zeroes"),
@@ -517,12 +526,16 @@ function describePercentiles(values, config) {
   );
 }
 
-function formatPercentileStats(stats, order, decimals = 0) {
+function formatPercentileStats(stats, order, formatHint = 0) {
   return order
     .map((label) => {
       const value = stats[label] ?? 0;
-      const formatted =
-        decimals > 0 ? Number(value).toFixed(decimals) : formatNumber(Math.round(value));
+      let formatted;
+      if (typeof formatHint === "string") {
+        formatted = formatMetricValue(value, formatHint, 1);
+      } else {
+        formatted = formatHint > 0 ? Number(value).toFixed(formatHint) : formatNumber(Math.round(value));
+      }
       return `${label}:${formatted}`;
     })
     .join(" · ");
@@ -739,6 +752,40 @@ function getCount(feature) {
   return Number(feature.properties.count_total) || 0;
 }
 
+function getDensity(feature) {
+  const density = Number(feature.properties.fines_per_mile);
+  return Number.isFinite(density) ? density : null;
+}
+
+function getMetricMode() {
+  return elements.metricMode?.value === METRIC_MODES.density ? METRIC_MODES.density : METRIC_MODES.total;
+}
+
+function getMetricLabel(metricMode) {
+  return METRIC_LABELS[metricMode] || METRIC_LABELS[METRIC_MODES.total];
+}
+
+function getMetricValue(feature, metricMode) {
+  if (metricMode === METRIC_MODES.density) {
+    return getDensity(feature);
+  }
+  return getCount(feature);
+}
+
+function isMetricEligible(feature, metricMode) {
+  if (metricMode === METRIC_MODES.density) {
+    return Number.isFinite(getDensity(feature));
+  }
+  return true;
+}
+
+function formatMetricValue(value, metricMode, fractionDigits = 1) {
+  if (metricMode === METRIC_MODES.density) {
+    return formatDecimal(value, fractionDigits);
+  }
+  return formatNumber(Math.round(value));
+}
+
 function getFeatureKey(feature) {
   return feature.properties.cache_key || feature.properties.display_name;
 }
@@ -751,8 +798,27 @@ function formatColorModeLabel(transformMode) {
   return COLOR_TRANSFORM_LABELS[transformMode] || "logarithmic";
 }
 
+function syncTopFilterLabels(metricMode) {
+  if (!elements.topFilter) {
+    return;
+  }
+  const metricSuffix = metricMode === METRIC_MODES.density ? "density" : "count";
+  const labels = {
+    top200: `Top 200 by ${metricSuffix}`,
+    top100: `Top 100 by ${metricSuffix}`,
+    top50: `Top 50 by ${metricSuffix}`,
+    all: "All streets",
+  };
+  for (const [value, label] of Object.entries(labels)) {
+    const option = elements.topFilter.querySelector(`option[value="${value}"]`);
+    if (option) {
+      option.textContent = label;
+    }
+  }
+}
+
 function selectMedianColorSamples(scaledPoints, sampleSize = 5) {
-  const sorted = [...scaledPoints].sort((a, b) => a.count - b.count);
+  const sorted = [...scaledPoints].sort((a, b) => a.metricValue - b.metricValue);
   if (!sorted.length) {
     return [];
   }
@@ -765,19 +831,25 @@ function selectMedianColorSamples(scaledPoints, sampleSize = 5) {
 function buildColorSampleRows(points) {
   return points.map((point) => ({
     street: point.feature.properties.display_name,
-    count: point.count,
+    metricValue: Number(point.metricValue.toFixed(4)),
     colorPercent: Number(point.colorPercent.toFixed(4)),
     fillColor: point.fillColor,
     fillOpacity: Number(point.fillOpacity.toFixed(2)),
   }));
 }
 
-function applyTopCountFilter(features, mode) {
+function applyTopMetricFilter(features, mode, metricMode) {
   const limit = TOP_FILTER_LIMITS[mode] ?? Infinity;
   if (!Number.isFinite(limit) || limit === Infinity || features.length <= limit) {
     return features;
   }
-  const sorted = [...features].sort((a, b) => getCount(b) - getCount(a));
+  const sorted = [...features].sort((a, b) => {
+    const difference = (getMetricValue(b, metricMode) ?? -Infinity) - (getMetricValue(a, metricMode) ?? -Infinity);
+    if (difference !== 0) {
+      return difference;
+    }
+    return a.properties.display_name.localeCompare(b.properties.display_name);
+  });
   return sorted.slice(0, limit);
 }
 
@@ -791,25 +863,25 @@ function matchesSearch(feature, term) {
   return haystacks.includes(term);
 }
 
-function logHeatSummary(topFilterMode, scaledPoints, stats) {
+function logHeatSummary(topFilterMode, metricMode, scaledPoints, stats) {
   const topStreets = [...scaledPoints]
-    .sort((a, b) => b.count - a.count)
+    .sort((a, b) => b.metricValue - a.metricValue)
     .slice(0, 25)
     .map((point) => ({
       street: point.feature.properties.display_name,
-      count: point.count,
+      metricValue: Number(point.metricValue.toFixed(4)),
       weight: Number(point.weight.toFixed(4)),
       radius: Number(point.radius.toFixed(2)),
       fillColor: point.fillColor,
       fillOpacity: Number(point.fillOpacity.toFixed(2)),
     }));
   const topColorSamples = buildColorSampleRows(
-    [...scaledPoints].sort((a, b) => b.count - a.count).slice(0, 10)
+    [...scaledPoints].sort((a, b) => b.metricValue - a.metricValue).slice(0, 10)
   );
   const medianColorSamples = buildColorSampleRows(selectMedianColorSamples(scaledPoints));
 
   console.groupCollapsed(
-    `[heat] filter=${topFilterMode} points=${scaledPoints.length}`
+    `[heat] metric=${metricMode} filter=${topFilterMode} points=${scaledPoints.length}`
   );
   console.log(`Streets visualized: ${scaledPoints.length}`);
   console.log("Heat mapping anchors:", formatAnchorStats(stats.heatAnchors, 4));
@@ -820,8 +892,8 @@ function logHeatSummary(topFilterMode, scaledPoints, stats) {
     )} · transform=${formatColorModeLabel(stats.colorTransformMode)}`
   );
   console.log(
-    "Count percentiles:",
-    formatPercentileStats(stats.countPercentiles, Object.keys(COUNT_PERCENTILES))
+    `${getMetricLabel(metricMode)} percentiles:`,
+    formatPercentileStats(stats.metricPercentiles, Object.keys(COUNT_PERCENTILES), metricMode)
   );
   console.log(
     "Weight percentiles:",
@@ -832,13 +904,13 @@ function logHeatSummary(topFilterMode, scaledPoints, stats) {
     formatPercentileStats(stats.radiusPercentiles, Object.keys(RADIUS_PERCENTILES), 2)
   );
   console.log(
-    "Marker colour count focus:",
-    formatPercentileStats(stats.countPercentiles, Object.keys(COLOR_DEBUG_PERCENTILES))
+    "Marker colour focus:",
+    formatPercentileStats(stats.metricPercentiles, Object.keys(COLOR_DEBUG_PERCENTILES), metricMode)
   );
   if (topFilterMode === "top50") {
     console.log(
-      "Top 50 count focus:",
-      formatPercentileStats(stats.countPercentiles, Object.keys(DEBUG_FOCUS_PERCENTILES))
+      "Top 50 metric focus:",
+      formatPercentileStats(stats.metricPercentiles, Object.keys(DEBUG_FOCUS_PERCENTILES), metricMode)
     );
     console.log(
       "Top 50 weight focus:",
@@ -907,31 +979,34 @@ function getStopConfig(topFilterMode) {
   };
 }
 
-function computeScalingContext(features, topFilterMode, weightMode) {
-  const counts = features.map((feature) => getCount(feature));
-  const countPercentiles = describePercentiles(counts, COUNT_PERCENTILES);
+function computeScalingContext(features, topFilterMode, weightMode, metricMode) {
+  const metricValues = features
+    .map((feature) => getMetricValue(feature, metricMode))
+    .filter((value) => Number.isFinite(value));
+  const metricPercentiles = describePercentiles(metricValues, COUNT_PERCENTILES);
   const stopConfig = getStopConfig(topFilterMode);
-  const heatAnchors = buildOutputAnchors(countPercentiles, stopConfig.heatStops);
-  const markerAnchors = buildOutputAnchors(countPercentiles, stopConfig.markerStops);
+  const heatAnchors = buildOutputAnchors(metricPercentiles, stopConfig.heatStops);
+  const markerAnchors = buildOutputAnchors(metricPercentiles, stopConfig.markerStops);
   const colorCapLabel = getColorCapLabel(topFilterMode);
-  const colorCapCount = Math.max(1, countPercentiles[colorCapLabel] || countPercentiles.max || 1);
+  const colorCapCount = Math.max(1, metricPercentiles[colorCapLabel] || metricPercentiles.max || 1);
   const colorTransformMode = getColorTransformMode(weightMode);
   return {
-    countPercentiles,
+    metricPercentiles,
     heatAnchors,
     markerAnchors,
     colorCapLabel,
     colorCapCount,
     colorTransformMode,
+    metricMode,
   };
 }
 
-function buildScaledPoints(features, scalingContext) {
+function buildScaledPoints(features, scalingContext, metricMode) {
   if (!features.length) {
     return {
       scaledPoints: [],
       stats: {
-        countPercentiles: describePercentiles([], COUNT_PERCENTILES),
+        metricPercentiles: describePercentiles([], COUNT_PERCENTILES),
         heatAnchors: [],
         markerAnchors: [],
         colorCapLabel: "p99",
@@ -939,18 +1014,19 @@ function buildScaledPoints(features, scalingContext) {
         colorTransformMode: "log",
         weightPercentiles: describePercentiles([], WEIGHT_PERCENTILES),
         radiusPercentiles: describePercentiles([], RADIUS_PERCENTILES),
+        metricMode,
       },
     };
   }
 
   const themeProfile = getThemeMapProfile();
   const scaledPoints = features.map((feature) => {
-    const count = getCount(feature);
-    const heatStrength = interpolateAnchors(count, scalingContext.heatAnchors);
+    const metricValue = getMetricValue(feature, metricMode) ?? 0;
+    const heatStrength = interpolateAnchors(metricValue, scalingContext.heatAnchors);
     const weight = boostHeatWeight(heatStrength);
-    const markerStrength = interpolateAnchors(count, scalingContext.markerAnchors);
+    const markerStrength = interpolateAnchors(metricValue, scalingContext.markerAnchors);
     const radius = computeMarkerRadius(markerStrength);
-    const colorPercent = computeColorPercent(count, {
+    const colorPercent = computeColorPercent(metricValue, {
       capCount: scalingContext.colorCapCount,
       transformMode: scalingContext.colorTransformMode,
     });
@@ -960,7 +1036,7 @@ function buildScaledPoints(features, scalingContext) {
       feature,
       lat,
       lon,
-      count,
+      metricValue,
       weight,
       heatRadius: getHeatRadius(weight, map.getZoom(), themeProfile),
       heatOpacity: getHeatOpacity(weight, themeProfile),
@@ -975,7 +1051,7 @@ function buildScaledPoints(features, scalingContext) {
   return {
     scaledPoints,
     stats: {
-      countPercentiles: scalingContext.countPercentiles,
+      metricPercentiles: scalingContext.metricPercentiles,
       heatAnchors: scalingContext.heatAnchors,
       markerAnchors: scalingContext.markerAnchors,
       colorCapLabel: scalingContext.colorCapLabel,
@@ -989,6 +1065,7 @@ function buildScaledPoints(features, scalingContext) {
         scaledPoints.map((point) => point.radius),
         RADIUS_PERCENTILES
       ),
+      metricMode,
     },
   };
 }
@@ -1066,43 +1143,56 @@ function updateSummary(summary, filteredCount) {
     .join("");
 }
 
-function updateLeagueTable(features, limit = 10) {
+function updateLeagueTable(features, metricMode, limit = 10) {
   if (!elements.leagueTable) {
     return;
   }
 
   const rankedRows = dedupeByCacheKey(features)
-    .filter((feature) => getCount(feature) > 0)
+    .filter((feature) => {
+      if (metricMode === METRIC_MODES.density) {
+        return isMetricEligible(feature, metricMode);
+      }
+      return getCount(feature) > 0;
+    })
     .sort((left, right) => {
-      const countDifference = getCount(right) - getCount(left);
-      if (countDifference !== 0) {
-        return countDifference;
+      const metricDifference =
+        (getMetricValue(right, metricMode) ?? -Infinity) - (getMetricValue(left, metricMode) ?? -Infinity);
+      if (metricDifference !== 0) {
+        return metricDifference;
       }
       return left.properties.display_name.localeCompare(right.properties.display_name);
     })
     .slice(0, limit);
 
-  const topTenShare = rankedRows.reduce(
-    (sum, feature) => sum + (feature.properties.share_of_total || 0),
-    0
-  );
-
   if (elements.leagueTableMeta) {
-    elements.leagueTableMeta.textContent = `TOP 10 STREETS–${formatPercent(topTenShare)}`;
+    if (metricMode === METRIC_MODES.density) {
+      elements.leagueTableMeta.textContent = "TOP 10 STREETS–DENSITY";
+    } else {
+      const topTenShare = rankedRows.reduce(
+        (sum, feature) => sum + (feature.properties.share_of_total || 0),
+        0
+      );
+      elements.leagueTableMeta.textContent = `TOP 10 STREETS–${formatPercent(topTenShare)}`;
+    }
   }
 
-  const rows = rankedRows.map((feature) => {
-    const overallRank = feature.properties.overall_rank;
+  const rows = rankedRows.map((feature, index) => {
     const pcnsPerDay = feature.properties.pcns_per_day;
     const shareOfTotal = feature.properties.share_of_total;
+    const density = getDensity(feature);
+    const secondaryMeta =
+      metricMode === METRIC_MODES.density
+        ? `${formatDecimal(density ?? 0, 1)} fines/mi`
+        : `${formatPercent(shareOfTotal)} of total`;
     return `
       <li class="league-row">
-        <span class="league-rank">#${formatNumber(overallRank)}</span>
+        <span class="league-rank">#${formatNumber(index + 1)}</span>
         <div class="league-main">
           <span class="league-street">${escapeHtml(feature.properties.display_name)}</span>
           <span class="league-meta">
             <span>${formatDecimal(pcnsPerDay)} per day</span>
-            <span>${formatPercent(shareOfTotal)} of total</span>
+            <span>${secondaryMeta}</span>
           </span>
         </div>
         <span class="league-count">${formatNumber(getCount(feature))} fines</span>
@@ -1148,22 +1238,22 @@ function buildHeatLayerFromPoints(scaledPoints) {
   return layer;
 }
 
-function updateLegend(stats) {
+function updateLegend(stats, metricMode) {
   const themeProfile = getThemeMapProfile();
   if (elements.legendBar) {
     elements.legendBar.style.background = buildLegendGradient(MARKER_COLOR_RAMP);
   }
   if (elements.legendTicks) {
     const tickSpecs = [
-      { label: "0", count: 0 },
-      { label: "P50", count: stats.countPercentiles.p50 || 0 },
-      { label: "P75", count: stats.countPercentiles.p75 || 0 },
-      { label: "P90", count: stats.countPercentiles.p90 || 0 },
-      { label: stats.colorCapLabel.toUpperCase(), count: stats.colorCapCount || 0 },
+      { label: "0", value: 0 },
+      { label: "P50", value: stats.metricPercentiles.p50 || 0 },
+      { label: "P75", value: stats.metricPercentiles.p75 || 0 },
+      { label: "P90", value: stats.metricPercentiles.p90 || 0 },
+      { label: stats.colorCapLabel.toUpperCase(), value: stats.colorCapCount || 0 },
     ];
     elements.legendTicks.innerHTML = tickSpecs
       .map((tick) => {
-        const colorPercent = computeColorPercent(tick.count, {
+        const colorPercent = computeColorPercent(tick.value, {
           capCount: stats.colorCapCount,
           transformMode: stats.colorTransformMode,
         });
@@ -1172,21 +1262,22 @@ function updateLegend(stats) {
           <div class="legend-tick">
             <span class="legend-swatch" style="background:${markerColorStyle.fillColor}; border-color:${markerColorStyle.strokeColor}; opacity:${markerColorStyle.fillOpacity};"></span>
             <span class="legend-tick-label">${tick.label}</span>
-            <span class="legend-tick-value">${formatNumber(Math.round(tick.count))}</span>
+            <span class="legend-tick-value">${formatMetricValue(tick.value, metricMode, 1)}</span>
           </div>
         `;
       })
       .join("");
   }
-  elements.legendMode.textContent = `marker colour · ${formatColorModeLabel(
+  const capLabelSuffix = metricMode === METRIC_MODES.density ? " density cap" : " cap";
+  elements.legendMode.textContent = `marker colour · ${getMetricLabel(metricMode)} · ${formatColorModeLabel(
     stats.colorTransformMode
-  )} scale / ${stats.colorCapLabel} cap`;
+  )} scale / ${stats.colorCapLabel}${capLabelSuffix}`;
 }
 
-function buildHeatLayer(features, topFilterMode, scalingContext) {
-  const { scaledPoints, stats } = buildScaledPoints(features, scalingContext);
+function buildHeatLayer(features, topFilterMode, scalingContext, metricMode) {
+  const { scaledPoints, stats } = buildScaledPoints(features, scalingContext, metricMode);
   if (DEBUG_SHOW_WEIGHTS) {
-    logHeatSummary(topFilterMode, scaledPoints, stats);
+    logHeatSummary(topFilterMode, metricMode, scaledPoints, stats);
   }
 
   return {
@@ -1231,13 +1322,22 @@ function applyFilters(summary) {
   const searchTerm = elements.searchInput.value.trim().toLowerCase();
   const weightMode = elements.weightMode.value;
   const topFilterMode = elements.topFilter.value;
+  const metricMode = getMetricMode();
+  syncTopFilterLabels(metricMode);
 
   const baseFiltered = allFeatures.filter((feature) => {
     const isVisibleZero = showZeroes || !feature.properties.is_zero_count;
     return isVisibleZero;
   });
-  const topFiltered = applyTopCountFilter(baseFiltered, topFilterMode);
+  const metricEligible = baseFiltered.filter((feature) => isMetricEligible(feature, metricMode));
+  const topFiltered = applyTopMetricFilter(metricEligible, topFilterMode, metricMode);
   visibleFeatures = topFiltered.filter((feature) => matchesSearch(feature, searchTerm));
+
+  if (metricMode === METRIC_MODES.density && visibleFeatures.length === 0) {
+    showStatus("No streets with fines-per-mile are available for the current filters.");
+  } else {
+    clearStatus();
+  }
 
   if (map.hasLayer(markerLayer)) {
     map.removeLayer(markerLayer);
@@ -1251,8 +1351,8 @@ function applyFilters(summary) {
       `[heat] deduped ${visibleFeatures.length - heatFeatures.length} overlapping point(s) before rendering`
     );
   }
-  const scalingContext = computeScalingContext(heatFeatures, topFilterMode, weightMode);
-  const heatResult = buildHeatLayer(heatFeatures, topFilterMode, scalingContext);
+  const scalingContext = computeScalingContext(heatFeatures, topFilterMode, weightMode, metricMode);
+  const heatResult = buildHeatLayer(heatFeatures, topFilterMode, scalingContext, metricMode);
   markerLayer = buildMarkerLayer(heatResult.scaledPoints);
   heatLayer = heatResult.layer;
 
@@ -1264,9 +1364,10 @@ function applyFilters(summary) {
   focusVisibleFeatures(
     visibleFeatures,
     searchTerm,
-    `${topFilterMode}|${showZeroes ? "zeroes" : "nonzero"}|${searchTerm}`
+    `${metricMode}|${topFilterMode}|${showZeroes ? "zeroes" : "nonzero"}|${searchTerm}`
   );
-  updateLegend(heatResult.stats);
+  updateLegend(heatResult.stats, metricMode);
+  updateLeagueTable(allFeatures, metricMode);
   updateSummary(summary, visibleFeatures.length);
 }
 
@@ -1308,7 +1409,8 @@ async function init() {
 
     allFeatures = geojson.features || [];
     assignOverallRanks(allFeatures);
-    updateLeagueTable(allFeatures);
+    syncTopFilterLabels(getMetricMode());
+    updateLeagueTable(allFeatures, getMetricMode());
     setDefaultBounds(allFeatures);
     applyFilters(summary);
 
@@ -1321,6 +1423,7 @@ async function init() {
     elements.searchInput.addEventListener("input", () => applyFilters(summary));
     elements.weightMode.addEventListener("change", () => applyFilters(summary));
     elements.topFilter.addEventListener("change", () => applyFilters(summary));
+    elements.metricMode.addEventListener("change", () => applyFilters(summary));
     elements.toggleHeat.addEventListener("change", () => applyFilters(summary));
     elements.toggleMarkers.addEventListener("change", () => updateMarkerVisibility());
     elements.toggleZeroes.addEventListener("change", () => applyFilters(summary));
@@ -1328,9 +1431,11 @@ async function init() {
       elements.searchInput.value = "";
       elements.weightMode.value = "log";
       elements.topFilter.value = "top200";
+      elements.metricMode.value = METRIC_MODES.total;
       elements.toggleHeat.checked = true;
       elements.toggleMarkers.checked = true;
       elements.toggleZeroes.checked = false;
+      syncTopFilterLabels(getMetricMode());
       if (defaultBounds) {
         map.fitBounds(defaultBounds.pad(0.08));
       } else {
