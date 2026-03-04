@@ -5,6 +5,27 @@ const MANUAL_OVERRIDE_STATUS = "manual_override";
 const DEBUG_SHOW_WEIGHTS = false;
 const MARKER_MIN_RADIUS = 2.5;
 const MARKER_MAX_RADIUS = 75;
+const THEME_STORAGE_KEY = "leicester-theme-preference";
+const THEME_COLORS = {
+  light: "#f8f3e8",
+  dark: "#111820",
+};
+const BASEMAPS = {
+  light: {
+    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    options: {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 19,
+    },
+  },
+  dark: {
+    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    options: {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 19,
+    },
+  },
+};
 const TOP_FILTER_LIMITS = {
   all: Infinity,
   top200: 200,
@@ -121,7 +142,18 @@ const HEAT_BLOB_OPTIONS = {
   minOpacity: 0.07,
   maxOpacity: 0.34,
 };
+const rootElement = document.documentElement;
+const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+const colorSchemeMeta = document.querySelector('meta[name="color-scheme"]');
+const systemThemeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+const themeState = {
+  mode: rootElement.dataset.theme === "dark" ? "dark" : "light",
+  source: rootElement.dataset.themeSource === "manual" ? "manual" : "system",
+};
 const elements = {
+  themeToggle: document.querySelector("#theme-toggle"),
+  themeToggleNote: document.querySelector("#theme-toggle-note"),
+  themeReset: document.querySelector("#theme-reset"),
   searchInput: document.querySelector("#search-input"),
   weightMode: document.querySelector("#weight-mode"),
   topFilter: document.querySelector("#top-filter"),
@@ -142,17 +174,103 @@ const map = L.map("map", {
   minZoom: 11,
 }).setView(LEICESTER_CENTER, DEFAULT_ZOOM);
 
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  maxZoom: 19,
-}).addTo(map);
-
 let allFeatures = [];
 let visibleFeatures = [];
+let baseTileLayer = null;
 let markerLayer = L.layerGroup();
 let heatLayer = null;
 let defaultBounds = null;
 let lastFocusedSearchKey = "";
+
+function getSystemTheme() {
+  return systemThemeMediaQuery.matches ? "dark" : "light";
+}
+
+function updateThemeMeta(theme) {
+  if (themeColorMeta) {
+    themeColorMeta.setAttribute("content", THEME_COLORS[theme] || THEME_COLORS.light);
+  }
+  if (colorSchemeMeta) {
+    colorSchemeMeta.setAttribute("content", theme === "dark" ? "dark light" : "light dark");
+  }
+}
+
+function createBaseTileLayer(theme) {
+  const config = BASEMAPS[theme] || BASEMAPS.light;
+  return L.tileLayer(config.url, config.options);
+}
+
+function updateBaseLayer(theme) {
+  const nextLayer = createBaseTileLayer(theme);
+  if (baseTileLayer) {
+    map.removeLayer(baseTileLayer);
+  }
+  baseTileLayer = nextLayer;
+  baseTileLayer.addTo(map);
+}
+
+function syncThemeUi() {
+  if (elements.themeToggle) {
+    elements.themeToggle.checked = themeState.mode === "dark";
+  }
+  if (elements.themeToggleNote) {
+    const label = themeState.mode === "dark" ? "Dark" : "Light";
+    elements.themeToggleNote.textContent =
+      themeState.source === "manual"
+        ? `Manual override active. ${label} mode is locked in.`
+        : `Following your device setting. ${label} mode is active.`;
+  }
+  if (elements.themeReset) {
+    elements.themeReset.hidden = themeState.source !== "manual";
+  }
+}
+
+function setThemeRoot(theme, source) {
+  rootElement.dataset.theme = theme;
+  rootElement.dataset.themeSource = source;
+  rootElement.style.colorScheme = theme;
+  rootElement.classList.toggle("theme-light", theme === "light");
+  rootElement.classList.toggle("theme-dark", theme === "dark");
+}
+
+function applyTheme(theme, source = themeState.source) {
+  const nextTheme = theme === "dark" ? "dark" : "light";
+  const nextSource = source === "manual" ? "manual" : "system";
+  themeState.mode = nextTheme;
+  themeState.source = nextSource;
+  setThemeRoot(nextTheme, nextSource);
+  updateThemeMeta(nextTheme);
+  updateBaseLayer(nextTheme);
+  syncThemeUi();
+}
+
+function persistThemePreference(theme) {
+  try {
+    window.localStorage.setItem(THEME_STORAGE_KEY, theme);
+  } catch {}
+  applyTheme(theme, "manual");
+}
+
+function resetThemePreference() {
+  try {
+    window.localStorage.removeItem(THEME_STORAGE_KEY);
+  } catch {}
+  applyTheme(getSystemTheme(), "system");
+}
+
+applyTheme(themeState.mode, themeState.source);
+
+const handleSystemThemeChange = (event) => {
+  if (themeState.source !== "manual") {
+    applyTheme(event.matches ? "dark" : "light", "system");
+  }
+};
+
+if (typeof systemThemeMediaQuery.addEventListener === "function") {
+  systemThemeMediaQuery.addEventListener("change", handleSystemThemeChange);
+} else if (typeof systemThemeMediaQuery.addListener === "function") {
+  systemThemeMediaQuery.addListener(handleSystemThemeChange);
+}
 
 function showStatus(message) {
   elements.statusBanner.textContent = message;
@@ -938,6 +1056,12 @@ async function init() {
     setDefaultBounds(allFeatures);
     applyFilters(summary);
 
+    elements.themeToggle.addEventListener("change", () => {
+      persistThemePreference(elements.themeToggle.checked ? "dark" : "light");
+    });
+    elements.themeReset.addEventListener("click", () => {
+      resetThemePreference();
+    });
     elements.searchInput.addEventListener("input", () => applyFilters(summary));
     elements.weightMode.addEventListener("change", () => applyFilters(summary));
     elements.topFilter.addEventListener("change", () => applyFilters(summary));

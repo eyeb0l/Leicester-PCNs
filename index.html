@@ -3,7 +3,46 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="supported-color-schemes" content="light dark" />
+    <meta name="theme-color" content="#f8f3e8" />
     <title>Leicester Parking Fines by Street (2025)</title>
+    <script>
+      (() => {
+        const storageKey = "leicester-theme-preference";
+        const themeColors = {
+          light: "#f8f3e8",
+          dark: "#111820",
+        };
+        const root = document.documentElement;
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        let theme = prefersDark ? "dark" : "light";
+        let source = "system";
+
+        try {
+          const storedTheme = window.localStorage.getItem(storageKey);
+          if (storedTheme === "light" || storedTheme === "dark") {
+            theme = storedTheme;
+            source = "manual";
+          }
+        } catch {}
+
+        root.dataset.theme = theme;
+        root.dataset.themeSource = source;
+        root.classList.add(`theme-${theme}`);
+        root.style.colorScheme = theme;
+
+        const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+        if (themeColorMeta) {
+          themeColorMeta.setAttribute("content", themeColors[theme]);
+        }
+
+        const colorSchemeMeta = document.querySelector('meta[name="color-scheme"]');
+        if (colorSchemeMeta) {
+          colorSchemeMeta.setAttribute("content", theme === "dark" ? "dark light" : "light dark");
+        }
+      })();
+    </script>
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -22,6 +61,26 @@
         </p>
 
         <section class="controls">
+          <div class="theme-controls">
+            <label class="toggle" for="theme-toggle">
+              <input
+                id="theme-toggle"
+                type="checkbox"
+                role="switch"
+                aria-describedby="theme-toggle-note"
+              />
+              <span>Dark mode</span>
+            </label>
+            <div class="theme-toggle-meta">
+              <p id="theme-toggle-note" class="theme-toggle-note">
+                Follows your device display mode until you switch it.
+              </p>
+              <button id="theme-reset" class="theme-reset" type="button" hidden>
+                Use device setting
+              </button>
+            </div>
+          </div>
+
           <div class="field">
             <label for="search-input">Search streets</label>
             <input id="search-input" type="search" placeholder="Start typing a street name" />
