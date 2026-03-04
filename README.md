@@ -15,6 +15,8 @@ Static web app and Python preprocessing pipeline for mapping Leicester City Coun
 - `data/manual-overrides.json`: manual lat/lon fixes that override cached API results
 - `data/build/streets.geojson`: final map-ready point dataset
 - `data/build/summary.json`: build summary used by the browser UI
+- `map-config.example.json`: tracked template for the public Mapbox runtime config
+- `map-config.json`: ignored runtime config loaded by the browser at startup
 
 ## Data rules
 
@@ -24,6 +26,24 @@ Static web app and Python preprocessing pipeline for mapping Leicester City Coun
 - Count values are parsed with `float()` and accepted only when they represent a whole number (e.g., `11.` → `11`)
 - Manual overrides always take precedence over geocoder responses
 - Failed geocodes are cached and not retried unless you delete them or rerun with `--retry-errors`
+
+## Map providers
+
+- Visible basemap: Mapbox Static Tiles (`mapbox/light-v11` and `mapbox/dark-v11`)
+- Geocoding provider: Nominatim (OpenStreetMap)
+
+## Runtime config
+
+Copy the tracked example and add a public Mapbox token before serving the site:
+
+```bash
+cp map-config.example.json map-config.json
+```
+
+- Use a public `pk.` access token in `map-config.json`
+- Restrict the token to `http://localhost:8000` and your deployed origin in the Mapbox dashboard
+- Publish `map-config.json` alongside the rest of the static site assets in deployment
+- Leave `mapbox/light-v11` and `mapbox/dark-v11` in place unless you want to target different compatible style IDs
 
 ## Geocoding behavior
 
@@ -38,6 +58,7 @@ Static web app and Python preprocessing pipeline for mapping Leicester City Coun
 
 ```bash
 cp /Users/irisgiertuga/Desktop/leicester.csv data/source/leicester.csv
+cp map-config.example.json map-config.json
 python3 -m pip install --user geopy
 python3 scripts/prepare_data.py
 python3 scripts/geocode_streets.py --progress --retry-errors

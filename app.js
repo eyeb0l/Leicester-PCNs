@@ -6,25 +6,20 @@ const DEBUG_SHOW_WEIGHTS = false;
 const MARKER_MIN_RADIUS = 2.5;
 const MARKER_MAX_RADIUS = 75;
 const THEME_STORAGE_KEY = "leicester-theme-preference";
+const MAP_CONFIG_PATH = "map-config.json";
+const MAPBOX_CONFIG_ERROR_MESSAGE =
+  "Missing Mapbox configuration. Copy map-config.example.json to map-config.json and add a public Mapbox token.";
+const MAPBOX_TILE_ERROR_MESSAGE =
+  "Mapbox tiles failed to load. Check the token and its URL restrictions.";
+const MAPBOX_ATTRIBUTION =
+  '&copy; <a href="https://www.mapbox.com/about/maps/" target="_blank" rel="noopener noreferrer">Mapbox</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> <a href="https://www.mapbox.com/map-feedback/" target="_blank" rel="noopener noreferrer">Improve this map</a>';
+const DEFAULT_BASEMAP_STYLES = Object.freeze({
+  light: "mapbox/light-v11",
+  dark: "mapbox/dark-v11",
+});
 const THEME_COLORS = {
   light: "#f8f3e8",
   dark: "#111820",
-};
-const BASEMAPS = {
-  light: {
-    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    options: {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      maxZoom: 19,
-    },
-  },
-  dark: {
-    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    options: {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      maxZoom: 19,
-    },
-  },
 };
 const TOP_FILTER_LIMITS = {
   all: Infinity,
@@ -171,6 +166,7 @@ const elements = {
   legendBar: document.querySelector("#legend-bar"),
   legendTicks: document.querySelector("#legend-ticks"),
   statusBanner: document.querySelector("#status-banner"),
+  mapboxWordmark: document.querySelector("#mapbox-wordmark"),
 };
 
 const map = L.map("map", {
@@ -185,6 +181,9 @@ let markerLayer = L.layerGroup();
 let heatLayer = null;
 let defaultBounds = null;
 let lastFocusedSearchKey = "";
+let basemapConfig = null;
+let transientStatusMessage = "";
+let persistentStatusMessage = "";
 
 function getSystemTheme() {
   return systemThemeMediaQuery.matches ? "dark" : "light";
@@ -202,13 +201,162 @@ function updateThemeMeta(theme) {
   }
 }
 
+function isNonEmptyString(value) {
+  return typeof value === "string" && value.trim() !== "";
+}
+
+function toStatusMessage(error, fallback) {
+  if (error instanceof Error && isNonEmptyString(error.message)) {
+    return error.message;
+  }
+  if (isNonEmptyString(error)) {
+    return error.trim();
+  }
+  return fallback;
+}
+
+function renderStatus() {
+  if (!elements.statusBanner) {
+    return;
+  }
+  const message = persistentStatusMessage || transientStatusMessage;
+  if (message) {
+    elements.statusBanner.textContent = message;
+    elements.statusBanner.classList.remove("is-hidden");
+    return;
+  }
+  elements.statusBanner.textContent = "";
+  elements.statusBanner.classList.add("is-hidden");
+}
+
+function showStatus(message, options = {}) {
+  const { persistent = false } = options;
+  const nextMessage = isNonEmptyString(message) ? message.trim() : "";
+  if (persistent) {
+    persistentStatusMessage = nextMessage;
+  } else {
+    transientStatusMessage = nextMessage;
+  }
+  renderStatus();
+}
+
+function clearStatus(options = {}) {
+  const { persistent = false } = options;
+  if (persistent) {
+    persistentStatusMessage = "";
+  } else {
+    transientStatusMessage = "";
+  }
+  renderStatus();
+}
+
+function hideStatus() {
+  clearStatus();
+}
+
+function setMapboxBrandingVisible(isVisible) {
+  if (elements.mapboxWordmark) {
+    elements.mapboxWordmark.hidden = !isVisible;
+  }
+}
+
+function normalizeStyleId(value, fallback) {
+  return isNonEmptyString(value) ? value.trim() : fallback;
+}
+
+function validateMapConfig(config) {
+  if (!config || typeof config !== "object" || Array.isArray(config)) {
+    throw new Error(MAPBOX_CONFIG_ERROR_MESSAGE);
+  }
+
+  const token = isNonEmptyString(config.mapboxAccessToken) ? config.mapboxAccessToken.trim() : "";
+  if (!token || token.includes("YOUR_PUBLIC_TOKEN_HERE") || !token.startsWith("pk.")) {
+    throw new Error(MAPBOX_CONFIG_ERROR_MESSAGE);
+  }
+
+  const rawStyles = config.basemapStyles;
+  if (rawStyles != null && (typeof rawStyles !== "object" || Array.isArray(rawStyles))) {
+    throw new Error(MAPBOX_CONFIG_ERROR_MESSAGE);
+  }
+  if (rawStyles?.light != null && !isNonEmptyString(rawStyles.light)) {
+    throw new Error(MAPBOX_CONFIG_ERROR_MESSAGE);
+  }
+  if (rawStyles?.dark != null && !isNonEmptyString(rawStyles.dark)) {
+    throw new Error(MAPBOX_CONFIG_ERROR_MESSAGE);
+  }
+
+  return {
+    mapboxAccessToken: token,
+    basemapStyles: {
+      light: normalizeStyleId(rawStyles?.light, DEFAULT_BASEMAP_STYLES.light),
+      dark: normalizeStyleId(rawStyles?.dark, DEFAULT_BASEMAP_STYLES.dark),
+    },
+  };
+}
+
+async function loadMapConfig() {
+  let response;
+  try {
+    response = await fetch(MAP_CONFIG_PATH, { cache: "no-store" });
+  } catch {
+    throw new Error(MAPBOX_CONFIG_ERROR_MESSAGE);
+  }
+
+  if (!response.ok) {
+    throw new Error(MAPBOX_CONFIG_ERROR_MESSAGE);
+  }
+
+  let payload;
+  try {
+    payload = await response.json();
+  } catch {
+    throw new Error(MAPBOX_CONFIG_ERROR_MESSAGE);
+  }
+
+  return validateMapConfig(payload);
+}
+
+function createMapboxTileUrl(styleId, token) {
+  const encodedStyleId = String(styleId)
+    .split("/")
+    .map((segment) => encodeURIComponent(segment))
+    .join("/");
+  const params = new URLSearchParams({ access_token: token });
+  return `https://api.mapbox.com/styles/v1/${encodedStyleId}/tiles/256/{z}/{x}/{y}?${params.toString()}`;
+}
+
 function createBaseTileLayer(theme) {
-  const config = BASEMAPS[theme] || BASEMAPS.light;
-  return L.tileLayer(config.url, config.options);
+  if (!basemapConfig) {
+    return null;
+  }
+
+  const styleId = basemapConfig.basemapStyles[theme] || basemapConfig.basemapStyles.light;
+  const layer = L.tileLayer(createMapboxTileUrl(styleId, basemapConfig.mapboxAccessToken), {
+    attribution: MAPBOX_ATTRIBUTION,
+    maxZoom: 19,
+  });
+
+  layer.on("tileerror", () => {
+    if (baseTileLayer !== layer) {
+      return;
+    }
+    showStatus(MAPBOX_TILE_ERROR_MESSAGE, { persistent: true });
+  });
+  layer.on("load", () => {
+    if (baseTileLayer !== layer || persistentStatusMessage !== MAPBOX_TILE_ERROR_MESSAGE) {
+      return;
+    }
+    clearStatus({ persistent: true });
+  });
+
+  return layer;
 }
 
 function updateBaseLayer(theme) {
   const nextLayer = createBaseTileLayer(theme);
+  if (!nextLayer) {
+    return;
+  }
   if (baseTileLayer) {
     map.removeLayer(baseTileLayer);
   }
@@ -291,15 +439,6 @@ if (typeof systemThemeMediaQuery.addEventListener === "function") {
   systemThemeMediaQuery.addEventListener("change", handleSystemThemeChange);
 } else if (typeof systemThemeMediaQuery.addListener === "function") {
   systemThemeMediaQuery.addListener(handleSystemThemeChange);
-}
-
-function showStatus(message) {
-  elements.statusBanner.textContent = message;
-  elements.statusBanner.classList.remove("is-hidden");
-}
-
-function hideStatus() {
-  elements.statusBanner.classList.add("is-hidden");
 }
 
 function formatNumber(value) {
@@ -1092,9 +1231,14 @@ function setDefaultBounds(features) {
 }
 
 async function init() {
-  showStatus("Loading prepared map data…");
+  showStatus("Loading Mapbox configuration…");
 
   try {
+    basemapConfig = await loadMapConfig();
+    setMapboxBrandingVisible(true);
+    updateBaseLayer(themeState.mode);
+
+    showStatus("Loading prepared map data…");
     const [geojsonResponse, summaryResponse] = await Promise.all([
       fetch("data/build/streets.geojson"),
       fetch("data/build/summary.json"),
@@ -1149,7 +1293,7 @@ async function init() {
 
     hideStatus();
   } catch (error) {
-    showStatus(error.message);
+    showStatus(toStatusMessage(error, MAPBOX_CONFIG_ERROR_MESSAGE), { persistent: true });
     console.error(error);
   }
 }
