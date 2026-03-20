@@ -830,7 +830,7 @@ function selectMedianColorSamples(scaledPoints, sampleSize = 5) {
 
 function buildColorSampleRows(points) {
   return points.map((point) => ({
-    street: point.feature.properties.display_name,
+    street: getFeatureLabel(point.feature),
     metricValue: Number(point.metricValue.toFixed(4)),
     colorPercent: Number(point.colorPercent.toFixed(4)),
     fillColor: point.fillColor,
@@ -848,7 +848,7 @@ function applyTopMetricFilter(features, mode, metricMode) {
     if (difference !== 0) {
       return difference;
     }
-    return a.properties.display_name.localeCompare(b.properties.display_name);
+    return getFeatureLabel(a).localeCompare(getFeatureLabel(b));
   });
   return sorted.slice(0, limit);
 }
@@ -857,7 +857,12 @@ function matchesSearch(feature, term) {
   if (!term) {
     return true;
   }
-  const haystacks = [feature.properties.display_name, ...(feature.properties.aliases || [])]
+  const haystacks = [
+    feature.properties.display_name,
+    feature.properties.display_label,
+    feature.properties.area,
+    ...(feature.properties.aliases || []),
+  ]
     .join(" ")
     .toLowerCase();
   return haystacks.includes(term);
@@ -868,7 +873,7 @@ function logHeatSummary(topFilterMode, metricMode, scaledPoints, stats) {
     .sort((a, b) => b.metricValue - a.metricValue)
     .slice(0, 25)
     .map((point) => ({
-      street: point.feature.properties.display_name,
+      street: getFeatureLabel(point.feature),
       metricValue: Number(point.metricValue.toFixed(4)),
       weight: Number(point.weight.toFixed(4)),
       radius: Number(point.radius.toFixed(2)),
@@ -943,7 +948,7 @@ function assignOverallRanks(features) {
     if (countDifference !== 0) {
       return countDifference;
     }
-    return left.properties.display_name.localeCompare(right.properties.display_name);
+    return getFeatureLabel(left).localeCompare(getFeatureLabel(right));
   });
   const totalFineCount = rankedFeatures.reduce((sum, feature) => sum + getCount(feature), 0);
 
@@ -974,7 +979,7 @@ function assignDensityRanks(features) {
       if (densityDifference !== 0) {
         return densityDifference;
       }
-      return left.properties.display_name.localeCompare(right.properties.display_name);
+      return getFeatureLabel(left).localeCompare(getFeatureLabel(right));
     });
 
   const ranksByKey = new Map(rankedFeatures.map((feature, index) => [getFeatureKey(feature), index + 1]));
@@ -1091,6 +1096,8 @@ function buildScaledPoints(features, scalingContext, metricMode) {
 function popupHtml(feature, metricMode) {
   const {
     display_name: displayName,
+    display_label: displayLabel,
+    area,
     count_total: countTotal,
     overall_rank: overallRank,
     density_rank: densityRank,
@@ -1125,10 +1132,12 @@ function popupHtml(feature, metricMode) {
         1
       )} fines/mi</p>`
     : "";
+  const areaHtml = area ? `<p>Authority: <strong>${escapeHtml(area)}</strong></p>` : "";
 
   return `
     <div class="popup-content">
-      <h3>${escapeHtml(displayName)}</h3>
+      <h3>${escapeHtml(displayLabel || displayName)}</h3>
+      ${areaHtml}
       <p><strong>${formatNumber(countTotal)}</strong> fines</p>
       ${rankHtml}
       ${perDayHtml}
@@ -1182,7 +1191,9 @@ function updateLeagueTable(features, metricMode, limit = 10) {
       if (metricDifference !== 0) {
         return metricDifference;
       }
-      return left.properties.display_name.localeCompare(right.properties.display_name);
+      return (left.properties.display_label || left.properties.display_name).localeCompare(
+        right.properties.display_label || right.properties.display_name
+      );
     })
     .slice(0, limit);
 
@@ -1210,7 +1221,9 @@ function updateLeagueTable(features, metricMode, limit = 10) {
       <li class="league-row">
         <span class="league-rank">#${formatNumber(index + 1)}</span>
         <div class="league-main">
-          <span class="league-street">${escapeHtml(feature.properties.display_name)}</span>
+          <span class="league-street">${escapeHtml(
+            feature.properties.display_label || feature.properties.display_name
+          )}</span>
           <span class="league-meta">
             <span>${formatDecimal(pcnsPerDay)} per day</span>
             <span>${secondaryMeta}</span>
@@ -1336,6 +1349,10 @@ function focusVisibleFeatures(features, searchTerm, focusKey) {
     map.fitBounds(bounds.pad(0.4), { maxZoom: 16 });
     lastFocusedSearchKey = focusKey;
   }
+}
+
+function getFeatureLabel(feature) {
+  return feature?.properties?.display_label || feature?.properties?.display_name || "";
 }
 
 function applyFilters(summary) {

@@ -51,6 +51,10 @@ def main() -> None:
     manual_overrides = load_json(MANUAL_OVERRIDES_JSON) if MANUAL_OVERRIDES_JSON.exists() else {}
     street_lengths = load_json(STREET_LENGTHS_JSON) if STREET_LENGTHS_JSON.exists() else {"entries": {}}
     length_entries = street_lengths.get("entries", {})
+    name_counts: dict[str, int] = {}
+    for street in normalized["streets"]:
+        name_key = str(street.get("display_name", "")).casefold()
+        name_counts[name_key] = name_counts.get(name_key, 0) + 1
 
     features = []
     failed_geocode_count = 0
@@ -78,6 +82,13 @@ def main() -> None:
 
         geocoded_success_count += 1
         length_entry = length_entries.get(cache_key) if isinstance(length_entries, dict) else None
+        display_name = street["display_name"]
+        area = str(street.get("area") or street.get("city") or "")
+        display_label = (
+            f"{display_name} ({area})"
+            if name_counts.get(str(display_name).casefold(), 0) > 1 and area
+            else display_name
+        )
         street_length_meters: float | None = None
         street_length_miles: float | None = None
         fines_per_mile: float | None = None
@@ -104,7 +115,9 @@ def main() -> None:
                 },
                 "properties": {
                     "cache_key": cache_key,
-                    "display_name": street["display_name"],
+                    "display_name": display_name,
+                    "display_label": display_label,
+                    "area": area,
                     "aliases": street["aliases"],
                     "count_total": count_total,
                     "source_rows": street["source_rows"],

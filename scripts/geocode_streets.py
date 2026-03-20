@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Geocode Leicester street records against Nominatim with resumable caching."""
+"""Geocode parking-fine street records against Nominatim with resumable caching."""
 
 from __future__ import annotations
 
 import argparse
 import json
+import re
+import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -33,14 +35,17 @@ ACCEPTED_TYPES = {
     "footway",
     "cycleway",
 }
-LEICESTER_BOUNDARY = {
-    "lat_min": 52.55,
-    "lat_max": 52.71,
-    "lon_min": -1.26,
-    "lon_max": -1.02,
+REGION_BOUNDARY = {
+    "lat_min": 52.47,
+    "lat_max": 52.84,
+    "lon_min": -1.36,
+    "lon_max": -1.0,
 }
 TERMINAL_STATUSES = {"ok", "not_found", "ambiguous", "manual_override"}
-VIEWBOX = ((52.55, -1.26), (52.71, -1.02))
+VIEWBOX = (
+    (REGION_BOUNDARY["lat_min"], REGION_BOUNDARY["lon_min"]),
+    (REGION_BOUNDARY["lat_max"], REGION_BOUNDARY["lon_max"]),
+)
 
 GEOCODER = Nominatim(user_agent=USER_AGENT, timeout=30)
 GEOCODE_WITH_LIMITER = RateLimiter(
@@ -54,6 +59,30 @@ GEOCODE_WITH_LIMITER = RateLimiter(
 
 def utc_now_iso() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+
+
+def normalize_text(value: str) -> str:
+    value = unicodedata.normalize("NFKC", value or "")
+    value = re.sub(r"\s+", " ", value).strip()
+    return value
+
+
+def normalize_match_text(value: str) -> str:
+    value = normalize_text(value).lower().replace("&", " and ")
+    value = re.sub(r"[^a-z0-9]+", " ", value)
+    return re.sub(r"\s+", " ", value).strip()
+
+
+def normalize_identity(value: str) -> str:
+    value = normalize_text(value).lower()
+    value = re.sub(r"[\s.,;:!?]+$", "", value)
+    return value
+
+
+def normalize_street_variant(value: str) -> str:
+    normalized = normalize_identity(value)
+    normalized = re.sub(r"^(?:[abm]\d+[a-z]?)\s+", "", normalized)
+    return normalized
 
 
 def load_json(path: Path, default: Any) -> Any:
@@ -99,28 +128,94 @@ def load_manual_overrides() -> dict[str, Any]:
     return overrides
 
 
-def in_leicester_bounds(lat: float, lon: float) -> bool:
+def in_region_bounds(lat: float, lon: float) -> bool:
     return (
-        LEICESTER_BOUNDARY["lat_min"] <= lat <= LEICESTER_BOUNDARY["lat_max"]
-        and LEICESTER_BOUNDARY["lon_min"] <= lon <= LEICESTER_BOUNDARY["lon_max"]
+        REGION_BOUNDARY["lat_min"] <= lat <= REGION_BOUNDARY["lat_max"]
+        and REGION_BOUNDARY["lon_min"] <= lon <= REGION_BOUNDARY["lon_max"]
     )
 
 
-def result_score(result: dict[str, Any]) -> tuple[int, float]:
+def build_match_blob(result: dict[str, Any]) -> str:
+    parts = [str(result.get("display_name") or "")]
+    address = result.get("address")
+    if isinstance(address, dict):
+        parts.extend(str(value or "") for value in address.values())
+    return normalize_match_text(" ".join(parts))
+
+
+def build_area_variants(area: str) -> set[str]:
+    normalized = normalize_match_text(area)
+    if not normalized:
+        return set()
+    variants = {normalized}
+    if " and " in normalized:
+        variants.add(normalized.replace(" and ", " "))
+    return variants
+
+
+def result_matches_area(area: str, result: dict[str, Any]) -> bool:
+    area_variants = build_area_variants(area)
+    if not area_variants:
+        return False
+    blob = f" {build_match_blob(result)} "
+    return any(f" {variant} " in blob for variant in area_variants)
+
+
+def build_street_variants(result: dict[str, Any]) -> set[str]:
+    parts = [str(result.get("name") or "")]
+    display_name = str(result.get("display_name") or "")
+    if display_name:
+        parts.append(display_name.split(",", 1)[0])
+    address = result.get("address")
+    if isinstance(address, dict):
+        for key in ("road", "pedestrian", "residential", "footway", "cycleway", "path", "highway"):
+            parts.append(str(address.get(key) or ""))
+    variants: set[str] = set()
+    for value in parts:
+        normalized = normalize_identity(value)
+        if not normalized:
+            continue
+        variants.add(normalized)
+        stripped = normalize_street_variant(value)
+        if stripped:
+            variants.add(stripped)
+    return variants
+
+
+def result_matches_street(street_name: str, result: dict[str, Any]) -> bool:
+    variants = build_street_variants(result)
+    targets = {normalize_identity(street_name), normalize_street_variant(street_name)}
+    targets.discard("")
+    return any(target in variants for target in targets)
+
+
+def build_result_context(result: dict[str, Any]) -> str:
+    parts = [str(result.get("name") or "")]
+    address = result.get("address")
+    if isinstance(address, dict):
+        for key in ("road", "pedestrian", "residential", "suburb", "quarter", "village", "town", "city", "county"):
+            parts.append(str(address.get(key) or ""))
+    return normalize_match_text(" ".join(parts))
+
+
+def result_score(street_name: str, area: str, result: dict[str, Any]) -> tuple[int, int, int, float]:
     result_type = str(result.get("type", "")).lower()
     category = str(result.get("category", "")).lower()
     importance = float(result.get("importance") or 0.0)
-    display_name = str(result.get("display_name") or "").lower()
+    match_blob = build_match_blob(result)
     lat = float(result["lat"])
     lon = float(result["lon"])
+    street_bonus = 4 if result_matches_street(street_name, result) else 0
     type_bonus = 2 if result_type in ACCEPTED_TYPES else 0
     category_bonus = 1 if category in {"highway", "place"} else 0
-    leicester_bonus = 2 if "leicester" in display_name else 0
-    bounds_bonus = 2 if in_leicester_bounds(lat, lon) else -2
-    return (type_bonus + category_bonus + leicester_bonus + bounds_bonus, importance)
+    area_bonus = 3 if result_matches_area(area, result) else 0
+    county_bonus = 1 if " leicestershire " in f" {match_blob} " else 0
+    bounds_bonus = 2 if in_region_bounds(lat, lon) else -2
+    total_score = street_bonus + type_bonus + category_bonus + area_bonus + county_bonus + bounds_bonus
+    return (total_score, street_bonus, area_bonus, importance)
 
 
-def pick_result(query: str, results: list[dict[str, Any]]) -> dict[str, Any]:
+def pick_result(query: str, street_name: str, area: str, results: list[dict[str, Any]]) -> dict[str, Any]:
     if not results:
         return {
             "query": query,
@@ -136,7 +231,7 @@ def pick_result(query: str, results: list[dict[str, Any]]) -> dict[str, Any]:
             lon = float(result["lon"])
         except (KeyError, TypeError, ValueError):
             continue
-        usable.append((result_score(result), lat, lon, result))
+        usable.append((result_score(street_name, area, result), lat, lon, result))
 
     if not usable:
         return {
@@ -162,9 +257,19 @@ def pick_result(query: str, results: list[dict[str, Any]]) -> dict[str, Any]:
     if len(usable) > 1:
         next_score, _, _, next_result = usable[1]
         if best_score[0] == next_score[0]:
-            best_display = str(best_result.get("display_name") or "").lower()
-            next_display = str(next_result.get("display_name") or "").lower()
-            if best_display != next_display and "leicester" not in best_display:
+            best_context = build_result_context(best_result)
+            next_context = build_result_context(next_result)
+            best_street_match = result_matches_street(street_name, best_result)
+            next_street_match = result_matches_street(street_name, next_result)
+            best_area_match = result_matches_area(area, best_result)
+            next_area_match = result_matches_area(area, next_result)
+            importance_gap = float(best_score[3]) - float(next_score[3])
+            if (
+                best_context != next_context
+                and best_street_match == next_street_match
+                and best_area_match == next_area_match
+                and importance_gap < 0.05
+            ):
                 return {
                     "query": query,
                     "status": "ambiguous",
@@ -228,6 +333,7 @@ def should_skip(entry: dict[str, Any] | None) -> bool:
 
 def geocode_records(
     force_retry_errors: bool = False,
+    force_retry_ambiguous: bool = False,
     max_records: int | None = None,
     show_progress: bool = False,
 ) -> None:
@@ -241,6 +347,7 @@ def geocode_records(
     for record in records:
         cache_key = record["cache_key"]
         query = record["query"]
+        area = str(record.get("area") or record.get("city") or "")
 
         if cache_key in manual_overrides:
             apply_manual_override(cache, cache_key, manual_overrides[cache_key], query)
@@ -258,13 +365,16 @@ def geocode_records(
 
         existing = entries.get(cache_key)
         if should_skip(existing):
-            continue
+            if existing and existing.get("status") == "ambiguous" and force_retry_ambiguous:
+                pass
+            else:
+                continue
         if existing and existing.get("status") == "error" and not force_retry_errors:
             continue
 
         try:
             results = fetch_results(query)
-            entries[cache_key] = pick_result(query, results)
+            entries[cache_key] = pick_result(query, record["display_name"], area, results)
         except Exception as exc:  # noqa: BLE001
             entries[cache_key] = {
                 "query": query,
@@ -308,6 +418,11 @@ def main() -> None:
         help="Print cache status counts without performing any geocoding.",
     )
     parser.add_argument(
+        "--retry-ambiguous",
+        action="store_true",
+        help="Retry cache entries previously marked as ambiguous.",
+    )
+    parser.add_argument(
         "--max-records",
         type=int,
         default=None,
@@ -326,6 +441,7 @@ def main() -> None:
 
     geocode_records(
         force_retry_errors=args.retry_errors,
+        force_retry_ambiguous=args.retry_ambiguous,
         max_records=args.max_records,
         show_progress=args.progress,
     )

@@ -1,6 +1,6 @@
 # Leicester 2025 Parking Fines Heat Map
 
-Static web app and Python preprocessing pipeline for mapping Leicester City Council parking fine counts by street in 2025.
+Static web app and Python preprocessing pipeline for mapping 2025 parking fine counts by street across Leicester plus nearby authorities in the current dataset.
 
 - Source rows: 1,548
 - Normalized streets: 1,546 (two duplicate groups resolved: `Atlas Close` vs `Atlas Close.` and `Brookland  Road` vs `Brookland Road`)
@@ -21,8 +21,10 @@ Static web app and Python preprocessing pipeline for mapping Leicester City Coun
 
 ## Data rules
 
-- Expected CSV columns: `Street/Location`, `City/Area`, `Count`
+- Supported source formats: CSV and Excel (`.xlsx`, `.xlsm`)
+- Supported columns: `Street/Location` or `Location Name`; `City/Area`, `Authority`, or `Authority Name`; `Count` or `Number Of PCNs Issued`
 - Street names are normalized using Unicode `NFKC`, whitespace collapsing, and trailing period stripping
+- Area/authority names are preserved in the cache key and geocode query, so identical street names in different places stay separate
 - Deduping is exact after normalization only; there is no fuzzy matching
 - Count values are parsed with `float()` and accepted only when they represent a whole number (e.g., `11.` → `11`)
 - Manual overrides always take precedence over geocoder responses
@@ -87,7 +89,7 @@ If a Preview deployment loads the app shell but the basemap never appears, the u
 ## Geocoding behavior
 
 - Provider: Nominatim (OpenStreetMap)
-- Query format: `{display_name}, Leicester, UK`
+- Query format: `{display_name}, {area/authority}, UK`
 - Rate limiting: handled by `geopy.extra.rate_limiter.RateLimiter` with a 1-second minimum delay and automatic retries
 - Cache writes happen after every lookup so interrupted runs can resume safely
 - `--max-records N` can be used for short test runs (default geocodes every uncached street)
@@ -104,6 +106,18 @@ python3 scripts/geocode_streets.py --progress --retry-errors
 python3 scripts/build_street_lengths.py
 python3 scripts/build_geojson.py
 python3 -m http.server
+```
+
+To merge the tracked Leicester CSV with an extra workbook:
+
+```bash
+python3 scripts/prepare_data.py data/source/leicester.csv "/Users/irisgiertuga/Downloads/PCN raw data.xlsx"
+```
+
+To normalize just the workbook into a separate JSON file:
+
+```bash
+python3 scripts/prepare_data.py "/Users/irisgiertuga/Downloads/PCN raw data.xlsx" --output /tmp/pcn-raw-normalized.json
 ```
 
 Then open [http://localhost:8000](http://localhost:8000).

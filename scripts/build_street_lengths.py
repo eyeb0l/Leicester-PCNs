@@ -16,15 +16,16 @@ from urllib.request import Request, urlopen
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 NORMALIZED_JSON = REPO_ROOT / "data" / "build" / "normalized_streets.json"
+GEOCODE_CACHE_JSON = REPO_ROOT / "data" / "cache" / "geocode-cache.json"
 MANUAL_OVERRIDES_JSON = REPO_ROOT / "data" / "manual-overrides.json"
 OUTPUT_JSON = REPO_ROOT / "data" / "cache" / "street-lengths.json"
 
 OVERPASS_URL = "https://overpass-api.de/api/interpreter"
-BBOX = {
-    "south": 52.55,
-    "west": -1.26,
-    "north": 52.71,
-    "east": -1.02,
+REGION_BBOX = {
+    "south": 52.47,
+    "west": -1.36,
+    "north": 52.84,
+    "east": -1.0,
 }
 EARTH_RADIUS_METERS = 6_371_000.0
 METERS_PER_MILE = 1_609.344
@@ -92,11 +93,66 @@ def compute_way_length_meters(geometry: list[dict[str, Any]]) -> float:
     return total
 
 
-def fetch_overpass_lengths() -> dict[str, float]:
+def normalize_node_key(point: dict[str, Any]) -> str:
+    return f"{float(point['lat']):.7f},{float(point['lon']):.7f}"
+
+
+def geometry_distance_meters(lat: float, lon: float, geometry: list[dict[str, Any]]) -> float:
+    best_distance = math.inf
+    for point in geometry:
+        distance = haversine_meters(lat, lon, float(point["lat"]), float(point["lon"]))
+        if distance < best_distance:
+            best_distance = distance
+    return best_distance
+
+
+def cluster_name_candidates(candidates: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    node_to_indices: dict[str, set[int]] = {}
+    for index, candidate in enumerate(candidates):
+        for node_key in candidate["node_keys"]:
+            node_to_indices.setdefault(node_key, set()).add(index)
+
+    visited: set[int] = set()
+    clusters: list[dict[str, Any]] = []
+    for start_index in range(len(candidates)):
+        if start_index in visited:
+            continue
+
+        queue = [start_index]
+        cluster_indices: list[int] = []
+        visited.add(start_index)
+        while queue:
+            current_index = queue.pop()
+            cluster_indices.append(current_index)
+            for node_key in candidates[current_index]["node_keys"]:
+                for neighbor_index in node_to_indices.get(node_key, set()):
+                    if neighbor_index in visited:
+                        continue
+                    visited.add(neighbor_index)
+                    queue.append(neighbor_index)
+
+        cluster_geometry: list[dict[str, Any]] = []
+        cluster_length = 0.0
+        for index in cluster_indices:
+            candidate = candidates[index]
+            cluster_length += candidate["length_meters"]
+            cluster_geometry.extend(candidate["geometry"])
+        clusters.append(
+            {
+                "length_meters": cluster_length,
+                "geometry": cluster_geometry,
+                "way_count": len(cluster_indices),
+            }
+        )
+
+    return clusters
+
+
+def fetch_overpass_clusters() -> dict[str, list[dict[str, Any]]]:
     query = f"""
     [out:json][timeout:180];
     (
-      way["highway"]["name"]({BBOX["south"]},{BBOX["west"]},{BBOX["north"]},{BBOX["east"]});
+      way["highway"]["name"]({REGION_BBOX["south"]},{REGION_BBOX["west"]},{REGION_BBOX["north"]},{REGION_BBOX["east"]});
     );
     out geom;
     """.strip()
@@ -114,7 +170,7 @@ def fetch_overpass_lengths() -> dict[str, float]:
         body = response.read()
     parsed = json.loads(body.decode("utf-8"))
     elements = parsed.get("elements") or []
-    lengths_by_name: dict[str, float] = {}
+    ways_by_name: dict[str, list[dict[str, Any]]] = {}
 
     for element in elements:
         if element.get("type") != "way":
@@ -132,9 +188,34 @@ def fetch_overpass_lengths() -> dict[str, float]:
         way_length = compute_way_length_meters(geometry)
         if way_length <= 0:
             continue
-        lengths_by_name[normalized_name] = lengths_by_name.get(normalized_name, 0.0) + way_length
+        node_keys = {normalize_node_key(point) for point in geometry}
+        if not node_keys:
+            continue
+        ways_by_name.setdefault(normalized_name, []).append(
+            {
+                "length_meters": way_length,
+                "geometry": geometry,
+                "node_keys": node_keys,
+            }
+        )
 
-    return lengths_by_name
+    return {name: cluster_name_candidates(candidates) for name, candidates in ways_by_name.items()}
+
+
+def choose_cluster(
+    clusters: list[dict[str, Any]],
+    lat: float,
+    lon: float,
+) -> dict[str, Any] | None:
+    if not clusters:
+        return None
+    return min(
+        clusters,
+        key=lambda cluster: (
+            geometry_distance_meters(lat, lon, cluster["geometry"]),
+            -float(cluster["length_meters"]),
+        ),
+    )
 
 
 def build_entries() -> dict[str, Any]:
@@ -143,8 +224,9 @@ def build_entries() -> dict[str, Any]:
         raise FileNotFoundError(
             f"Missing normalized data at {NORMALIZED_JSON}. Run scripts/prepare_data.py first."
         )
+    geocode_cache = load_json(GEOCODE_CACHE_JSON, {"entries": {}})
     manual_overrides = load_json(MANUAL_OVERRIDES_JSON, {})
-    lengths_by_name = fetch_overpass_lengths()
+    clusters_by_name = fetch_overpass_clusters()
     entries: dict[str, Any] = {}
 
     for street in normalized["streets"]:
@@ -157,16 +239,30 @@ def build_entries() -> dict[str, Any]:
             entries[cache_key] = {"status": "skipped_car_park"}
             continue
 
-        length_meters = lengths_by_name.get(normalized_street)
-        if not length_meters or length_meters <= 0:
+        geocode_entry = geocode_cache.get("entries", {}).get(cache_key, {})
+        if geocode_entry.get("status") != "ok":
+            entries[cache_key] = {"status": "missing_geocode"}
+            continue
+
+        try:
+            lat = float(geocode_entry["lat"])
+            lon = float(geocode_entry["lon"])
+        except (KeyError, TypeError, ValueError):
+            entries[cache_key] = {"status": "missing_geocode"}
+            continue
+
+        cluster = choose_cluster(clusters_by_name.get(normalized_street, []), lat, lon)
+        if cluster is None:
             entries[cache_key] = {"status": "not_found"}
             continue
 
+        length_meters = float(cluster["length_meters"])
         length_miles = length_meters / METERS_PER_MILE
         entries[cache_key] = {
             "status": "ok",
             "length_meters": round(length_meters, 3),
             "length_miles": round(length_miles, 6),
+            "way_count": int(cluster["way_count"]),
         }
 
     return entries
@@ -186,7 +282,7 @@ def main() -> None:
         "version": 1,
         "source": "openstreetmap_overpass",
         "generated_at": utc_now_iso(),
-        "bbox": BBOX,
+        "bbox": REGION_BBOX,
         "entries": entries,
     }
     OUTPUT_JSON.parent.mkdir(parents=True, exist_ok=True)

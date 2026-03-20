@@ -1,24 +1,29 @@
 #!/usr/bin/env python3
-"""Normalize Leicester parking fine street data into a stable JSON dataset."""
+"""Normalize parking fine street data from CSV/XLSX sources into a stable JSON dataset."""
 
 from __future__ import annotations
 
+import argparse
 import csv
 import json
 import re
 import unicodedata
-from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterable
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-SOURCE_CSV = REPO_ROOT / "data" / "source" / "leicester.csv"
+DEFAULT_SOURCE_FILES = [REPO_ROOT / "data" / "source" / "leicester.csv"]
 OUTPUT_JSON = REPO_ROOT / "data" / "build" / "normalized_streets.json"
-
-EXPECTED_HEADERS = {"Street/Location", "City/Area", "Count"}
+COLUMN_ALIASES = {
+    "street": ("Street/Location", "Location Name"),
+    "area": ("City/Area", "Authority", "Authority Name"),
+    "count": ("Count", "Number Of PCNs Issued"),
+}
+DEFAULT_AREA = "Leicester"
+DEFAULT_COUNTRY = "UK"
 
 
 def utc_now_iso() -> str:
@@ -56,8 +61,8 @@ def choose_display_name(aliases: set[str], normalized_key: str) -> str:
     return normalized_key.title()
 
 
-def parse_count(raw_value: str, street_name: str) -> int:
-    value = normalize_text(raw_value)
+def parse_count(raw_value: Any, street_name: str) -> int:
+    value = normalize_text("" if raw_value is None else str(raw_value))
     try:
         parsed = float(value)
     except ValueError as exc:
@@ -71,8 +76,8 @@ def parse_count(raw_value: str, street_name: str) -> int:
 class StreetAggregate:
     normalized_street: str
     cache_key: str
-    city: str = "Leicester"
-    country: str = "UK"
+    area: str = DEFAULT_AREA
+    country: str = DEFAULT_COUNTRY
     aliases: set[str] = field(default_factory=set)
     count_total: int = 0
     source_rows: int = 0
@@ -95,9 +100,10 @@ class StreetAggregate:
             "cache_key": self.cache_key,
             "display_name": display_name,
             "aliases": alias_list,
-            "city": self.city,
+            "city": self.area,
+            "area": self.area,
             "country": self.country,
-            "query": f"{display_name}, {self.city}, {self.country}",
+            "query": f"{display_name}, {self.area}, {self.country}",
             "count_total": self.count_total,
             "source_rows": self.source_rows,
             "has_zero_count_variant": self.has_zero_count_variant,
@@ -106,42 +112,146 @@ class StreetAggregate:
         }
 
 
-def load_rows() -> list[dict[str, str]]:
-    with SOURCE_CSV.open("r", encoding="utf-8-sig", newline="") as handle:
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "sources",
+        nargs="*",
+        type=Path,
+        help="Source CSV/XLSX files to normalize. Defaults to data/source/leicester.csv.",
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=OUTPUT_JSON,
+        help=f"Output JSON path (default: {OUTPUT_JSON})",
+    )
+    return parser.parse_args()
+
+
+def resolve_column_name(fieldnames: Iterable[str | None], key: str, source_path: Path) -> str:
+    header_lookup = {
+        normalize_text(str(name)): str(name)
+        for name in fieldnames
+        if normalize_text("" if name is None else str(name))
+    }
+    for alias in COLUMN_ALIASES[key]:
+        normalized_alias = normalize_text(alias)
+        if normalized_alias in header_lookup:
+            return header_lookup[normalized_alias]
+    expected_display = ", ".join(COLUMN_ALIASES[key])
+    raise ValueError(f"{source_path} is missing a supported {key} column ({expected_display})")
+
+
+def canonicalize_row(
+    row: dict[str, Any],
+    street_column: str,
+    area_column: str,
+    count_column: str,
+) -> dict[str, Any]:
+    return {
+        "street": row.get(street_column, ""),
+        "area": row.get(area_column, ""),
+        "count": row.get(count_column, ""),
+    }
+
+
+def load_csv_rows(source_path: Path) -> list[dict[str, Any]]:
+    with source_path.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
-        headers = set(reader.fieldnames or [])
-        missing = EXPECTED_HEADERS - headers
-        if missing:
-            missing_display = ", ".join(sorted(missing))
-            raise ValueError(f"CSV is missing required columns: {missing_display}")
-        return list(reader)
+        if not reader.fieldnames:
+            raise ValueError(f"{source_path} has no header row")
+        street_column = resolve_column_name(reader.fieldnames, "street", source_path)
+        area_column = resolve_column_name(reader.fieldnames, "area", source_path)
+        count_column = resolve_column_name(reader.fieldnames, "count", source_path)
+        return [canonicalize_row(row, street_column, area_column, count_column) for row in reader]
 
 
-def build_records(rows: list[dict[str, str]]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    grouped: dict[str, StreetAggregate] = {}
-    source_rows = 0
+def load_xlsx_rows(source_path: Path) -> list[dict[str, Any]]:
+    try:
+        from openpyxl import load_workbook
+    except ImportError as exc:
+        raise RuntimeError(
+            "Reading Excel sources requires openpyxl. Install it with `python3 -m pip install openpyxl`."
+        ) from exc
+
+    workbook = load_workbook(source_path, read_only=True, data_only=True)
+    worksheet = workbook[workbook.sheetnames[0]]
+    rows = worksheet.iter_rows(values_only=True)
+    header_row = next(rows, None)
+    if header_row is None:
+        raise ValueError(f"{source_path} has no rows")
+
+    header_names = [None if value is None else str(value) for value in header_row]
+    street_column = resolve_column_name(header_names, "street", source_path)
+    area_column = resolve_column_name(header_names, "area", source_path)
+    count_column = resolve_column_name(header_names, "count", source_path)
+    street_index = header_names.index(street_column)
+    area_index = header_names.index(area_column)
+    count_index = header_names.index(count_column)
+
+    normalized_rows: list[dict[str, Any]] = []
     for row in rows:
-        street_raw = strip_outer_whitespace(row.get("Street/Location", ""))
-        if not street_raw:
-            raise ValueError("Street/Location is required")
+        if row is None:
+            continue
+        street_value = row[street_index] if street_index < len(row) else ""
+        area_value = row[area_index] if area_index < len(row) else ""
+        count_value = row[count_index] if count_index < len(row) else ""
+        if street_value is None and area_value is None and count_value is None:
+            continue
+        normalized_rows.append(
+            {
+                "street": street_value,
+                "area": area_value,
+                "count": count_value,
+            }
+        )
+    workbook.close()
+    return normalized_rows
 
-        city_raw = normalize_text(row.get("City/Area", ""))
-        count_value = parse_count(row.get("Count", ""), street_raw)
+
+def load_rows(source_paths: list[Path]) -> tuple[list[dict[str, Any]], list[str]]:
+    rows: list[dict[str, Any]] = []
+    source_labels: list[str] = []
+    for source_path in source_paths:
+        resolved_path = source_path.expanduser().resolve()
+        if not resolved_path.exists():
+            raise FileNotFoundError(f"Source file not found: {resolved_path}")
+        suffix = resolved_path.suffix.lower()
+        if suffix == ".csv":
+            loaded_rows = load_csv_rows(resolved_path)
+        elif suffix in {".xlsx", ".xlsm"}:
+            loaded_rows = load_xlsx_rows(resolved_path)
+        else:
+            raise ValueError(f"Unsupported source type {resolved_path.suffix!r} for {resolved_path}")
+        rows.extend(loaded_rows)
+        source_labels.append(str(resolved_path))
+    return rows, source_labels
+
+
+def build_records(rows: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    grouped: dict[str, StreetAggregate] = {}
+    for row in rows:
+        street_raw = strip_outer_whitespace(str(row.get("street", "") or ""))
+        if not street_raw:
+            raise ValueError("Street/Location or Location Name is required")
+
+        area_raw = normalize_text(str(row.get("area", "") or "")) or DEFAULT_AREA
+        count_value = parse_count(row.get("count", ""), street_raw)
 
         normalized_street = normalize_identity(street_raw)
-        normalized_city = "leicester"
-        cache_key = f"{normalized_street}|{normalized_city}|uk"
+        normalized_area = normalize_identity(area_raw)
+        cache_key = f"{normalized_street}|{normalized_area}|uk"
 
         aggregate = grouped.get(cache_key)
         if aggregate is None:
             aggregate = StreetAggregate(
                 normalized_street=normalized_street,
                 cache_key=cache_key,
-                city="Leicester",
+                area=area_raw,
             )
             grouped[cache_key] = aggregate
         aggregate.add_row(street_raw, count_value)
-        source_rows += 1
 
     records = [aggregate.to_record() for aggregate in sorted(grouped.values(), key=lambda item: item.cache_key)]
     duplicate_groups = []
@@ -160,13 +270,16 @@ def build_records(rows: list[dict[str, str]]) -> tuple[list[dict[str, Any]], lis
 
 
 def main() -> None:
-    rows = load_rows()
+    args = parse_args()
+    source_paths = args.sources or DEFAULT_SOURCE_FILES
+    rows, source_labels = load_rows(source_paths)
     records, duplicate_groups = build_records(rows)
 
-    OUTPUT_JSON.parent.mkdir(parents=True, exist_ok=True)
+    args.output.parent.mkdir(parents=True, exist_ok=True)
     payload = {
         "generated_at": utc_now_iso(),
-        "source_csv": str(SOURCE_CSV),
+        "source_csv": source_labels[0] if len(source_labels) == 1 else None,
+        "source_files": source_labels,
         "source_row_count": len(rows),
         "normalized_street_count": len(records),
         "zero_count_rows": sum(1 for row in records if row["is_zero_count"]),
@@ -175,14 +288,14 @@ def main() -> None:
         "duplicate_groups": duplicate_groups,
         "streets": records,
     }
-    with OUTPUT_JSON.open("w", encoding="utf-8") as handle:
+    with args.output.open("w", encoding="utf-8") as handle:
         json.dump(payload, handle, ensure_ascii=False, indent=2)
         handle.write("\n")
 
     print(
         json.dumps(
             {
-                "output": str(OUTPUT_JSON),
+                "output": str(args.output),
                 "source_row_count": payload["source_row_count"],
                 "normalized_street_count": payload["normalized_street_count"],
                 "duplicate_groups_resolved": payload["duplicate_groups_resolved"],
