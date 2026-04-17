@@ -19,7 +19,25 @@ STREET_LENGTHS_JSON = REPO_ROOT / "data" / "cache" / "street-lengths.json"
 GEOJSON_OUTPUT = REPO_ROOT / "data" / "build" / "streets.geojson"
 SUMMARY_OUTPUT = REPO_ROOT / "data" / "build" / "summary.json"
 CAR_PARK_PATTERN = re.compile(r"\b(?:car\s*park|carpark|parking\s+area)\b", re.IGNORECASE)
-HIDDEN_LOCALITIES = {"loughborough"}
+HIDDEN_LOCALITIES = {
+    "barrow upon soar",
+    "cosby",
+    "countesthorpe",
+    "croft",
+    "huncote",
+    "loughborough",
+    "mountsorrel",
+    "quorn",
+    "rothley",
+    "sapcote",
+    "seagrave",
+    "shepshed",
+    "sileby",
+    "shelthorpe",
+    "stoney stanton",
+    "thrussington",
+    "woodhouse eaves",
+}
 
 
 def utc_now_iso() -> str:
