@@ -1158,10 +1158,12 @@ function escapeHtml(value) {
 }
 
 function updateSummary(summary, filteredCount) {
+  const hiddenLocalityFeatureCount = Number(summary.hidden_locality_feature_count) || 0;
   const rows = [
     ["Source rows", formatNumber(summary.source_row_count)],
     ["Normalized streets", formatNumber(summary.normalized_street_count)],
     ["Geocoded streets", formatNumber(summary.geocoded_success_count)],
+    ["Hidden localities", formatNumber(hiddenLocalityFeatureCount)],
     ["Failed geocodes", formatNumber(summary.failed_geocode_count)],
     ["Zero-count mapped", formatNumber(summary.zero_count_feature_count)],
     ["Duplicate groups", formatNumber(summary.duplicate_groups_resolved)],

@@ -19,6 +19,7 @@ STREET_LENGTHS_JSON = REPO_ROOT / "data" / "cache" / "street-lengths.json"
 GEOJSON_OUTPUT = REPO_ROOT / "data" / "build" / "streets.geojson"
 SUMMARY_OUTPUT = REPO_ROOT / "data" / "build" / "summary.json"
 CAR_PARK_PATTERN = re.compile(r"\b(?:car\s*park|carpark|parking\s+area)\b", re.IGNORECASE)
+HIDDEN_LOCALITIES = {"loughborough"}
 
 
 def utc_now_iso() -> str:
@@ -45,6 +46,15 @@ def to_finite_number(value: Any) -> float | None:
     return parsed
 
 
+def normalize_display_part(value: Any) -> str:
+    return str(value or "").strip().casefold()
+
+
+def is_hidden_locality(display_name: Any) -> bool:
+    parts = [normalize_display_part(part) for part in str(display_name or "").split(",")]
+    return any(part in HIDDEN_LOCALITIES for part in parts[1:] if part)
+
+
 def main() -> None:
     normalized = load_json(NORMALIZED_JSON)
     cache = load_json(CACHE_JSON) if CACHE_JSON.exists() else {"entries": {}}
@@ -59,6 +69,7 @@ def main() -> None:
     features = []
     failed_geocode_count = 0
     geocoded_success_count = 0
+    hidden_locality_feature_count = 0
 
     for street in normalized["streets"]:
         cache_key = street["cache_key"]
@@ -78,6 +89,15 @@ def main() -> None:
         else:
             if entry and entry.get("status") in {"not_found", "ambiguous", "error"}:
                 failed_geocode_count += 1
+            continue
+
+        resolved_display_name = (
+            str(override.get("display_name") or "")
+            if cache_key in manual_overrides
+            else str(entry.get("display_name") or "")
+        )
+        if is_hidden_locality(resolved_display_name):
+            hidden_locality_feature_count += 1
             continue
 
         geocoded_success_count += 1
@@ -143,6 +163,7 @@ def main() -> None:
         "normalized_street_count": normalized["normalized_street_count"],
         "geocoded_success_count": geocoded_success_count,
         "failed_geocode_count": failed_geocode_count,
+        "hidden_locality_feature_count": hidden_locality_feature_count,
         "zero_count_feature_count": sum(1 for feature in features if feature["properties"]["is_zero_count"]),
         "duplicate_groups_resolved": normalized["duplicate_groups_resolved"],
         "last_build_at": utc_now_iso(),

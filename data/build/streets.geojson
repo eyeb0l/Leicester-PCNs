@@ -426,34 +426,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2064658,
-          52.7724511
-        ]
-      },
-      "properties": {
-        "cache_key": "biggin street|charnwood|uk",
-        "display_name": "Biggin Street",
-        "display_label": "Biggin Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Biggin Street"
-        ],
-        "count_total": 936,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 221.264,
-        "street_length_miles": 0.137487,
-        "fines_per_mile": 6807.916384821838
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1385312,
           52.6247548
         ]
@@ -867,34 +839,6 @@
         "street_length_meters": 98.492,
         "street_length_miles": 0.0612,
         "fines_per_mile": 10996.73202614379
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2094274,
-          52.771279
-        ]
-      },
-      "properties": {
-        "cache_key": "packe street|charnwood|uk",
-        "display_name": "Packe Street",
-        "display_label": "Packe Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Packe Street"
-        ],
-        "count_total": 664,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 207.276,
-        "street_length_miles": 0.128795,
-        "fines_per_mile": 5155.479638184713
       }
     },
     {
@@ -2358,34 +2302,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2080115,
-          52.7733825
-        ]
-      },
-      "properties": {
-        "cache_key": "shakespeare street|charnwood|uk",
-        "display_name": "Shakespeare Street",
-        "display_label": "Shakespeare Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Shakespeare Street"
-        ],
-        "count_total": 396,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 141.574,
-        "street_length_miles": 0.08797,
-        "fines_per_mile": 4501.534614072979
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1092737,
           52.6243257
         ]
@@ -2890,34 +2806,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2071102,
-          52.7699428
-        ]
-      },
-      "properties": {
-        "cache_key": "devonshire square|charnwood|uk",
-        "display_name": "Devonshire Square",
-        "display_label": "Devonshire Square",
-        "area": "Charnwood",
-        "aliases": [
-          "Devonshire Square"
-        ],
-        "count_total": 339,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 74.617,
-        "street_length_miles": 0.046365,
-        "fines_per_mile": 7311.549660304108
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1346605,
           52.6300609
         ]
@@ -3135,34 +3023,6 @@
         "street_length_meters": 26.797,
         "street_length_miles": 0.016651,
         "fines_per_mile": 19097.952074950455
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2093841,
-          52.7722082
-        ]
-      },
-      "properties": {
-        "cache_key": "ashby square|charnwood|uk",
-        "display_name": "Ashby Square",
-        "display_label": "Ashby Square",
-        "area": "Charnwood",
-        "aliases": [
-          "Ashby Square"
-        ],
-        "count_total": 317,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 114.434,
-        "street_length_miles": 0.071106,
-        "fines_per_mile": 4458.132928304221
       }
     },
     {
@@ -4178,34 +4038,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2058204,
-          52.7729977
-        ]
-      },
-      "properties": {
-        "cache_key": "church gate|charnwood|uk",
-        "display_name": "Church Gate",
-        "display_label": "Church Gate (Charnwood)",
-        "area": "Charnwood",
-        "aliases": [
-          "Church Gate"
-        ],
-        "count_total": 249,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 140.874,
-        "street_length_miles": 0.087535,
-        "fines_per_mile": 2844.5764551322327
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1305692,
           52.638587
         ]
@@ -4871,34 +4703,6 @@
         "street_length_meters": 40.346,
         "street_length_miles": 0.02507,
         "fines_per_mile": 8057.439170323096
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.1964949,
-          52.7778936
-        ]
-      },
-      "properties": {
-        "cache_key": "burder street|charnwood|uk",
-        "display_name": "Burder Street",
-        "display_label": "Burder Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Burder Street"
-        ],
-        "count_total": 200,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 478.144,
-        "street_length_miles": 0.297105,
-        "fines_per_mile": 673.1626865922822
       }
     },
     {
@@ -6194,34 +5998,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.215888,
-          52.7745076
-        ]
-      },
-      "properties": {
-        "cache_key": "leopold street|charnwood|uk",
-        "display_name": "Leopold Street",
-        "display_label": "Leopold Street (Charnwood)",
-        "area": "Charnwood",
-        "aliases": [
-          "Leopold Street"
-        ],
-        "count_total": 159,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 391.109,
-        "street_length_miles": 0.243024,
-        "fines_per_mile": 654.2563697412602
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1421378,
           52.6353043
         ]
@@ -7482,34 +7258,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2165795,
-          52.7748654
-        ]
-      },
-      "properties": {
-        "cache_key": "paget street|charnwood|uk",
-        "display_name": "Paget Street",
-        "display_label": "Paget Street (Charnwood)",
-        "area": "Charnwood",
-        "aliases": [
-          "Paget Street"
-        ],
-        "count_total": 127,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 388.472,
-        "street_length_miles": 0.241385,
-        "fines_per_mile": 526.1304554964062
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1153331,
           52.6261044
         ]
@@ -7594,34 +7342,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2130534,
-          52.7717077
-        ]
-      },
-      "properties": {
-        "cache_key": "granville street|charnwood|uk",
-        "display_name": "Granville Street",
-        "display_label": "Granville Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Granville Street"
-        ],
-        "count_total": 123,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 185.658,
-        "street_length_miles": 0.115362,
-        "fines_per_mile": 1066.208976959484
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1346279,
           52.6286371
         ]
@@ -7643,34 +7363,6 @@
         "street_length_meters": 99.382,
         "street_length_miles": 0.061753,
         "fines_per_mile": 1991.8060661020515
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2038219,
-          52.7772524
-        ]
-      },
-      "properties": {
-        "cache_key": "howard street|charnwood|uk",
-        "display_name": "Howard Street",
-        "display_label": "Howard Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Howard Street"
-        ],
-        "count_total": 122,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 248.666,
-        "street_length_miles": 0.154514,
-        "fines_per_mile": 789.5724659254176
       }
     },
     {
@@ -8434,34 +8126,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2083619,
-          52.7723431
-        ]
-      },
-      "properties": {
-        "cache_key": "derby square|charnwood|uk",
-        "display_name": "Derby Square",
-        "display_label": "Derby Square",
-        "area": "Charnwood",
-        "aliases": [
-          "Derby Square"
-        ],
-        "count_total": 104,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 66.111,
-        "street_length_miles": 0.041079,
-        "fines_per_mile": 2531.7071983251785
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1309848,
           52.6403805
         ]
@@ -8714,34 +8378,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2015531,
-          52.7721304
-        ]
-      },
-      "properties": {
-        "cache_key": "pinfold gate|charnwood|uk",
-        "display_name": "Pinfold Gate",
-        "display_label": "Pinfold Gate",
-        "area": "Charnwood",
-        "aliases": [
-          "Pinfold Gate"
-        ],
-        "count_total": 101,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 121.422,
-        "street_length_miles": 0.075448,
-        "fines_per_mile": 1338.6703424875411
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1743296,
           52.6444033
         ]
@@ -8763,34 +8399,6 @@
         "street_length_meters": 662.253,
         "street_length_miles": 0.411505,
         "fines_per_mile": 243.0104129961969
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2100665,
-          52.7773008
-        ]
-      },
-      "properties": {
-        "cache_key": "limehurst avenue|charnwood|uk",
-        "display_name": "Limehurst Avenue",
-        "display_label": "Limehurst Avenue",
-        "area": "Charnwood",
-        "aliases": [
-          "Limehurst Avenue"
-        ],
-        "count_total": 100,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 577.106,
-        "street_length_miles": 0.358597,
-        "fines_per_mile": 278.8645749964445
       }
     },
     {
@@ -9183,34 +8791,6 @@
         "street_length_meters": null,
         "street_length_miles": null,
         "fines_per_mile": null
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2028267,
-          52.7709719
-        ]
-      },
-      "properties": {
-        "cache_key": "aumberry gap|charnwood|uk",
-        "display_name": "Aumberry Gap",
-        "display_label": "Aumberry Gap",
-        "area": "Charnwood",
-        "aliases": [
-          "Aumberry Gap"
-        ],
-        "count_total": 94,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 75.537,
-        "street_length_miles": 0.046936,
-        "fines_per_mile": 2002.7271177773991
       }
     },
     {
@@ -9863,34 +9443,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.205887,
-          52.7741128
-        ]
-      },
-      "properties": {
-        "cache_key": "fennel street|charnwood|uk",
-        "display_name": "Fennel Street",
-        "display_label": "Fennel Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Fennel Street"
-        ],
-        "count_total": 88,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 324.933,
-        "street_length_miles": 0.201904,
-        "fines_per_mile": 435.8507013234012
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1130165,
           52.6255318
         ]
@@ -10395,34 +9947,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2174007,
-          52.7751935
-        ]
-      },
-      "properties": {
-        "cache_key": "station street|charnwood|uk",
-        "display_name": "Station Street",
-        "display_label": "Station Street (Charnwood)",
-        "area": "Charnwood",
-        "aliases": [
-          "Station Street"
-        ],
-        "count_total": 82,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 380.955,
-        "street_length_miles": 0.236714,
-        "fines_per_mile": 346.4095913211724
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1350366,
           52.6309999
         ]
@@ -10815,34 +10339,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2095136,
-          52.7735609
-        ]
-      },
-      "properties": {
-        "cache_key": "the rushes|charnwood|uk",
-        "display_name": "The Rushes",
-        "display_label": "The Rushes",
-        "area": "Charnwood",
-        "aliases": [
-          "The Rushes"
-        ],
-        "count_total": 78,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 425.824,
-        "street_length_miles": 0.264595,
-        "fines_per_mile": 294.79015098546836
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1430032,
           52.6439691
         ]
@@ -10864,34 +10360,6 @@
         "street_length_meters": 280.526,
         "street_length_miles": 0.174311,
         "fines_per_mile": 441.7391902978011
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2125683,
-          52.7702108
-        ]
-      },
-      "properties": {
-        "cache_key": "arthur street|charnwood|uk",
-        "display_name": "Arthur Street",
-        "display_label": "Arthur Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Arthur Street"
-        ],
-        "count_total": 77,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 144.113,
-        "street_length_miles": 0.089547,
-        "fines_per_mile": 859.8836365260701
       }
     },
     {
@@ -11144,34 +10612,6 @@
         "street_length_meters": 161.326,
         "street_length_miles": 0.100243,
         "fines_per_mile": 738.2061590335485
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2045662,
-          52.7742972
-        ]
-      },
-      "properties": {
-        "cache_key": "steeple row|charnwood|uk",
-        "display_name": "Steeple Row",
-        "display_label": "Steeple Row",
-        "area": "Charnwood",
-        "aliases": [
-          "Steeple Row"
-        ],
-        "count_total": 74,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 121.105,
-        "street_length_miles": 0.075251,
-        "fines_per_mile": 983.3756362041701
       }
     },
     {
@@ -11711,34 +11151,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2139879,
-          52.7718767
-        ]
-      },
-      "properties": {
-        "cache_key": "chestnut street|charnwood|uk",
-        "display_name": "Chestnut Street",
-        "display_label": "Chestnut Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Chestnut Street"
-        ],
-        "count_total": 68,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 137.097,
-        "street_length_miles": 0.085188,
-        "fines_per_mile": 798.2344931210969
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1123748,
           52.6325087
         ]
@@ -11956,34 +11368,6 @@
         "street_length_meters": 423.806,
         "street_length_miles": 0.263341,
         "fines_per_mile": 250.62561469729363
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2112141,
-          52.7716038
-        ]
-      },
-      "properties": {
-        "cache_key": "caldwell street|charnwood|uk",
-        "display_name": "Caldwell Street",
-        "display_label": "Caldwell Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Caldwell Street"
-        ],
-        "count_total": 66,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 66.181,
-        "street_length_miles": 0.041123,
-        "fines_per_mile": 1604.9412737397563
       }
     },
     {
@@ -12215,34 +11599,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2129133,
-          52.7687806
-        ]
-      },
-      "properties": {
-        "cache_key": "frederick street|charnwood|uk",
-        "display_name": "Frederick Street",
-        "display_label": "Frederick Street (Charnwood)",
-        "area": "Charnwood",
-        "aliases": [
-          "Frederick Street"
-        ],
-        "count_total": 65,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 495.262,
-        "street_length_miles": 0.307742,
-        "fines_per_mile": 211.2158886339856
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.118454,
           52.652295
         ]
@@ -12348,34 +11704,6 @@
         "street_length_meters": 71.928,
         "street_length_miles": 0.044694,
         "fines_per_mile": 1454.3339150668994
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2211238,
-          52.7705911
-        ]
-      },
-      "properties": {
-        "cache_key": "westfield drive|charnwood|uk",
-        "display_name": "Westfield Drive",
-        "display_label": "Westfield Drive",
-        "area": "Charnwood",
-        "aliases": [
-          "Westfield Drive"
-        ],
-        "count_total": 65,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 504.403,
-        "street_length_miles": 0.313421,
-        "fines_per_mile": 207.38878377645403
       }
     },
     {
@@ -12831,34 +12159,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2010501,
-          52.7694058
-        ]
-      },
-      "properties": {
-        "cache_key": "moira street|charnwood|uk",
-        "display_name": "Moira Street",
-        "display_label": "Moira Street (Charnwood)",
-        "area": "Charnwood",
-        "aliases": [
-          "Moira Street"
-        ],
-        "count_total": 62,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 315.272,
-        "street_length_miles": 0.195901,
-        "fines_per_mile": 316.4863885329835
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1065567,
           52.6409574
         ]
@@ -12880,34 +12180,6 @@
         "street_length_meters": 248.055,
         "street_length_miles": 0.154134,
         "fines_per_mile": 402.24739512372355
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2011819,
-          52.7739806
-        ]
-      },
-      "properties": {
-        "cache_key": "cradock street|charnwood|uk",
-        "display_name": "Cradock Street",
-        "display_label": "Cradock Street (Charnwood)",
-        "area": "Charnwood",
-        "aliases": [
-          "Cradock Street"
-        ],
-        "count_total": 61,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 185.89,
-        "street_length_miles": 0.115507,
-        "fines_per_mile": 528.1065216826686
       }
     },
     {
@@ -13216,34 +12488,6 @@
         "street_length_meters": 44.601,
         "street_length_miles": 0.027714,
         "fines_per_mile": 2092.8050804647473
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.206336,
-          52.772181
-        ]
-      },
-      "properties": {
-        "cache_key": "market place|charnwood|uk",
-        "display_name": "Market Place",
-        "display_label": "Market Place (Charnwood)",
-        "area": "Charnwood",
-        "aliases": [
-          "Market Place"
-        ],
-        "count_total": 58,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 199.186,
-        "street_length_miles": 0.123768,
-        "fines_per_mile": 468.6187059660009
       }
     },
     {
@@ -13587,34 +12831,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2153033,
-          52.7673311
-        ]
-      },
-      "properties": {
-        "cache_key": "adam dale|charnwood|uk",
-        "display_name": "Adam Dale",
-        "display_label": "Adam Dale",
-        "area": "Charnwood",
-        "aliases": [
-          "Adam Dale"
-        ],
-        "count_total": 56,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 283.107,
-        "street_length_miles": 0.175914,
-        "fines_per_mile": 318.33736939640966
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1098208,
           52.6307911
         ]
@@ -13636,34 +12852,6 @@
         "street_length_meters": 253.643,
         "street_length_miles": 0.157606,
         "fines_per_mile": 355.31642196363083
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2078375,
-          52.7666814
-        ]
-      },
-      "properties": {
-        "cache_key": "garton road|charnwood|uk",
-        "display_name": "Garton Road",
-        "display_label": "Garton Road",
-        "area": "Charnwood",
-        "aliases": [
-          "Garton Road"
-        ],
-        "count_total": 56,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 175.726,
-        "street_length_miles": 0.109191,
-        "fines_per_mile": 512.8627817310951
       }
     },
     {
@@ -13720,34 +12908,6 @@
         "street_length_meters": 30.916,
         "street_length_miles": 0.01921,
         "fines_per_mile": 2915.1483602290473
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2029467,
-          52.7775402
-        ]
-      },
-      "properties": {
-        "cache_key": "rendell street|charnwood|uk",
-        "display_name": "Rendell Street",
-        "display_label": "Rendell Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Rendell Street"
-        ],
-        "count_total": 56,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 154.143,
-        "street_length_miles": 0.09578,
-        "fines_per_mile": 584.6732094382961
       }
     },
     {
@@ -14091,34 +13251,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2149112,
-          52.7768226
-        ]
-      },
-      "properties": {
-        "cache_key": "grange street|charnwood|uk",
-        "display_name": "Grange Street",
-        "display_label": "Grange Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Grange Street"
-        ],
-        "count_total": 53,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 94.492,
-        "street_length_miles": 0.058715,
-        "fines_per_mile": 902.6654176956484
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1290441,
           52.6293421
         ]
@@ -14371,90 +13503,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2188406,
-          52.7749697
-        ]
-      },
-      "properties": {
-        "cache_key": "havelock street|charnwood|uk",
-        "display_name": "Havelock Street",
-        "display_label": "Havelock Street (Charnwood)",
-        "area": "Charnwood",
-        "aliases": [
-          "Havelock Street"
-        ],
-        "count_total": 51,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 205.846,
-        "street_length_miles": 0.127907,
-        "fines_per_mile": 398.7272002314182
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2116095,
-          52.771101
-        ]
-      },
-      "properties": {
-        "cache_key": "heathcoat street|charnwood|uk",
-        "display_name": "Heathcoat Street",
-        "display_label": "Heathcoat Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Heathcoat Street"
-        ],
-        "count_total": 51,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 102.178,
-        "street_length_miles": 0.06349,
-        "fines_per_mile": 803.2761064734603
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2161722,
-          52.7657624
-        ]
-      },
-      "properties": {
-        "cache_key": "kingfisher way|charnwood|uk",
-        "display_name": "Kingfisher Way",
-        "display_label": "Kingfisher Way",
-        "area": "Charnwood",
-        "aliases": [
-          "Kingfisher Way"
-        ],
-        "count_total": 51,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 485.575,
-        "street_length_miles": 0.301722,
-        "fines_per_mile": 169.02976912522124
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.136297,
           52.6181925
         ]
@@ -14532,34 +13580,6 @@
         "street_length_meters": 155.133,
         "street_length_miles": 0.096395,
         "fines_per_mile": 529.0730847035635
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.1998084,
-          52.7781684
-        ]
-      },
-      "properties": {
-        "cache_key": "glebe street|charnwood|uk",
-        "display_name": "Glebe Street",
-        "display_label": "Glebe Street (Charnwood)",
-        "area": "Charnwood",
-        "aliases": [
-          "Glebe Street"
-        ],
-        "count_total": 50,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 164.236,
-        "street_length_miles": 0.102051,
-        "fines_per_mile": 489.9511028799326
       }
     },
     {
@@ -15155,34 +14175,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2005161,
-          52.7783361
-        ]
-      },
-      "properties": {
-        "cache_key": "cartwright street|charnwood|uk",
-        "display_name": "Cartwright Street",
-        "display_label": "Cartwright Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Cartwright Street"
-        ],
-        "count_total": 46,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 229.347,
-        "street_length_miles": 0.14251,
-        "fines_per_mile": 322.78436600940285
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1262698,
           52.6480855
         ]
@@ -15232,34 +14224,6 @@
         "street_length_meters": 178.22,
         "street_length_miles": 0.110741,
         "fines_per_mile": 406.3535637207538
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.1993224,
-          52.7716073
-        ]
-      },
-      "properties": {
-        "cache_key": "russell street|charnwood|uk",
-        "display_name": "Russell Street",
-        "display_label": "Russell Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Russell Street"
-        ],
-        "count_total": 45,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 225.591,
-        "street_length_miles": 0.140176,
-        "fines_per_mile": 321.0249971464445
       }
     },
     {
@@ -15456,34 +14420,6 @@
         "street_length_meters": 654.515,
         "street_length_miles": 0.406697,
         "fines_per_mile": 105.72981851353711
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2068136,
-          52.7706034
-        ]
-      },
-      "properties": {
-        "cache_key": "cattlemarket|charnwood|uk",
-        "display_name": "Cattlemarket",
-        "display_label": "Cattlemarket",
-        "area": "Charnwood",
-        "aliases": [
-          "Cattlemarket"
-        ],
-        "count_total": 42,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 79.017,
-        "street_length_miles": 0.049099,
-        "fines_per_mile": 855.4145705615186
       }
     },
     {
@@ -16044,34 +14980,6 @@
         "street_length_meters": 472.65,
         "street_length_miles": 0.293691,
         "fines_per_mile": 136.19756819241994
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2175171,
-          52.7665446
-        ]
-      },
-      "properties": {
-        "cache_key": "goldfinch close|charnwood|uk",
-        "display_name": "Goldfinch Close",
-        "display_label": "Goldfinch Close",
-        "area": "Charnwood",
-        "aliases": [
-          "Goldfinch Close"
-        ],
-        "count_total": 40,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 135.328,
-        "street_length_miles": 0.084089,
-        "fines_per_mile": 475.68647504429833
       }
     },
     {
@@ -16863,34 +15771,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2076747,
-          52.7673885
-        ]
-      },
-      "properties": {
-        "cache_key": "bampton street|charnwood|uk",
-        "display_name": "Bampton Street",
-        "display_label": "Bampton Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Bampton Street"
-        ],
-        "count_total": 36,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 73.545,
-        "street_length_miles": 0.045699,
-        "fines_per_mile": 787.7634083896803
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1126484,
           52.5845312
         ]
@@ -16940,62 +15820,6 @@
         "street_length_meters": 156.77,
         "street_length_miles": 0.097412,
         "fines_per_mile": 369.5643247238533
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2045785,
-          52.7768381
-        ]
-      },
-      "properties": {
-        "cache_key": "herbert street|charnwood|uk",
-        "display_name": "Herbert Street",
-        "display_label": "Herbert Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Herbert Street"
-        ],
-        "count_total": 36,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 217.603,
-        "street_length_miles": 0.135212,
-        "fines_per_mile": 266.2485578203118
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2149722,
-          52.777445
-        ]
-      },
-      "properties": {
-        "cache_key": "lisle street|charnwood|uk",
-        "display_name": "Lisle Street",
-        "display_label": "Lisle Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Lisle Street"
-        ],
-        "count_total": 36,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 85.92,
-        "street_length_miles": 0.053388,
-        "fines_per_mile": 674.3088334457182
       }
     },
     {
@@ -17255,34 +16079,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2007078,
-          52.7711819
-        ]
-      },
-      "properties": {
-        "cache_key": "cobden street|charnwood|uk",
-        "display_name": "Cobden Street",
-        "display_label": "Cobden Street (Charnwood)",
-        "area": "Charnwood",
-        "aliases": [
-          "Cobden Street"
-        ],
-        "count_total": 34,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 133.051,
-        "street_length_miles": 0.082674,
-        "fines_per_mile": 411.25384038512715
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1397466,
           52.6402304
         ]
@@ -17311,34 +16107,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2213392,
-          52.7747908
-        ]
-      },
-      "properties": {
-        "cache_key": "goods yard close|charnwood|uk",
-        "display_name": "Goods Yard Close",
-        "display_label": "Goods Yard Close",
-        "area": "Charnwood",
-        "aliases": [
-          "Goods Yard Close"
-        ],
-        "count_total": 34,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 241.791,
-        "street_length_miles": 0.150242,
-        "fines_per_mile": 226.30156680555373
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1411037,
           52.6086766
         ]
@@ -17360,34 +16128,6 @@
         "street_length_meters": 570.803,
         "street_length_miles": 0.354681,
         "fines_per_mile": 95.86078758095302
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2097771,
-          52.7727696
-        ]
-      },
-      "properties": {
-        "cache_key": "greenclose lane|charnwood|uk",
-        "display_name": "Greenclose Lane",
-        "display_label": "Greenclose Lane",
-        "area": "Charnwood",
-        "aliases": [
-          "Greenclose Lane"
-        ],
-        "count_total": 34,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 151.319,
-        "street_length_miles": 0.094025,
-        "fines_per_mile": 361.60595586280243
       }
     },
     {
@@ -17444,34 +16184,6 @@
         "street_length_meters": 176.648,
         "street_length_miles": 0.109764,
         "fines_per_mile": 309.75547538355016
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2018242,
-          52.7739321
-        ]
-      },
-      "properties": {
-        "cache_key": "the coneries|charnwood|uk",
-        "display_name": "The Coneries",
-        "display_label": "The Coneries",
-        "area": "Charnwood",
-        "aliases": [
-          "The Coneries"
-        ],
-        "count_total": 34,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 153.349,
-        "street_length_miles": 0.095287,
-        "fines_per_mile": 356.81677458624995
       }
     },
     {
@@ -17899,34 +16611,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2210224,
-          52.7742311
-        ]
-      },
-      "properties": {
-        "cache_key": "rosebery street|charnwood|uk",
-        "display_name": "Rosebery Street",
-        "display_label": "Rosebery Street (Charnwood)",
-        "area": "Charnwood",
-        "aliases": [
-          "Rosebery Street"
-        ],
-        "count_total": 31,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 129.56,
-        "street_length_miles": 0.080505,
-        "fines_per_mile": 385.0692503571207
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1141056,
           52.6246699
         ]
@@ -18011,34 +16695,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.23568,
-          52.7722132
-        ]
-      },
-      "properties": {
-        "cache_key": "alan moss road|charnwood|uk",
-        "display_name": "Alan Moss Road",
-        "display_label": "Alan Moss Road",
-        "area": "Charnwood",
-        "aliases": [
-          "Alan Moss Road"
-        ],
-        "count_total": 30,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 898.502,
-        "street_length_miles": 0.558303,
-        "fines_per_mile": 53.73426257784752
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1190237,
           52.6557844
         ]
@@ -18060,34 +16716,6 @@
         "street_length_meters": 114.437,
         "street_length_miles": 0.071108,
         "fines_per_mile": 421.8934578387804
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2055008,
-          52.7655344
-        ]
-      },
-      "properties": {
-        "cache_key": "burton street|charnwood|uk",
-        "display_name": "Burton Street",
-        "display_label": "Burton Street (Charnwood)",
-        "area": "Charnwood",
-        "aliases": [
-          "Burton Street"
-        ],
-        "count_total": 30,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 251.026,
-        "street_length_miles": 0.155981,
-        "fines_per_mile": 192.3311172514601
       }
     },
     {
@@ -18151,62 +16779,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2193891,
-          52.7731932
-        ]
-      },
-      "properties": {
-        "cache_key": "fearon street|charnwood|uk",
-        "display_name": "Fearon Street",
-        "display_label": "Fearon Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Fearon Street"
-        ],
-        "count_total": 30,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 142.624,
-        "street_length_miles": 0.088623,
-        "fines_per_mile": 338.51257574218886
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.1932349,
-          52.7687526
-        ]
-      },
-      "properties": {
-        "cache_key": "great central road|charnwood|uk",
-        "display_name": "Great Central Road",
-        "display_label": "Great Central Road",
-        "area": "Charnwood",
-        "aliases": [
-          "Great Central Road"
-        ],
-        "count_total": 30,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 535.672,
-        "street_length_miles": 0.332851,
-        "fines_per_mile": 90.13041871588187
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1535674,
           52.6445094
         ]
@@ -18228,34 +16800,6 @@
         "street_length_meters": 3878.345,
         "street_length_miles": 2.409892,
         "fines_per_mile": 12.448690646717777
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.215294,
-          52.7728921
-        ]
-      },
-      "properties": {
-        "cache_key": "hastings street|charnwood|uk",
-        "display_name": "Hastings Street",
-        "display_label": "Hastings Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Hastings Street"
-        ],
-        "count_total": 30,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 172.691,
-        "street_length_miles": 0.107305,
-        "fines_per_mile": 279.5769069474861
       }
     },
     {
@@ -18627,34 +17171,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2014556,
-          52.7729873
-        ]
-      },
-      "properties": {
-        "cache_key": "sparrow hill|charnwood|uk",
-        "display_name": "Sparrow Hill",
-        "display_label": "Sparrow Hill",
-        "area": "Charnwood",
-        "aliases": [
-          "Sparrow Hill"
-        ],
-        "count_total": 29,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 478.213,
-        "street_length_miles": 0.297148,
-        "fines_per_mile": 97.59446471118768
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1072324,
           52.6280666
         ]
@@ -19012,34 +17528,6 @@
         "street_length_meters": 226.713,
         "street_length_miles": 0.140873,
         "fines_per_mile": 191.66199342670348
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.1984723,
-          52.7711955
-        ]
-      },
-      "properties": {
-        "cache_key": "selbourne street|charnwood|uk",
-        "display_name": "Selbourne Street",
-        "display_label": "Selbourne Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Selbourne Street"
-        ],
-        "count_total": 27,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 141.935,
-        "street_length_miles": 0.088195,
-        "fines_per_mile": 306.1398038437553
       }
     },
     {
@@ -19831,34 +18319,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.197648,
-          52.7772882
-        ]
-      },
-      "properties": {
-        "cache_key": "towpath close|charnwood|uk",
-        "display_name": "Towpath Close",
-        "display_label": "Towpath Close",
-        "area": "Charnwood",
-        "aliases": [
-          "Towpath Close"
-        ],
-        "count_total": 25,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 120.907,
-        "street_length_miles": 0.075128,
-        "fines_per_mile": 332.76541369396233
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1260733,
           52.6284049
         ]
@@ -20160,34 +18620,6 @@
         "street_length_meters": 56.08,
         "street_length_miles": 0.034846,
         "fines_per_mile": 660.047064225449
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.1998235,
-          52.7750038
-        ]
-      },
-      "properties": {
-        "cache_key": "bromhead street|charnwood|uk",
-        "display_name": "Bromhead Street",
-        "display_label": "Bromhead Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Bromhead Street"
-        ],
-        "count_total": 23,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 60.113,
-        "street_length_miles": 0.037353,
-        "fines_per_mile": 615.7470618156507
       }
     },
     {
@@ -20531,34 +18963,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2072618,
-          52.772088
-        ]
-      },
-      "properties": {
-        "cache_key": "george yard|charnwood|uk",
-        "display_name": "George Yard",
-        "display_label": "George Yard",
-        "area": "Charnwood",
-        "aliases": [
-          "George Yard"
-        ],
-        "count_total": 22,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 104.587,
-        "street_length_miles": 0.064987,
-        "fines_per_mile": 338.52924431040054
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.0798374,
           52.6598826
         ]
@@ -20664,34 +19068,6 @@
         "street_length_meters": 122.781,
         "street_length_miles": 0.076292,
         "fines_per_mile": 288.3657526346144
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.204283,
-          52.7700858
-        ]
-      },
-      "properties": {
-        "cache_key": "pack horse lane|charnwood|uk",
-        "display_name": "Pack Horse Lane",
-        "display_label": "Pack Horse Lane",
-        "area": "Charnwood",
-        "aliases": [
-          "Pack Horse Lane"
-        ],
-        "count_total": 22,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 88.438,
-        "street_length_miles": 0.054953,
-        "fines_per_mile": 400.34211053081725
       }
     },
     {
@@ -20888,34 +19264,6 @@
         "street_length_meters": 203.735,
         "street_length_miles": 0.126595,
         "fines_per_mile": 165.8833287254631
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.207372,
-          52.7776536
-        ]
-      },
-      "properties": {
-        "cache_key": "lower cambridge street|charnwood|uk",
-        "display_name": "Lower Cambridge Street",
-        "display_label": "Lower Cambridge Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Lower Cambridge Street"
-        ],
-        "count_total": 21,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 191.981,
-        "street_length_miles": 0.119292,
-        "fines_per_mile": 176.03862790463737
       }
     },
     {
@@ -21567,34 +19915,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2112297,
-          52.7753841
-        ]
-      },
-      "properties": {
-        "cache_key": "canal bank|charnwood|uk",
-        "display_name": "Canal Bank",
-        "display_label": "Canal Bank",
-        "area": "Charnwood",
-        "aliases": [
-          "Canal Bank"
-        ],
-        "count_total": 19,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 516.212,
-        "street_length_miles": 0.32076,
-        "fines_per_mile": 59.23431849357775
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1114872,
           52.635299
         ]
@@ -22099,34 +20419,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2095,
-          52.7603643
-        ]
-      },
-      "properties": {
-        "cache_key": "lansdowne drive|charnwood|uk",
-        "display_name": "Lansdowne Drive",
-        "display_label": "Lansdowne Drive",
-        "area": "Charnwood",
-        "aliases": [
-          "Lansdowne Drive"
-        ],
-        "count_total": 18,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 367.422,
-        "street_length_miles": 0.228305,
-        "fines_per_mile": 78.84190008979216
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1008893,
           52.6547137
         ]
@@ -22575,34 +20867,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2013485,
-          52.7774216
-        ]
-      },
-      "properties": {
-        "cache_key": "hanford way|charnwood|uk",
-        "display_name": "Hanford Way",
-        "display_label": "Hanford Way",
-        "area": "Charnwood",
-        "aliases": [
-          "Hanford Way"
-        ],
-        "count_total": 17,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 312.929,
-        "street_length_miles": 0.194445,
-        "fines_per_mile": 87.42832163336676
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1400057,
           52.6415475
         ]
@@ -22792,34 +21056,6 @@
         "street_length_meters": 99.935,
         "street_length_miles": 0.062096,
         "fines_per_mile": 273.7696469981963
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2041772,
-          52.7759231
-        ]
-      },
-      "properties": {
-        "cache_key": "toothill road|charnwood|uk",
-        "display_name": "Toothill Road",
-        "display_label": "Toothill Road",
-        "area": "Charnwood",
-        "aliases": [
-          "Toothill Road"
-        ],
-        "count_total": 17,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 311.47,
-        "street_length_miles": 0.193538,
-        "fines_per_mile": 87.8380473085389
       }
     },
     {
@@ -23275,34 +21511,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2061431,
-          52.7779165
-        ]
-      },
-      "properties": {
-        "cache_key": "alfred street|charnwood|uk",
-        "display_name": "Alfred Street",
-        "display_label": "Alfred Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Alfred Street"
-        ],
-        "count_total": 15,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 98.365,
-        "street_length_miles": 0.061121,
-        "fines_per_mile": 245.4148328724988
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1664353,
           52.6606693
         ]
@@ -23471,34 +21679,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2061031,
-          52.7658175
-        ]
-      },
-      "properties": {
-        "cache_key": "gray street|charnwood|uk",
-        "display_name": "Gray Street",
-        "display_label": "Gray Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Gray Street"
-        ],
-        "count_total": 15,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 154.265,
-        "street_length_miles": 0.095856,
-        "fines_per_mile": 156.48472709063597
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1166802,
           52.6546325
         ]
@@ -23576,62 +21756,6 @@
         "street_length_meters": 230.574,
         "street_length_miles": 0.143272,
         "fines_per_mile": 104.69596292366965
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2031576,
-          52.780321
-        ]
-      },
-      "properties": {
-        "cache_key": "meadow avenue|charnwood|uk",
-        "display_name": "Meadow Avenue",
-        "display_label": "Meadow Avenue",
-        "area": "Charnwood",
-        "aliases": [
-          "Meadow Avenue"
-        ],
-        "count_total": 15,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 206.197,
-        "street_length_miles": 0.128125,
-        "fines_per_mile": 117.07317073170732
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2161972,
-          52.7664264
-        ]
-      },
-      "properties": {
-        "cache_key": "moorhen way|charnwood|uk",
-        "display_name": "Moorhen Way",
-        "display_label": "Moorhen Way",
-        "area": "Charnwood",
-        "aliases": [
-          "Moorhen Way"
-        ],
-        "count_total": 15,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 121.127,
-        "street_length_miles": 0.075265,
-        "fines_per_mile": 199.295821430944
       }
     },
     {
@@ -23863,34 +21987,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2004108,
-          52.776308
-        ]
-      },
-      "properties": {
-        "cache_key": "clarence street|charnwood|uk",
-        "display_name": "Clarence Street",
-        "display_label": "Clarence Street (Charnwood)",
-        "area": "Charnwood",
-        "aliases": [
-          "Clarence Street"
-        ],
-        "count_total": 14,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 242.877,
-        "street_length_miles": 0.150917,
-        "fines_per_mile": 92.7662224931585
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.148716,
           52.646371
         ]
@@ -23940,34 +22036,6 @@
         "street_length_meters": 596.609,
         "street_length_miles": 0.370716,
         "fines_per_mile": 37.764757927901684
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2210981,
-          52.7734394
-        ]
-      },
-      "properties": {
-        "cache_key": "cumberland road|charnwood|uk",
-        "display_name": "Cumberland Road",
-        "display_label": "Cumberland Road",
-        "area": "Charnwood",
-        "aliases": [
-          "Cumberland Road"
-        ],
-        "count_total": 14,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 266.893,
-        "street_length_miles": 0.165839,
-        "fines_per_mile": 84.41922587569873
       }
     },
     {
@@ -24143,34 +22211,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2007334,
-          52.7706828
-        ]
-      },
-      "properties": {
-        "cache_key": "moor lane|charnwood|uk",
-        "display_name": "Moor Lane",
-        "display_label": "Moor Lane",
-        "area": "Charnwood",
-        "aliases": [
-          "Moor Lane"
-        ],
-        "count_total": 14,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 333.705,
-        "street_length_miles": 0.207355,
-        "fines_per_mile": 67.51706011429674
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.086193,
           52.5997613
         ]
@@ -24311,34 +22351,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2060487,
-          52.7732442
-        ]
-      },
-      "properties": {
-        "cache_key": "warners lane|charnwood|uk",
-        "display_name": "Warners Lane",
-        "display_label": "Warners Lane",
-        "area": "Charnwood",
-        "aliases": [
-          "Warners Lane"
-        ],
-        "count_total": 14,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 63.282,
-        "street_length_miles": 0.039322,
-        "fines_per_mile": 356.0347896851635
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1048662,
           52.6162031
         ]
@@ -24388,34 +22400,6 @@
         "street_length_meters": 87.146,
         "street_length_miles": 0.05415,
         "fines_per_mile": 240.07386888273317
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2144575,
-          52.7687137
-        ]
-      },
-      "properties": {
-        "cache_key": "burfield avenue|charnwood|uk",
-        "display_name": "Burfield Avenue",
-        "display_label": "Burfield Avenue",
-        "area": "Charnwood",
-        "aliases": [
-          "Burfield Avenue"
-        ],
-        "count_total": 13,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 192.304,
-        "street_length_miles": 0.119492,
-        "fines_per_mile": 108.79389415190975
       }
     },
     {
@@ -24647,34 +22631,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2085197,
-          52.7635188
-        ]
-      },
-      "properties": {
-        "cache_key": "mayfield drive|charnwood|uk",
-        "display_name": "Mayfield Drive",
-        "display_label": "Mayfield Drive",
-        "area": "Charnwood",
-        "aliases": [
-          "Mayfield Drive"
-        ],
-        "count_total": 13,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 344.002,
-        "street_length_miles": 0.213753,
-        "fines_per_mile": 60.81785986629428
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1345699184751121,
           52.63119831457563
         ]
@@ -24787,34 +22743,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.1975791,
-          52.771313
-        ]
-      },
-      "properties": {
-        "cache_key": "wharncliffe road|charnwood|uk",
-        "display_name": "Wharncliffe Road",
-        "display_label": "Wharncliffe Road",
-        "area": "Charnwood",
-        "aliases": [
-          "Wharncliffe Road"
-        ],
-        "count_total": 13,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 266.069,
-        "street_length_miles": 0.165328,
-        "fines_per_mile": 78.63156876028259
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1801413,
           52.6069949
         ]
@@ -24864,34 +22792,6 @@
         "street_length_meters": 320.732,
         "street_length_miles": 0.199294,
         "fines_per_mile": 60.21255030256807
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2321655,
-          52.7698605
-        ]
-      },
-      "properties": {
-        "cache_key": "cotswold close|charnwood|uk",
-        "display_name": "Cotswold Close",
-        "display_label": "Cotswold Close",
-        "area": "Charnwood",
-        "aliases": [
-          "Cotswold Close"
-        ],
-        "count_total": 12,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 295.249,
-        "street_length_miles": 0.183459,
-        "fines_per_mile": 65.40971007146011
       }
     },
     {
@@ -25284,34 +23184,6 @@
         "street_length_meters": 582.444,
         "street_length_miles": 0.361914,
         "fines_per_mile": 33.157048359555034
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2046701,
-          52.78309
-        ]
-      },
-      "properties": {
-        "cache_key": "north road|charnwood|uk",
-        "display_name": "North Road",
-        "display_label": "North Road",
-        "area": "Charnwood",
-        "aliases": [
-          "North Road"
-        ],
-        "count_total": 12,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 542.72,
-        "street_length_miles": 0.337231,
-        "fines_per_mile": 35.58391725553108
       }
     },
     {
@@ -25795,34 +23667,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2199138,
-          52.7747168
-        ]
-      },
-      "properties": {
-        "cache_key": "wheel tappers way|charnwood|uk",
-        "display_name": "Wheel Tappers Way",
-        "display_label": "Wheel Tappers Way",
-        "area": "Charnwood",
-        "aliases": [
-          "Wheel Tappers Way"
-        ],
-        "count_total": 11,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 84.011,
-        "street_length_miles": 0.052202,
-        "fines_per_mile": 210.71989578943337
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1206708,
           52.6478223
         ]
@@ -25956,34 +23800,6 @@
         "street_length_meters": 94.562,
         "street_length_miles": 0.058758,
         "fines_per_mile": 170.18959120460192
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2161726,
-          52.7695592
-        ]
-      },
-      "properties": {
-        "cache_key": "chester close|charnwood|uk",
-        "display_name": "Chester Close",
-        "display_label": "Chester Close (Charnwood)",
-        "area": "Charnwood",
-        "aliases": [
-          "Chester Close"
-        ],
-        "count_total": 10,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 117.625,
-        "street_length_miles": 0.073089,
-        "fines_per_mile": 136.81949404151104
       }
     },
     {
@@ -26607,34 +24423,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.198117,
-          52.7666428
-        ]
-      },
-      "properties": {
-        "cache_key": "albert promenade|charnwood|uk",
-        "display_name": "Albert Promenade",
-        "display_label": "Albert Promenade",
-        "area": "Charnwood",
-        "aliases": [
-          "Albert Promenade"
-        ],
-        "count_total": 9,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 400.726,
-        "street_length_miles": 0.249,
-        "fines_per_mile": 36.144578313253014
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1247765,
           52.6366816
         ]
@@ -26915,34 +24703,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2247267,
-          52.7699638
-        ]
-      },
-      "properties": {
-        "cache_key": "grove road|charnwood|uk",
-        "display_name": "Grove Road",
-        "display_label": "Grove Road (Charnwood)",
-        "area": "Charnwood",
-        "aliases": [
-          "Grove Road"
-        ],
-        "count_total": 9,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 66.131,
-        "street_length_miles": 0.041092,
-        "fines_per_mile": 219.02073396281517
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1135986,
           52.6374136
         ]
@@ -27020,34 +24780,6 @@
         "street_length_meters": 133.827,
         "street_length_miles": 0.083156,
         "fines_per_mile": 108.23031410842273
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.203692,
-          52.7730354
-        ]
-      },
-      "properties": {
-        "cache_key": "lemyngton street|charnwood|uk",
-        "display_name": "Lemyngton Street",
-        "display_label": "Lemyngton Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Lemyngton Street"
-        ],
-        "count_total": 9,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 187.427,
-        "street_length_miles": 0.116462,
-        "fines_per_mile": 77.27842558087617
       }
     },
     {
@@ -27188,34 +24920,6 @@
         "street_length_meters": 103.1,
         "street_length_miles": 0.064064,
         "fines_per_mile": 140.4845154845155
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2054559,
-          52.7667612
-        ]
-      },
-      "properties": {
-        "cache_key": "princess street|charnwood|uk",
-        "display_name": "Princess Street",
-        "display_label": "Princess Street (Charnwood)",
-        "area": "Charnwood",
-        "aliases": [
-          "Princess Street"
-        ],
-        "count_total": 9,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 61.815,
-        "street_length_miles": 0.03841,
-        "fines_per_mile": 234.31398073418382
       }
     },
     {
@@ -27384,34 +25088,6 @@
         "street_length_meters": 1381.913,
         "street_length_miles": 0.858681,
         "fines_per_mile": 10.48119150184993
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2135658,
-          52.7638176
-        ]
-      },
-      "properties": {
-        "cache_key": "wallace road|charnwood|uk",
-        "display_name": "Wallace Road",
-        "display_label": "Wallace Road",
-        "area": "Charnwood",
-        "aliases": [
-          "Wallace Road"
-        ],
-        "count_total": 9,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 371.459,
-        "street_length_miles": 0.230814,
-        "fines_per_mile": 38.9924354675193
       }
     },
     {
@@ -27699,34 +25375,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2012838,
-          52.7757504
-        ]
-      },
-      "properties": {
-        "cache_key": "duke street|charnwood|uk",
-        "display_name": "Duke Street",
-        "display_label": "Duke Street (Charnwood)",
-        "area": "Charnwood",
-        "aliases": [
-          "Duke Street"
-        ],
-        "count_total": 8,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 179.822,
-        "street_length_miles": 0.111736,
-        "fines_per_mile": 71.59733657907925
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1408322,
           52.6366739
         ]
@@ -27832,34 +25480,6 @@
         "street_length_meters": 861.501,
         "street_length_miles": 0.535312,
         "fines_per_mile": 14.944555698359087
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2005987,
-          52.7725868
-        ]
-      },
-      "properties": {
-        "cache_key": "hume street|charnwood|uk",
-        "display_name": "Hume Street",
-        "display_label": "Hume Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Hume Street"
-        ],
-        "count_total": 8,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 48.714,
-        "street_length_miles": 0.030269,
-        "fines_per_mile": 264.2968053123658
       }
     },
     {
@@ -28000,34 +25620,6 @@
         "street_length_meters": 179.727,
         "street_length_miles": 0.111677,
         "fines_per_mile": 71.63516211932627
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2136746,
-          52.7761081
-        ]
-      },
-      "properties": {
-        "cache_key": "regent wharf place|charnwood|uk",
-        "display_name": "Regent Wharf Place",
-        "display_label": "Regent Wharf Place",
-        "area": "Charnwood",
-        "aliases": [
-          "Regent Wharf Place"
-        ],
-        "count_total": 8,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 148.448,
-        "street_length_miles": 0.092242,
-        "fines_per_mile": 86.72838836972312
       }
     },
     {
@@ -28364,34 +25956,6 @@
         "street_length_meters": 251.725,
         "street_length_miles": 0.156415,
         "fines_per_mile": 44.75274110539271
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2127249,
-          52.7645934
-        ]
-      },
-      "properties": {
-        "cache_key": "colgrove road|charnwood|uk",
-        "display_name": "Colgrove Road",
-        "display_label": "Colgrove Road",
-        "area": "Charnwood",
-        "aliases": [
-          "Colgrove Road"
-        ],
-        "count_total": 7,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 302.224,
-        "street_length_miles": 0.187793,
-        "fines_per_mile": 37.27508480081792
       }
     },
     {
@@ -28847,34 +26411,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.1971631,
-          52.7744246
-        ]
-      },
-      "properties": {
-        "cache_key": "queen's road|charnwood|uk",
-        "display_name": "Queen's Road",
-        "display_label": "Queen's Road",
-        "area": "Charnwood",
-        "aliases": [
-          "Queen's Road"
-        ],
-        "count_total": 7,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 432.52,
-        "street_length_miles": 0.268756,
-        "fines_per_mile": 26.045930137373677
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1404438,
           52.6116745
         ]
@@ -28896,34 +26432,6 @@
         "street_length_meters": 244.329,
         "street_length_miles": 0.151819,
         "fines_per_mile": 46.10753594741106
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2155043,
-          52.7663039
-        ]
-      },
-      "properties": {
-        "cache_key": "robin mews|charnwood|uk",
-        "display_name": "Robin Mews",
-        "display_label": "Robin Mews",
-        "area": "Charnwood",
-        "aliases": [
-          "Robin Mews"
-        ],
-        "count_total": 7,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 67.48,
-        "street_length_miles": 0.04193,
-        "fines_per_mile": 166.9449081803005
       }
     },
     {
@@ -29064,34 +26572,6 @@
         "street_length_meters": 244.062,
         "street_length_miles": 0.151653,
         "fines_per_mile": 46.15800544664464
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2084737,
-          52.7740797
-        ]
-      },
-      "properties": {
-        "cache_key": "the rushes (a6)|charnwood|uk",
-        "display_name": "The Rushes (A6)",
-        "display_label": "The Rushes (A6)",
-        "area": "Charnwood",
-        "aliases": [
-          "The Rushes (A6)"
-        ],
-        "count_total": 7,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": null,
-        "street_length_miles": null,
-        "fines_per_mile": null
       }
     },
     {
@@ -30499,34 +27979,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2109549,
-          52.7651271
-        ]
-      },
-      "properties": {
-        "cache_key": "wicket close|charnwood|uk",
-        "display_name": "Wicket Close",
-        "display_label": "Wicket Close",
-        "area": "Charnwood",
-        "aliases": [
-          "Wicket Close"
-        ],
-        "count_total": 6,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 252.614,
-        "street_length_miles": 0.156967,
-        "fines_per_mile": 38.22459497856237
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1168205,
           52.6529294
         ]
@@ -31003,62 +28455,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2054957,
-          52.7664146
-        ]
-      },
-      "properties": {
-        "cache_key": "park street|charnwood|uk",
-        "display_name": "Park Street",
-        "display_label": "Park Street (Charnwood)",
-        "area": "Charnwood",
-        "aliases": [
-          "Park Street"
-        ],
-        "count_total": 5,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 138.555,
-        "street_length_miles": 0.086094,
-        "fines_per_mile": 58.07605640346598
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2115919,
-          52.7808631
-        ]
-      },
-      "properties": {
-        "cache_key": "prince william road|charnwood|uk",
-        "display_name": "Prince William Road",
-        "display_label": "Prince William Road",
-        "area": "Charnwood",
-        "aliases": [
-          "Prince William Road"
-        ],
-        "count_total": 5,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 442.437,
-        "street_length_miles": 0.274917,
-        "fines_per_mile": 18.187307441882457
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.123866,
           52.6475224
         ]
@@ -31171,34 +28567,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2052575,
-          52.7690097
-        ]
-      },
-      "properties": {
-        "cache_key": "southfield road|charnwood|uk",
-        "display_name": "Southfield Road",
-        "display_label": "Southfield Road",
-        "area": "Charnwood",
-        "aliases": [
-          "Southfield Road"
-        ],
-        "count_total": 5,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 371.392,
-        "street_length_miles": 0.230773,
-        "fines_per_mile": 21.666312783557867
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.0836765,
           52.6022787
         ]
@@ -31220,34 +28588,6 @@
         "street_length_meters": 165.246,
         "street_length_miles": 0.102679,
         "fines_per_mile": 48.69544892334362
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.205348,
-          52.7645062
-        ]
-      },
-      "properties": {
-        "cache_key": "stanley street|charnwood|uk",
-        "display_name": "Stanley Street",
-        "display_label": "Stanley Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Stanley Street"
-        ],
-        "count_total": 5,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 116.114,
-        "street_length_miles": 0.07215,
-        "fines_per_mile": 69.3000693000693
       }
     },
     {
@@ -31304,34 +28644,6 @@
         "street_length_meters": 248.802,
         "street_length_miles": 0.154598,
         "fines_per_mile": 32.34194491519942
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2139869,
-          52.7725477
-        ]
-      },
-      "properties": {
-        "cache_key": "union street|charnwood|uk",
-        "display_name": "Union Street",
-        "display_label": "Union Street (Charnwood)",
-        "area": "Charnwood",
-        "aliases": [
-          "Union Street"
-        ],
-        "count_total": 5,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 38.66,
-        "street_length_miles": 0.024022,
-        "fines_per_mile": 208.1425360086587
       }
     },
     {
@@ -31697,34 +29009,6 @@
         "street_length_meters": 200.175,
         "street_length_miles": 0.124383,
         "fines_per_mile": 32.158735518519414
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.1991651,
-          52.774996
-        ]
-      },
-      "properties": {
-        "cache_key": "bishop street|charnwood|uk",
-        "display_name": "Bishop Street",
-        "display_label": "Bishop Street (Charnwood)",
-        "area": "Charnwood",
-        "aliases": [
-          "Bishop Street"
-        ],
-        "count_total": 4,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 118.136,
-        "street_length_miles": 0.073406,
-        "fines_per_mile": 54.491458463885785
       }
     },
     {
@@ -32964,34 +30248,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2024519,
-          52.7788942
-        ]
-      },
-      "properties": {
-        "cache_key": "waterside close|charnwood|uk",
-        "display_name": "Waterside Close",
-        "display_label": "Waterside Close",
-        "area": "Charnwood",
-        "aliases": [
-          "Waterside Close"
-        ],
-        "count_total": 4,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 91.473,
-        "street_length_miles": 0.056839,
-        "fines_per_mile": 70.37421488766516
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1198635,
           52.6546074
         ]
@@ -33041,34 +30297,6 @@
         "street_length_meters": 444.108,
         "street_length_miles": 0.275956,
         "fines_per_mile": 14.495064430561396
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2060659,
-          52.7669649
-        ]
-      },
-      "properties": {
-        "cache_key": "albert place|charnwood|uk",
-        "display_name": "Albert Place",
-        "display_label": "Albert Place",
-        "area": "Charnwood",
-        "aliases": [
-          "Albert Place"
-        ],
-        "count_total": 3,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 95.017,
-        "street_length_miles": 0.059041,
-        "fines_per_mile": 50.81214749072678
       }
     },
     {
@@ -34728,62 +31956,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2141937,
-          52.7739919
-        ]
-      },
-      "properties": {
-        "cache_key": "armitage close|charnwood|uk",
-        "display_name": "Armitage Close",
-        "display_label": "Armitage Close",
-        "area": "Charnwood",
-        "aliases": [
-          "Armitage Close"
-        ],
-        "count_total": 2,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 64.684,
-        "street_length_miles": 0.040193,
-        "fines_per_mile": 49.75990844176847
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2382156,
-          52.7661928
-        ]
-      },
-      "properties": {
-        "cache_key": "ashby road|charnwood|uk",
-        "display_name": "Ashby Road",
-        "display_label": "Ashby Road",
-        "area": "Charnwood",
-        "aliases": [
-          "Ashby Road"
-        ],
-        "count_total": 2,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 2368.52,
-        "street_length_miles": 1.47173,
-        "fines_per_mile": 1.3589449151678636
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1598799,
           52.6364737
         ]
@@ -35960,34 +33132,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.1983632,
-          52.7743402
-        ]
-      },
-      "properties": {
-        "cache_key": "hudson street|charnwood|uk",
-        "display_name": "Hudson Street",
-        "display_label": "Hudson Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Hudson Street"
-        ],
-        "count_total": 2,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 179.005,
-        "street_length_miles": 0.111229,
-        "fines_per_mile": 17.980922241501766
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.0882723,
           52.5967553
         ]
@@ -36373,34 +33517,6 @@
         "street_length_meters": 322.663,
         "street_length_miles": 0.200494,
         "fines_per_mile": 9.975360858679062
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2116546,
-          52.7780738
-        ]
-      },
-      "properties": {
-        "cache_key": "navigation way|charnwood|uk",
-        "display_name": "Navigation Way",
-        "display_label": "Navigation Way",
-        "area": "Charnwood",
-        "aliases": [
-          "Navigation Way"
-        ],
-        "count_total": 2,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 266.907,
-        "street_length_miles": 0.165848,
-        "fines_per_mile": 12.059234962134003
       }
     },
     {
@@ -37892,62 +35008,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2072457,
-          52.7685775
-        ]
-      },
-      "properties": {
-        "cache_key": "bedford square|charnwood|uk",
-        "display_name": "Bedford Square",
-        "display_label": "Bedford Square",
-        "area": "Charnwood",
-        "aliases": [
-          "Bedford Square"
-        ],
-        "count_total": 1,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 30.544,
-        "street_length_miles": 0.018979,
-        "fines_per_mile": 52.68981505874915
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2058793,
-          52.769107
-        ]
-      },
-      "properties": {
-        "cache_key": "beehive lane|charnwood|uk",
-        "display_name": "Beehive Lane",
-        "display_label": "Beehive Lane",
-        "area": "Charnwood",
-        "aliases": [
-          "Beehive Lane"
-        ],
-        "count_total": 1,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 55.057,
-        "street_length_miles": 0.034211,
-        "fines_per_mile": 29.23036450264535
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1460403,
           52.6060795
         ]
@@ -37969,34 +35029,6 @@
         "street_length_meters": 82.108,
         "street_length_miles": 0.051019,
         "fines_per_mile": 19.600540974930908
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2150471,
-          52.7808243
-        ]
-      },
-      "properties": {
-        "cache_key": "belton road west extension|charnwood|uk",
-        "display_name": "Belton Road West Extension",
-        "display_label": "Belton Road West Extension",
-        "area": "Charnwood",
-        "aliases": [
-          "Belton Road West Extension"
-        ],
-        "count_total": 1,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 426.43,
-        "street_length_miles": 0.264972,
-        "fines_per_mile": 3.773983666198693
       }
     },
     {
@@ -38144,34 +35176,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2234121,
-          52.7884018
-        ]
-      },
-      "properties": {
-        "cache_key": "bishop meadow road|charnwood|uk",
-        "display_name": "Bishop Meadow Road",
-        "display_label": "Bishop Meadow Road",
-        "area": "Charnwood",
-        "aliases": [
-          "Bishop Meadow Road"
-        ],
-        "count_total": 1,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 344.281,
-        "street_length_miles": 0.213927,
-        "fines_per_mile": 4.674491765882754
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1502537,
           52.7290215
         ]
@@ -38193,34 +35197,6 @@
         "street_length_meters": 1223.808,
         "street_length_miles": 0.760439,
         "fines_per_mile": 1.3150298709035175
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2067972,
-          52.7814795
-        ]
-      },
-      "properties": {
-        "cache_key": "bottleacre lane|charnwood|uk",
-        "display_name": "Bottleacre Lane",
-        "display_label": "Bottleacre Lane",
-        "area": "Charnwood",
-        "aliases": [
-          "Bottleacre Lane"
-        ],
-        "count_total": 1,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 963.329,
-        "street_length_miles": 0.598585,
-        "fines_per_mile": 1.6706065136947967
       }
     },
     {
@@ -38508,34 +35484,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2125877,
-          52.7784283
-        ]
-      },
-      "properties": {
-        "cache_key": "chainbridge close|charnwood|uk",
-        "display_name": "Chainbridge Close",
-        "display_label": "Chainbridge Close",
-        "area": "Charnwood",
-        "aliases": [
-          "Chainbridge Close"
-        ],
-        "count_total": 1,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 138.961,
-        "street_length_miles": 0.086346,
-        "fines_per_mile": 11.581312394320523
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.0586649,
           52.6250024
         ]
@@ -38613,34 +35561,6 @@
         "street_length_meters": 124.354,
         "street_length_miles": 0.07727,
         "fines_per_mile": 12.941633234114144
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2191923,
-          52.7773382
-        ]
-      },
-      "properties": {
-        "cache_key": "clifford road|charnwood|uk",
-        "display_name": "Clifford Road",
-        "display_label": "Clifford Road",
-        "area": "Charnwood",
-        "aliases": [
-          "Clifford Road"
-        ],
-        "count_total": 1,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 187.186,
-        "street_length_miles": 0.116312,
-        "fines_per_mile": 8.597565169543985
       }
     },
     {
@@ -38900,34 +35820,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2077177,
-          52.7696721
-        ]
-      },
-      "properties": {
-        "cache_key": "devonshire lane|charnwood|uk",
-        "display_name": "Devonshire Lane",
-        "display_label": "Devonshire Lane",
-        "area": "Charnwood",
-        "aliases": [
-          "Devonshire Lane"
-        ],
-        "count_total": 1,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 58.541,
-        "street_length_miles": 0.036376,
-        "fines_per_mile": 27.49065317791951
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1783256,
           52.5610968
         ]
@@ -39145,34 +36037,6 @@
         "street_length_meters": null,
         "street_length_miles": null,
         "fines_per_mile": null
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.1968816,
-          52.7753069
-        ]
-      },
-      "properties": {
-        "cache_key": "ferryman road|charnwood|uk",
-        "display_name": "Ferryman Road",
-        "display_label": "Ferryman Road",
-        "area": "Charnwood",
-        "aliases": [
-          "Ferryman Road"
-        ],
-        "count_total": 1,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 96.597,
-        "street_length_miles": 0.060023,
-        "fines_per_mile": 16.6602802259134
       }
     },
     {
@@ -40300,34 +37164,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.1933996,
-          52.7703303
-        ]
-      },
-      "properties": {
-        "cache_key": "judges street|charnwood|uk",
-        "display_name": "Judges Street",
-        "display_label": "Judges Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Judges Street"
-        ],
-        "count_total": 1,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 171.903,
-        "street_length_miles": 0.106816,
-        "fines_per_mile": 9.361893349310964
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.0720488,
           52.6488518
         ]
@@ -40433,34 +37269,6 @@
         "street_length_meters": 118.603,
         "street_length_miles": 0.073696,
         "fines_per_mile": 13.569257490230134
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2253447,
-          52.7776003
-        ]
-      },
-      "properties": {
-        "cache_key": "knightthorpe road|charnwood|uk",
-        "display_name": "Knightthorpe Road",
-        "display_label": "Knightthorpe Road",
-        "area": "Charnwood",
-        "aliases": [
-          "Knightthorpe Road"
-        ],
-        "count_total": 1,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 825.828,
-        "street_length_miles": 0.513146,
-        "fines_per_mile": 1.9487631200477058
       }
     },
     {
@@ -40944,34 +37752,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2092057,
-          52.772595
-        ]
-      },
-      "properties": {
-        "cache_key": "orchard street|charnwood|uk",
-        "display_name": "Orchard Street",
-        "display_label": "Orchard Street (Charnwood)",
-        "area": "Charnwood",
-        "aliases": [
-          "Orchard Street"
-        ],
-        "count_total": 1,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 84.521,
-        "street_length_miles": 0.052519,
-        "fines_per_mile": 19.04072811744321
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1234116,
           52.6610508
         ]
@@ -41077,34 +37857,6 @@
         "street_length_meters": 311.666,
         "street_length_miles": 0.19366,
         "fines_per_mile": 5.163688939378292
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2147167,
-          52.7743573
-        ]
-      },
-      "properties": {
-        "cache_key": "pleasant close|charnwood|uk",
-        "display_name": "Pleasant Close",
-        "display_label": "Pleasant Close",
-        "area": "Charnwood",
-        "aliases": [
-          "Pleasant Close"
-        ],
-        "count_total": 1,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 61.735,
-        "street_length_miles": 0.03836,
-        "fines_per_mile": 26.068821689259646
       }
     },
     {
@@ -41476,34 +38228,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2082688,
-          52.7674192
-        ]
-      },
-      "properties": {
-        "cache_key": "royland road|charnwood|uk",
-        "display_name": "Royland Road",
-        "display_label": "Royland Road",
-        "area": "Charnwood",
-        "aliases": [
-          "Royland Road"
-        ],
-        "count_total": 1,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 251.517,
-        "street_length_miles": 0.156286,
-        "fines_per_mile": 6.398525779660366
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.168744,
           52.6653485
         ]
@@ -41784,34 +38508,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2161796,
-          52.7627659
-        ]
-      },
-      "properties": {
-        "cache_key": "squirrel way|charnwood|uk",
-        "display_name": "Squirrel Way",
-        "display_label": "Squirrel Way",
-        "area": "Charnwood",
-        "aliases": [
-          "Squirrel Way"
-        ],
-        "count_total": 1,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 214.239,
-        "street_length_miles": 0.133122,
-        "fines_per_mile": 7.511906371598985
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -1.1412668,
           52.6039649
         ]
@@ -42029,34 +38725,6 @@
         "street_length_meters": 59.876,
         "street_length_miles": 0.037205,
         "fines_per_mile": 26.8781077812122
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2065557,
-          52.7753145
-        ]
-      },
-      "properties": {
-        "cache_key": "tatmarsh|charnwood|uk",
-        "display_name": "Tatmarsh",
-        "display_label": "Tatmarsh",
-        "area": "Charnwood",
-        "aliases": [
-          "Tatmarsh"
-        ],
-        "count_total": 1,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 145.232,
-        "street_length_miles": 0.090243,
-        "fines_per_mile": 11.08119189300001
       }
     },
     {
@@ -42337,34 +39005,6 @@
         "street_length_meters": 368.248,
         "street_length_miles": 0.228819,
         "fines_per_mile": 4.37026645514577
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2000299,
-          52.7698791
-        ]
-      },
-      "properties": {
-        "cache_key": "trinity street|charnwood|uk",
-        "display_name": "Trinity Street",
-        "display_label": "Trinity Street",
-        "area": "Charnwood",
-        "aliases": [
-          "Trinity Street"
-        ],
-        "count_total": 1,
-        "source_rows": 1,
-        "is_zero_count": false,
-        "has_zero_count_variant": false,
-        "geocode_status": "ok",
-        "is_car_park": false,
-        "street_length_meters": 154.784,
-        "street_length_miles": 0.096178,
-        "fines_per_mile": 10.397388176090166
       }
     },
     {
