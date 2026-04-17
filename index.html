@@ -7,7 +7,7 @@
     <meta name="supported-color-schemes" content="light dark" />
     <meta name="theme-color" content="#f8f3e8" />
     <title>Leicester Parking Fines by Street (2025)</title>
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
+    <link id="site-favicon" rel="icon" type="image/png" sizes="32x32" href="favicon-light.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
     <script>
       (() => {
@@ -16,7 +16,18 @@
           light: "#f8f3e8",
           dark: "#111820",
         };
+        const faviconHrefs = {
+          light: "favicon-light.png",
+          dark: "favicon-dark.png",
+        };
         const root = document.documentElement;
+        const prefersDarkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+        const updateFavicon = () => {
+          const faviconLink = document.getElementById("site-favicon");
+          if (faviconLink) {
+            faviconLink.setAttribute("href", prefersDarkQuery.matches ? faviconHrefs.dark : faviconHrefs.light);
+          }
+        };
         const applyThemeSignals = (target, theme, source) => {
           if (!target) {
             return;
@@ -33,9 +44,11 @@
           target.classList.toggle("color-mode-dark", theme === "dark");
           target.style.colorScheme = theme;
         };
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const prefersDark = prefersDarkQuery.matches;
         let theme = prefersDark ? "dark" : "light";
         let source = "system";
+
+        updateFavicon();
 
         try {
           const storedTheme = window.localStorage.getItem(storageKey);
@@ -71,6 +84,41 @@
           },
           { once: true }
         );
+
+        const handleColorSchemeChange = (event) => {
+          updateFavicon();
+          if (source === "manual") {
+            return;
+          }
+
+          theme = event.matches ? "dark" : "light";
+          applyThemeSignals(root, theme, source);
+
+          const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+          if (themeColorMeta) {
+            themeColorMeta.setAttribute("content", themeColors[theme]);
+          }
+
+          const colorSchemeMeta = document.querySelector('meta[name="color-scheme"]');
+          if (colorSchemeMeta) {
+            colorSchemeMeta.setAttribute("content", theme);
+          }
+
+          const supportedColorSchemesMeta = document.querySelector(
+            'meta[name="supported-color-schemes"]'
+          );
+          if (supportedColorSchemesMeta) {
+            supportedColorSchemesMeta.setAttribute("content", theme);
+          }
+
+          applyThemeSignals(document.body, theme, source);
+        };
+
+        if (typeof prefersDarkQuery.addEventListener === "function") {
+          prefersDarkQuery.addEventListener("change", handleColorSchemeChange);
+        } else if (typeof prefersDarkQuery.addListener === "function") {
+          prefersDarkQuery.addListener(handleColorSchemeChange);
+        }
       })();
     </script>
     <link
